@@ -24,5 +24,8 @@
   "homepage": "https://github.com/appellation/handles#readme",
   "dependencies": {
     "fs-extra": "^1.0.0"
+  },
+  "peerDependencies": {
+    "discord.js": "^10.0.1"
   }
 }
