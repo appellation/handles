@@ -4,6 +4,7 @@
 
 const fsX = require('fs-extra');
 const EventEmitter = require('events');
+const path = require('path');
 
 const NotACommandError = require('./errors/NotACommand');
 const InvalidCommandError = require('./errors/InvalidCommand');
@@ -205,24 +206,31 @@ class CommandHandler extends EventEmitter   {
                 if(mod.disabled === false && (mod.disabled !== true || typeof mod.disabled !== 'undefined')) continue;
 
                 if(mod.triggers && typeof mod.triggers[Symbol.iterator] === 'function' && typeof mod.triggers !== 'string' && !(mod.triggers instanceof RegExp))  {
-                    for(const trigger of mod.triggers)  {
-                        contents.set(trigger, {
-                            func: mod.func,
-                            validator: mod.validator,
-                            respond: mod.respond,
-                            disabled: mod.disabled
-                        });
-                    }
+                    for(const trigger of mod.triggers)  CommandHandler._setModule(contents, trigger, mod);
+                }   else if(typeof mod === 'function')  {
+                    CommandHandler._setModule(contents, path.basename(file, '.js'), { func: mod })
                 }   else    {
-                    contents.set(mod.triggers, {
-                        func: mod.func,
-                        validator: mod.validator,
-                        respond: mod.respond,
-                        disabled: mod.disabled
-                    });
+                    CommandHandler._setModule(contents, mod.triggers, mod);
                 }
             }
             return contents;
+        });
+    }
+
+    /**
+     * Adds a module to the given map.
+     *
+     * @param {Map} map
+     * @param {String|RegExp} trigger
+     * @param {Object} module
+     * @private
+     */
+    static _setModule(map, trigger, module)  {
+        map.set(trigger, {
+            func: module.func,
+            validator: module.validator,
+            respond: module.respond,
+            disabled: module.disabled
         });
     }
 }
