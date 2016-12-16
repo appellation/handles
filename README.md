@@ -66,7 +66,7 @@ module.exports = {
     },
     triggers: [
         'poke',
-        'prod',
+        'prod'
     ],
     validator: (message, args) =>  {
         return args.length !== 0;
