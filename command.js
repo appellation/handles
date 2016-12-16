@@ -123,7 +123,7 @@ class CommandHandler extends EventEmitter   {
              */
             this.emit('commandFinished', { message, cmd, result });
 
-            if((this.config.respond || cmd.respond) && (typeof result === 'string' || typeof result === 'number')) message.channel.sendMessage(result);
+            if((this.config.respond || cmd.respond) && (typeof result === 'string' || typeof result === 'number')) message.channel.sendMessage(result).catch(() => null);
             return result;
         }).catch(err => {
             if(!err) return;
