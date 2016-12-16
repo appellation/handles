@@ -45,7 +45,7 @@ Let's face it: most of us like a little customization.  For those who like to ti
 | Option    | Type                               | Description                                                                                                                                          |
 |:---------:|:----------------------------------:|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | func      | Function                           | This is where you command happens; it takes two arguments: a `Message` object and an array of arguments respectively.                                |
-| triggers  | Array<String/RegExp>/String/RegExp | This is what will trigger this command and can be either a string or a regular expression.  If it's an array, all of those triggers will be applied. |
+| triggers  | Array(String/RegExp)/String/RegExp | This is what will trigger this command and can be either a string or a regular expression.  If it's an array, all of those triggers will be applied. |
 | validator | Function                           | More below, but this determines whether to call the command or not.                                                                                  |
 | respond   | boolean                            | Whether to automatically attempt to send the return value of the command function to the channel the command was issued in.                          |
 
