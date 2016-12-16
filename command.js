@@ -71,12 +71,13 @@ class CommandHandler extends EventEmitter   {
      * @returns {Promise.<*>}
      */
     handle(message, body) {
-        let content = body || this.trimPrefix(message);
-        content = (content instanceof Promise) ? content : (content ? Promise.resolve(content) : Promise.reject(content));
 
-        return content.then(resolved => {
-            if(message.author.bot) return Promise.reject(new NotACommandError(message));
+        return new Promise((resolve, reject) => {
+            if(message.author.bot) return reject(null);
 
+            let content = body || this.trimPrefix(message);
+            return content ? resolve(content) : reject(content);
+        }).then(resolved => {
             this.resolvedContent = resolved;
             return this.fetchCommand(resolved, message);
         }).then(cmd => {
