@@ -74,6 +74,8 @@ module.exports = {
 }
 ```
 
+> n.b. don't use this code if you really want to make a poke command.
+
 ### Ooohhhhh, global options
 
 Suppose we pass a parameter to our message handler initializer like so:
@@ -104,8 +106,6 @@ Here's a complete list of options:
 |   directory   |  String  | When you want to name your command directory `folder of awesomeness`, simply set this to `./folder of awesomeness` and put your command files inside.  You can use this option to specify a subdirectory or any other schenanigans you might want.                                                          |
 |   validator   | Function | This function accepts one parameter: the `Message` object of D.js.  It must return the message content (`String`) without any prefixes if the message is a command, or falsy if the command is not valid.  It will be evaluated for every message your bot receives, so don't do anything inefficient here. |
 | ignoreInvalid |  boolean | By default, your command handler will ignore any invalid commands.  If, for some reason, you feel inclined to handle them yourself, invalid commands will reject with a `NotACommand` object that has properties `msg` of the Message object and `message` of string `Not a command.`.                      |
-
-> n.b. don't use this code if you really want to make a poke command.
 
 ### A couple other things
 
