@@ -28,7 +28,6 @@ const InvalidCommandError = require('./errors/InvalidCommand');
  * @property {String} [directory] - Where your commands are located; defaults to `./commands`
  * @property {Validator} [validator] - Valid command forms (defaults to prefixed).
  * @property {boolean} [respond] - Whether to automatically send the CommandExecutor response to the channel the command was sent in.
- * @property {boolean} [resolveErrors] - Whether to automatically resolve user input errors.
  * @property {boolean} [ignoreInvalid] - Whether to internally ignore invalid command errors.
  */
 
@@ -90,8 +89,11 @@ class CommandHandler extends EventEmitter   {
                 return valid.then(() => cmd).catch(reason => {
                     return Promise.reject(new InvalidCommandError(message, cmd, reason));
                 });
+            }   else if(typeof valid === 'boolean')    {
+                return valid ? cmd : Promise.reject(new InvalidCommandError(message, cmd, 'Invalid command.'));
+            }   else if(valid)  {
+                return Promise.reject(new InvalidCommandError(message, cmd, valid));
             }   else    {
-                if(valid instanceof Error) return Promise.reject(new InvalidCommandError(message, cmd, valid.message));
                 return cmd;
             }
 
@@ -205,8 +207,7 @@ class CommandHandler extends EventEmitter   {
                             func: mod.func,
                             validator: mod.validator,
                             respond: mod.respond,
-                            disabled: mod.disabled,
-                            resolveErrors: mod.resolveErrors
+                            disabled: mod.disabled
                         });
                     }
                 }   else    {
@@ -214,8 +215,7 @@ class CommandHandler extends EventEmitter   {
                         func: mod.func,
                         validator: mod.validator,
                         respond: mod.respond,
-                        disabled: mod.disabled,
-                        resolveErrors: mod.resolveErrors
+                        disabled: mod.disabled
                     });
                 }
             }
