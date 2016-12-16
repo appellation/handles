@@ -8,7 +8,7 @@ For those of us who get frustrated with writing command handlers but don't quite
 npm install --save discord-handles
 ```
 
-Or, if you're want to risk cutting yourself, install the bleeding edge version:
+Or, if you want to risk cutting yourself, install the bleeding edge version:
 
 ```xl
 npm install --save appellation/handles#master
