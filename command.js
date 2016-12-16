@@ -154,7 +154,10 @@ class CommandHandler extends EventEmitter   {
      * @returns {Promise.<StoredCommand>}
      */
     fetchCommand(content, message)  {
+        const split = content.split(' ');
         return this.commands.then(commands => {
+
+            if(typeof split[0] === 'string' && commands.get(split[0])) return commands.get(split[0]);
 
             for(const cmd of commands.keys())  {
                 if(cmd instanceof RegExp)   {
