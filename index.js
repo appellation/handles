@@ -5,5 +5,5 @@ const CommandHandler = require('./command');
 
 module.exports = config => {
     const handler = new CommandHandler(config);
-    return handler.handle.bind(handler);
+    return (msg, body) => (msg) ? handler.handle(msg, body) : handler;
 };

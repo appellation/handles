@@ -108,7 +108,7 @@ class CommandHandler extends EventEmitter   {
              * @property {Message} message
              * @property {StoredCommand} cmd
              */
-            this.emit('commandStarted', { content: this.resolvedContent, cmd });
+            this.emit('commandStarted', { message, content: this.resolvedContent, cmd });
 
             return Promise.all([
                 cmd,
@@ -123,7 +123,7 @@ class CommandHandler extends EventEmitter   {
              * @property {StoredCommand} cmd
              * @property {*} result - The result of the command execution.
              */
-            this.emit('commandFinished', { content: this.resolvedContent, cmd, result });
+            this.emit('commandFinished', { message, content: this.resolvedContent, cmd, result });
 
             if((this.config.respond || cmd.respond) && (typeof result === 'string' || typeof result === 'number')) message.channel.sendMessage(result).catch(() => null);
             return result;

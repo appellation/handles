@@ -107,8 +107,28 @@ Here's a complete list of options:
 |   validator   | Function | This function accepts one parameter: the `Message` object of D.js.  It must return the message content (`String`) without any prefixes if the message is a command, or falsy if the command is not valid.  It will be evaluated for every message your bot receives, so don't do anything inefficient here. |
 | ignoreInvalid |  boolean | By default, your command handler will ignore any invalid commands.  If, for some reason, you feel inclined to handle them yourself, invalid commands will reject with a `NotACommand` object that has properties `msg` of the Message object and `message` of string `Not a command.`.                      |
 
+### Interacting directly with the handler
+
+You can call the handler with no arguments to get its instance.  This is useful in cases where you might want to listen for events or otherwise interact directly with the command handler.  For example:
+
+```js
+const handler = require('discord-handles')();
+
+// listen for events
+handler().on('commandStarted', ({ message, contents, cmd }) => {
+    // do stuff after the command starts
+});
+
+handler().on('commandFinished', ({ message, contents, cmd, result }) => {
+    // do stuff after the command finishes
+});
+
+// interact with the handler directly
+handler().reloadCommands();
+```
+
 ### A couple other things
 
-The handler itself resolves with the result of the command.
+The handler resolves with the result of the command.
 
 If either the handler or the command specify `respond`, the handler will respond.  There is no priority given to either (should be an easy fix if you want to PR it).
