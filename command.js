@@ -58,7 +58,7 @@ class CommandHandler extends EventEmitter   {
     constructor(config = {}) {
         super();
         this.config = config;
-        this.commands = this.loadCommands();
+        this.commands = this._loadCommands();
     }
 
     /**
@@ -175,10 +175,18 @@ class CommandHandler extends EventEmitter   {
     }
 
     /**
+     * Reload all commands.
+     */
+    reloadCommands()    {
+        this.commands = this._loadCommands();
+    }
+
+    /**
      * Load all commands into memory.
      * @returns {Promise.<Map.<String|RegExp, StoredCommand>>}
+     * @private
      */
-    loadCommands() {
+    _loadCommands() {
         return new Promise((resolve, reject) => {
             const files = [];
             const walker = fsX.walk(this.config.directory || './commands');
@@ -203,11 +211,11 @@ class CommandHandler extends EventEmitter   {
                  * @type {Command}
                  */
                 const mod = require(file);
-
                 if(mod.disabled === false && (mod.disabled !== true || typeof mod.disabled !== 'undefined')) continue;
 
                 if(mod.triggers && typeof mod.triggers[Symbol.iterator] === 'function' && typeof mod.triggers !== 'string' && !(mod.triggers instanceof RegExp))  {
                     for(const trigger of mod.triggers)  CommandHandler._setModule(contents, trigger, mod);
+
                 }   else if(typeof mod === 'function')  {
                     CommandHandler._setModule(contents, path.basename(file, '.js'), { func: mod })
                 }   else    {
