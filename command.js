@@ -74,7 +74,7 @@ class CommandHandler extends EventEmitter   {
         return new Promise((resolve, reject) => {
             if(message.author.bot) return reject(null);
 
-            let content = body || this.trimPrefix(message);
+            let content = body || this.resolvePrefix(message);
             return content ? resolve(content) : reject(content);
         }).then(resolved => {
             this.resolvedContent = resolved;
@@ -138,7 +138,7 @@ class CommandHandler extends EventEmitter   {
      * @param {Message} message
      * @returns {ResolvedContent}
      */
-    trimPrefix(message) {
+    resolvePrefix(message) {
         if(this.config.validator && typeof this.config.validator === 'function')    {
             return this.config.validator(message);
         }   else    {
