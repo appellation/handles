@@ -6,7 +6,7 @@ class InvalidCommand extends Error   {
     /**
      * @constructor
      * @param {Message} message
-     * @param {StoredCommand} command
+     * @param {Command} command
      * @param {String} reason
      */
     constructor(message, command, reason)   {

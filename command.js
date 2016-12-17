@@ -10,13 +10,8 @@ const NotACommandError = require('./errors/NotACommand');
 const InvalidCommandError = require('./errors/InvalidCommand');
 
 /**
- * @typedef {Object} Command - Structure of exported commands
+ * @typedef {Object|Function} Command - Structure of exported commands
  * @property {Iterable<String|RegExp>|String|RegExp} triggers
- * @extends {StoredCommand}
- */
-
-/**
- * @typedef {Object} StoredCommand - Structure of command map used internally.
  * @property {boolean} [disabled] - Whether the command is globally disabled
  * @property {CommandExecutor} func - The command function to execute.
  * @property {Validator} [validator] - Function to call to determine whether the command is valid.
@@ -35,7 +30,8 @@ const InvalidCommandError = require('./errors/InvalidCommand');
 /**
  * @typedef {Function} Validator - Structure of any validator functions.
  * @param {Message} message
- * @returns {TrimmedContent} - Message content without any prefixes, null if invalid
+ * @param {Array} [args] - Args are only passed to command-level validators.
+ * @returns {ResolvedContent} - Message content without any prefixes, null if invalid
  */
 
 /**
@@ -46,7 +42,7 @@ const InvalidCommandError = require('./errors/InvalidCommand');
  */
 
 /**
- * @typedef {Promise<String|null>|String|null} TrimmedContent
+ * @typedef {String|null} ResolvedContent
  */
 
 class CommandHandler extends EventEmitter   {
@@ -57,8 +53,11 @@ class CommandHandler extends EventEmitter   {
      */
     constructor(config = {}) {
         super();
+
         this.config = config;
-        this.commands = this._loadCommands();
+        if(!this.config.directory) this.config.directory = './commands';
+
+        this.loadCommands();
     }
 
     /**
@@ -79,13 +78,12 @@ class CommandHandler extends EventEmitter   {
             return content ? resolve(content) : reject(content);
         }).then(resolved => {
             this.resolvedContent = resolved;
-            return this.fetchCommand(resolved, message);
-        }).then(cmd => {
 
+            const cmd = this.fetchCommand(resolved, message);
             if(!cmd.validator) return cmd;
             if(typeof cmd.validator !== 'function') throw new Error('validator is not a function');
 
-            const valid = cmd.validator(message, this.resolvedContent.split(' ').slice(1));
+            const valid = cmd.validator(message, this.trimmedContent.split(' '));
 
             if(valid instanceof Promise)    {
                 return valid.then(() => cmd).catch(reason => {
@@ -106,13 +104,14 @@ class CommandHandler extends EventEmitter   {
              * @event EventEmitter#commandStarted
              * @type {Object}
              * @property {Message} message
-             * @property {StoredCommand} cmd
+             * @property {ResolvedContent} content
+             * @property {Command} cmd
              */
             this.emit('commandStarted', { message, content: this.resolvedContent, cmd });
 
             return Promise.all([
                 cmd,
-                Promise.resolve(cmd.func(message, this.resolvedContent.split(' ').slice(1)))
+                Promise.resolve(cmd.func(message, this.trimmedContent.split(' ')))
             ]);
         }).then(([cmd, result]) => {
 
@@ -120,7 +119,8 @@ class CommandHandler extends EventEmitter   {
              * @event EventEmitter#commandFinished
              * @type {Object}
              * @property {Message} message
-             * @property {StoredCommand} cmd
+             * @property {ResolvedContent} content
+             * @property {Command} cmd
              * @property {*} result - The result of the command execution.
              */
             this.emit('commandFinished', { message, content: this.resolvedContent, cmd, result });
@@ -136,7 +136,7 @@ class CommandHandler extends EventEmitter   {
 
     /**
      * @param {Message} message
-     * @returns {TrimmedContent}
+     * @returns {ResolvedContent}
      */
     trimPrefix(message) {
         if(this.config.validator && typeof this.config.validator === 'function')    {
@@ -151,52 +151,45 @@ class CommandHandler extends EventEmitter   {
 
     /**
      * Fetch a command from given content.
-     * @param {String} content
-     * @param {Message} message
-     * @returns {Promise.<StoredCommand>}
+     *
+     * @param {String} content - Should not contain prefixes
+     * @param {Message} [message] - Only used for returning an error when no command is found.
+     * @returns {Command|NotACommand}
      */
     fetchCommand(content, message)  {
-        const split = content.split(' ');
-        return this.commands.then(commands => {
+        const split = content.trim().split(' ');
+        if(typeof split[0] === 'string' && this.commands.has([0])) {
+            this.trimmedContent = split.slice(1).join(' ');
+            return this.commands.get(split[0]);
+        }
 
-            if(typeof split[0] === 'string' && commands.get(split[0])) return commands.get(split[0]);
-
-            for(const cmd of commands.keys())  {
-                if(cmd instanceof RegExp)   {
-                    if(content.match(cmd)) return commands.get(cmd);
-
-                }   else if(typeof cmd === 'string')    {
-                    if(content.startsWith(cmd)) return commands.get(cmd);
-                }
+        for(const [trigger, cmd] of this.commands)  {
+            const regex = (trigger instanceof RegExp) ? trigger : new RegExp(`^${trigger}`);
+            if(regex.test(content)) {
+                this.trimmedContent = content.replace(regex, '').trim();
+                return cmd;
             }
+        }
 
-            return Promise.reject(new NotACommandError(message));
-        });
+        return new NotACommandError(message);
     }
 
     /**
-     * Reload all commands.
+     * Load all commands into memory.  Use when reloading commands.
+     *
+     * @returns {Promise.<Map.<String|RegExp, Command>>}
      */
-    reloadCommands()    {
-        this.commands = this._loadCommands();
-    }
-
-    /**
-     * Load all commands into memory.
-     * @returns {Promise.<Map.<String|RegExp, StoredCommand>>}
-     * @private
-     */
-    _loadCommands() {
+    loadCommands() {
+        this.commands = new Map();
         return new Promise((resolve, reject) => {
             const files = [];
-            const walker = fsX.walk(this.config.directory || './commands');
+            const walker = fsX.walk(this.config.directory);
 
             walker.on('data', (data) => {
-                if(data.stats.isFile()) files.push(data.path);
+                if(data.stats.isFile() && path.extname(data.path) === '.js') files.push(data.path);
             });
 
             walker.on('errors', err => {
-                console.error(err);
                 return reject(err);
             });
 
@@ -204,7 +197,6 @@ class CommandHandler extends EventEmitter   {
                 return resolve(files);
             });
         }).then(files => {
-            const contents = new Map();
             for(const file of files)    {
 
                 /**
@@ -214,33 +206,26 @@ class CommandHandler extends EventEmitter   {
                 if(mod.disabled === false && (mod.disabled !== true || typeof mod.disabled !== 'undefined')) continue;
 
                 if(mod.triggers && typeof mod.triggers[Symbol.iterator] === 'function' && typeof mod.triggers !== 'string' && !(mod.triggers instanceof RegExp))  {
-                    for(const trigger of mod.triggers)  CommandHandler._setModule(contents, trigger, mod);
+                    for(const trigger of mod.triggers)  this._setModule(trigger, mod);
 
                 }   else if(typeof mod === 'function')  {
-                    CommandHandler._setModule(contents, path.basename(file, '.js'), { func: mod })
+                    this._setModule(path.basename(file, '.js'), { func: mod })
                 }   else    {
-                    CommandHandler._setModule(contents, mod.triggers, mod);
+                    this._setModule(mod.triggers, mod);
                 }
             }
-            return contents;
         });
     }
 
     /**
-     * Adds a module to the given map.
+     * Adds a module to the map.
      *
-     * @param {Map} map
      * @param {String|RegExp} trigger
-     * @param {Object} module
+     * @param {Command} module
      * @private
      */
-    static _setModule(map, trigger, module)  {
-        map.set(trigger, {
-            func: module.func,
-            validator: module.validator,
-            respond: module.respond,
-            disabled: module.disabled
-        });
+    _setModule(trigger, module)  {
+        this.commands.set(trigger, module);
     }
 }
 
