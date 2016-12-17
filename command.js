@@ -111,7 +111,7 @@ class CommandHandler extends EventEmitter   {
 
             return Promise.all([
                 cmd,
-                Promise.resolve(cmd.func(message, this.trimmedContent.split(' ')))
+                Promise.resolve(cmd.func(message, this.trimmedContent.split(' '), this))
             ]);
         }).then(([cmd, result]) => {
 

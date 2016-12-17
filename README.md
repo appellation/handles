@@ -18,6 +18,8 @@ Usually I try to avoid pushing broken code, but sometimes I move a little too fa
 
 ## Examples
 
+There's a directory called `examples`; what are you waiting for?  Oh, maybe some context:
+
 ### The simplest it gets
 
 ```js
@@ -61,7 +63,7 @@ For example, the below command would be invalid if no arguments are passed:
 
 ```js
 module.exports = {
-    func: (message, args) => {
+    func: (message, args, handler) => {
         return `hey ${args[0]}, wake up`;
     },
     triggers: [
