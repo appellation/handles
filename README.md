@@ -89,12 +89,7 @@ const messageHandler = require('discord-handles')({
 Now your command handler will take the output of your `func`, resolve it if it's a promise, and if the result if a string or number, it will automatically send that output to the channel the command was issued in.  This greatly simplifies our example command like so:
 
 ```js
-module.exports = {
-    func: () => {
-        return 'pong';
-    },
-    triggers: 'ping'
-}
+module.exports = () => 'pong';
 ```
 
 Here's a complete list of options:
