@@ -55,6 +55,7 @@ class CommandHandler extends EventEmitter   {
         super();
 
         this.config = config;
+        if(!this.config.prefixes) this.config.prefixes = [];
         if(!this.config.directory) this.config.directory = './commands';
 
         this.loadCommands();
@@ -142,8 +143,8 @@ class CommandHandler extends EventEmitter   {
         if(this.config.validator && typeof this.config.validator === 'function')    {
             return this.config.validator(message);
         }   else    {
-            if(!this.config.prefixes || this.config.prefixes.length === 0) this.config.prefixes = [ `<@${message.client.user.id}>`, `<@!${message.client.user.id}>` ];
 
+            this.config.prefixes.concat([ `<@${message.client.user.id}>`, `<@!${message.client.user.id}>` ]);
             for(const pref of this.config.prefixes) if(message.content.startsWith(pref)) return message.content.substring(pref.length).trim();
             return null;
         }
