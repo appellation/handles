@@ -109,8 +109,6 @@ Here's a complete list of options:
 
 ### A couple other things
 
-Your command handler emits `commandStarted` and `commandFinished` events.  Both pass an object of `{ message, cmd }` in which `message` is the message that triggered the command and `cmd` is the exported command properties minus `triggers`.  `commandFinished` has one extra property `result` which is the returned value from the command function.
-
 The handler itself resolves with the result of the command.
 
 If either the handler or the command specify `respond`, the handler will respond.  There is no priority given to either (should be an easy fix if you want to PR it).
