@@ -178,6 +178,7 @@ class CommandHandler extends EventEmitter   {
     /**
      * Load all commands into memory.  Use when reloading commands.
      *
+     * @fires CommandHandler#loaded
      * @returns {Promise.<Map.<String|RegExp, Command>>}
      */
     loadCommands() {
@@ -215,6 +216,11 @@ class CommandHandler extends EventEmitter   {
                     this._setModule(mod.triggers, mod);
                 }
             }
+
+            /**
+             * @event EventEmitter#loaded
+             */
+            this.emit('loaded');
         });
     }
 
