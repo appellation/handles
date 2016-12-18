@@ -84,7 +84,7 @@ class CommandHandler extends EventEmitter   {
             if(!cmd.validator) return cmd;
             if(typeof cmd.validator !== 'function') throw new Error('validator is not a function');
 
-            const valid = cmd.validator(message, this.trimmedContent.split(' '));
+            const valid = cmd.validator(message, CommandHandler._argumentify(this.trimmedContent));
 
             if(valid instanceof Promise)    {
                 return valid.then(() => cmd).catch(reason => {
@@ -112,7 +112,7 @@ class CommandHandler extends EventEmitter   {
 
             return Promise.all([
                 cmd,
-                Promise.resolve(cmd.func(message, this.trimmedContent.split(' '), this))
+                Promise.resolve(cmd.func(message, CommandHandler._argumentify(this.trimmedContent), this))
             ]);
         }).then(([cmd, result]) => {
 
@@ -233,6 +233,16 @@ class CommandHandler extends EventEmitter   {
      */
     _setModule(trigger, module)  {
         this.commands.set(trigger, module);
+    }
+
+    /**
+     * Make a string into arguments.
+     * @param {String} string
+     * @returns {Array}
+     * @private
+     */
+    static _argumentify(string)   {
+        return string ? string.split(' ') : [];
     }
 }
 
