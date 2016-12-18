@@ -158,14 +158,14 @@ class CommandHandler extends EventEmitter   {
      * @returns {Command|NotACommand}
      */
     fetchCommand(content, message)  {
-        const split = content.trim().split(' ');
+        const split = content.trim().toLowerCase().split(' ');
         if(typeof split[0] === 'string' && this.commands.has([0])) {
             this.trimmedContent = split.slice(1).join(' ');
             return this.commands.get(split[0]);
         }
 
         for(const [trigger, cmd] of this.commands)  {
-            const regex = (trigger instanceof RegExp) ? trigger : new RegExp(`^${trigger}`);
+            const regex = (trigger instanceof RegExp) ? trigger : new RegExp(`^${trigger}\s*`, 'i');
             if(regex.test(content)) {
                 this.trimmedContent = content.replace(regex, '').trim();
                 return cmd;
