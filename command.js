@@ -165,7 +165,7 @@ class CommandHandler extends EventEmitter   {
         }
 
         for(const [trigger, cmd] of this.commands)  {
-            const regex = (trigger instanceof RegExp) ? trigger : new RegExp(`^${trigger}\s*`, 'i');
+            const regex = (trigger instanceof RegExp) ? trigger : new RegExp(`^${trigger}\\s*`, 'i');
             if(regex.test(content)) {
                 this.trimmedContent = content.replace(regex, '').trim();
                 return cmd;
