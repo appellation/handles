@@ -142,7 +142,7 @@ class CommandHandler extends EventEmitter   {
      * Given a message, return it's content without any prefixes (or null if it's not properly prefixed).
      *
      * @param {Message} message
-     * @returns {ResolvedContent|null}
+     * @returns {ResolvedContent}
      */
     resolvePrefix(message) {
         if(this.config.validator && typeof this.config.validator === 'function')    {
