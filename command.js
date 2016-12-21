@@ -45,10 +45,13 @@ const InvalidCommandError = require('./errors/InvalidCommand');
  * @typedef {String|null} ResolvedContent
  */
 
+/**
+ * Class to handle events
+ * @extends EventEmitter
+ */
 class CommandHandler extends EventEmitter   {
 
     /**
-     * @constructor
      * @param {Config} config
      */
     constructor(config = {}) {
@@ -136,8 +139,10 @@ class CommandHandler extends EventEmitter   {
     }
 
     /**
+     * Given a message, return it's content without any prefixes (or null if it's not properly prefixed).
+     *
      * @param {Message} message
-     * @returns {ResolvedContent}
+     * @returns {ResolvedContent|null}
      */
     resolvePrefix(message) {
         if(this.config.validator && typeof this.config.validator === 'function')    {
@@ -191,13 +196,8 @@ class CommandHandler extends EventEmitter   {
                 if(data.stats.isFile() && path.extname(data.path) === '.js') files.push(data.path);
             });
 
-            walker.on('errors', err => {
-                return reject(err);
-            });
-
-            walker.on('end', () => {
-                return resolve(files);
-            });
+            walker.on('errors', err => reject(err));
+            walker.on('end', () => resolve(files));
         }).then(files => {
             for(const file of files)    {
 
