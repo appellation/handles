@@ -167,7 +167,7 @@ class CommandHandler extends EventEmitter   {
     fetchCommand(content, message)  {
         const split = content.trim().toLowerCase().split(' ');
         if(typeof split[0] === 'string' && this.commands.has(split[0])) {
-            this.trimmedContent = split.slice(1).join(' ');
+            this.trimmedContent = content.replace(/^(\S*\s*)(.*)/, '$2');
             return this.commands.get(split[0]);
         }
 
