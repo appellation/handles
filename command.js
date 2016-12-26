@@ -84,6 +84,8 @@ class CommandHandler extends EventEmitter   {
             this.resolvedContent = resolved;
 
             const cmd = this.fetchCommand(resolved, message);
+            if(cmd instanceof NotACommandError) return Promise.reject(cmd);
+
             if(!cmd.validator) return cmd;
             if(typeof cmd.validator !== 'function') throw new Error('validator is not a function');
 
@@ -201,19 +203,23 @@ class CommandHandler extends EventEmitter   {
         }).then(files => {
             for(const file of files)    {
 
-                /**
-                 * @type {Command}
-                 */
-                const mod = require(file);
-                if(mod.disabled === false && (mod.disabled !== true || typeof mod.disabled !== 'undefined')) continue;
+                try {
+                    /**
+                     * @type {Command}
+                     */
+                    const mod = require(file);
+                    if (mod.disabled === false && (mod.disabled !== true || typeof mod.disabled !== 'undefined')) continue;
 
-                if(mod.triggers && typeof mod.triggers[Symbol.iterator] === 'function' && typeof mod.triggers !== 'string' && !(mod.triggers instanceof RegExp))  {
-                    for(const trigger of mod.triggers)  this._setModule(trigger, mod);
+                    if (mod.triggers && typeof mod.triggers[Symbol.iterator] === 'function' && typeof mod.triggers !== 'string' && !(mod.triggers instanceof RegExp)) {
+                        for (const trigger of mod.triggers)  this._setModule(trigger, mod);
 
-                }   else if(typeof mod === 'function')  {
-                    this._setModule(path.basename(file, '.js'), { func: mod })
-                }   else    {
-                    this._setModule(mod.triggers, mod);
+                    } else if (typeof mod === 'function') {
+                        this._setModule(path.basename(file, '.js'), {func: mod})
+                    } else {
+                        this._setModule(mod.triggers, mod);
+                    }
+                }   catch(e)    {
+                    //
                 }
             }
 
