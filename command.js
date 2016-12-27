@@ -3,7 +3,7 @@
  */
 
 const fsX = require('fs-extra');
-const EventEmitter = require('events');
+const EventEmitter = require('events').EventEmitter;
 const path = require('path');
 
 const NotACommandError = require('./errors/NotACommand');
@@ -208,7 +208,7 @@ class CommandHandler extends EventEmitter   {
                      * @type {Command}
                      */
                     const mod = require(file);
-                    if (mod.disabled === false && (mod.disabled !== true || typeof mod.disabled !== 'undefined')) continue;
+                    if (mod.disabled === true) continue;
 
                     if (mod.triggers && typeof mod.triggers[Symbol.iterator] === 'function' && typeof mod.triggers !== 'string' && !(mod.triggers instanceof RegExp)) {
                         for (const trigger of mod.triggers)  this._setModule(trigger, mod);
