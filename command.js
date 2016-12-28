@@ -210,12 +210,15 @@ class CommandHandler extends EventEmitter   {
                     const mod = require(file);
                     if (mod.disabled === true) continue;
 
+                    // if triggers are iterable
                     if (mod.triggers && typeof mod.triggers[Symbol.iterator] === 'function' && typeof mod.triggers !== 'string' && !(mod.triggers instanceof RegExp)) {
                         for (const trigger of mod.triggers)  this._setModule(trigger, mod);
 
-                    } else if (typeof mod === 'function') {
+                    } else if (typeof mod === 'function') { // if a single function is exported
                         this._setModule(path.basename(file, '.js'), {func: mod})
-                    } else {
+                    } else if (typeof mod.triggers === 'undefined') {   // if no triggers are provided
+                        this._setModule(path.basename(file, '.js'), mod);
+                    } else  {
                         this._setModule(mod.triggers, mod);
                     }
                 }   catch(e)    {
