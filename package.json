@@ -27,6 +27,6 @@
     "fs-extra": "^1.0.0"
   },
   "peerDependencies": {
-    "discord.js": "^10.0.1"
+    "discord.js": ">=10.0.0"
   }
 }
