@@ -5,6 +5,7 @@
 const fsX = require('fs-extra');
 const EventEmitter = require('events').EventEmitter;
 const path = require('path');
+const clearRequire = require('clear-require');
 
 const NotACommandError = require('./errors/NotACommand');
 const InvalidCommandError = require('./errors/InvalidCommand');
@@ -204,6 +205,8 @@ class CommandHandler extends EventEmitter   {
             for(const file of files)    {
 
                 try {
+                    clearRequire(file);
+
                     /**
                      * @type {Command}
                      */
