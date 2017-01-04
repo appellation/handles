@@ -254,7 +254,11 @@ class CommandHandler extends EventEmitter   {
      * @private
      */
     static _argumentify(string)   {
-        return string ? string.split(' ') : [];
+        const regex = /(("|')([a-zA-Z0-9 ]+)("|'))|([a-zA-Z0-9]+)/g;
+        const matches = [];
+        let match;
+        while((match = regex.exec(string)) !== null) matches.push(match[3] || match[0]);
+        return matches;
     }
 }
 
