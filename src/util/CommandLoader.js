@@ -7,8 +7,8 @@ const EventEmitter = require('events').EventEmitter;
 const path = require('path');
 const clearRequire = require('clear-require');
 
-const NotACommandError = require('./errors/NotACommand');
-const InvalidCommandError = require('./errors/InvalidCommand');
+const NotACommandError = require('../errors/NotACommand');
+const InvalidCommandError = require('../errors/InvalidCommand');
 
 /**
  * @typedef {Object|Function} Command - Structure of exported commands
@@ -39,6 +39,7 @@ const InvalidCommandError = require('./errors/InvalidCommand');
  * @typedef {Function} CommandExecutor - Structure of any command execution functions.
  * @param {Message} message
  * @param {Array} args
+ * @param {CommandLoader} loader
  * @returns {*}
  */
 
