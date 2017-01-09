@@ -218,7 +218,7 @@ class CommandHandler extends EventEmitter   {
                         for (const trigger of mod.triggers)  this._setModule(trigger, mod);
 
                     } else if (typeof mod === 'function') { // if a single function is exported
-                        this._setModule(path.basename(file, '.js'), {func: mod})
+                        this._setModule(path.basename(file, '.js'), {func: mod});
                     } else if (typeof mod.triggers === 'undefined') {   // if no triggers are provided
                         this._setModule(path.basename(file, '.js'), mod);
                     } else  {
