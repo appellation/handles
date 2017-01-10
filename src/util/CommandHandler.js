@@ -13,19 +13,19 @@ class CommandHandler extends EventEmitter {
 
         /**
          * The command loader to use for commands.
-         * @type CommandLoader
+         * @type {CommandLoader}
          */
         this.loader = loader;
 
         /**
          * The message that triggered this command.
-         * @type Message
+         * @type {Message}
          */
         this.msg = msg;
 
         /**
          * The body of the command.
-         * @type String
+         * @type {String}
          */
         this.body = body || this.msg.content;
 
@@ -56,8 +56,9 @@ class CommandHandler extends EventEmitter {
 
     handle()    {
         return new Promise((resolve, reject) => {
+            if(this.msg.author.bot) return reject(null);
             if(!this.resolvePrefix() || !this.resolveCommand()) return reject(new NotACommandError(this.msg));
-            return this.validate().catch(reason => reject(new InvalidCommandError(this.msg, this.command, reason)));
+            return this.validate().then(resolve).catch(reason => reject(new InvalidCommandError(this.msg, this.command, reason)));
         }).then(() => {
             if(typeof this.command.func !== 'function') throw new Error('No command function provided.');
             this.emit('commandStarted', {
@@ -75,7 +76,7 @@ class CommandHandler extends EventEmitter {
                 result
             });
 
-            if((this.config.respond || this.command.respond) && (typeof result === 'string' || typeof result === 'number')) this.msg.channel.sendMessage(result).catch(() => null);
+            if((this.loader.config.respond || this.command.respond) && (typeof result === 'string' || typeof result === 'number')) this.msg.channel.sendMessage(result).catch(() => null);
             return result;
         }).catch(err => {
             if(!err) return;
