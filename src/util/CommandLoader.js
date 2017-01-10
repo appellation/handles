@@ -7,9 +7,6 @@ const EventEmitter = require('events').EventEmitter;
 const path = require('path');
 const clearRequire = require('clear-require');
 
-const NotACommandError = require('../errors/NotACommand');
-const InvalidCommandError = require('../errors/InvalidCommand');
-
 /**
  * @typedef {Object|Function} Command - Structure of exported commands
  * @property {Iterable<String|RegExp>|String|RegExp} triggers
@@ -51,7 +48,7 @@ const InvalidCommandError = require('../errors/InvalidCommand');
  * Class to handle events
  * @extends EventEmitter
  */
-class CommandHandler extends EventEmitter   {
+class CommandLoader extends EventEmitter   {
 
     /**
      * @param {Config} config
@@ -64,124 +61,6 @@ class CommandHandler extends EventEmitter   {
         if(!this.config.directory) this.config.directory = './commands';
 
         this.loadCommands();
-    }
-
-    /**
-     * Handle commands.
-     *
-     * @param {Message} message
-     * @param {String} [body]
-     * @fires CommandHandler#commandStarted
-     * @fires CommandHandler#commandFinished
-     * @returns {Promise.<*>}
-     */
-    handle(message, body) {
-
-        return new Promise((resolve, reject) => {
-            if(message.author.bot) return reject(null);
-
-            let content = body || this.resolvePrefix(message);
-            return content ? resolve(content) : reject(content);
-        }).then(resolved => {
-            this.resolvedContent = resolved;
-
-            const cmd = this.fetchCommand(resolved, message);
-            if(cmd instanceof NotACommandError) return Promise.reject(cmd);
-
-            if(!cmd.validator) return cmd;
-            if(typeof cmd.validator !== 'function') throw new Error('validator is not a function');
-
-            const valid = cmd.validator(message, CommandHandler._argumentify(this.trimmedContent));
-
-            if(valid instanceof Promise)    {
-                return valid.then(() => cmd).catch(reason => {
-                    return Promise.reject(new InvalidCommandError(message, cmd, reason));
-                });
-            }   else if(typeof valid === 'boolean')    {
-                return valid ? cmd : Promise.reject(new InvalidCommandError(message, cmd, 'Invalid command.'));
-            }   else if(valid)  {
-                return Promise.reject(new InvalidCommandError(message, cmd, valid));
-            }   else    {
-                return cmd;
-            }
-
-        }).then(cmd => {
-            if(typeof cmd.func !== 'function') throw new Error('unable to execute command: no function provided');
-
-            /**
-             * @event EventEmitter#commandStarted
-             * @type {Object}
-             * @property {Message} message
-             * @property {ResolvedContent} content
-             * @property {Command} cmd
-             */
-            this.emit('commandStarted', { message, content: this.resolvedContent, cmd });
-
-            return Promise.all([
-                cmd,
-                Promise.resolve(cmd.func(message, CommandHandler._argumentify(this.trimmedContent), this))
-            ]);
-        }).then(([cmd, result]) => {
-
-            /**
-             * @event EventEmitter#commandFinished
-             * @type {Object}
-             * @property {Message} message
-             * @property {ResolvedContent} content
-             * @property {Command} cmd
-             * @property {*} result - The result of the command execution.
-             */
-            this.emit('commandFinished', { message, content: this.resolvedContent, cmd, result });
-
-            if((this.config.respond || cmd.respond) && (typeof result === 'string' || typeof result === 'number')) message.channel.sendMessage(result).catch(() => null);
-            return result;
-        }).catch(err => {
-            if(!err) return;
-            if((typeof this.config.ignoreInvalid === 'undefined' || this.config.ignoreInvalid === true) && (err instanceof NotACommandError || err instanceof InvalidCommandError)) return;
-            return Promise.reject(err);
-        });
-    }
-
-    /**
-     * Given a message, return it's content without any prefixes (or null if it's not properly prefixed).
-     *
-     * @param {Message} message
-     * @returns {ResolvedContent}
-     */
-    resolvePrefix(message) {
-        if(this.config.validator && typeof this.config.validator === 'function')    {
-            return this.config.validator(message);
-        }   else    {
-
-            this.config.prefixes.concat([ `<@${message.client.user.id}>`, `<@!${message.client.user.id}>` ]);
-            for(const pref of this.config.prefixes) if(message.content.startsWith(pref)) return message.content.substring(pref.length).trim();
-            return null;
-        }
-    }
-
-    /**
-     * Fetch a command from given content.
-     *
-     * @param {String} content - Should not contain prefixes
-     * @param {Message} [message] - Only used for returning an error when no command is found.
-     * @returns {Command|NotACommand}
-     */
-    fetchCommand(content, message)  {
-        const split = content.trim().toLowerCase().split(' ');
-        if(typeof split[0] === 'string' && this.commands.has(split[0])) {
-            this.trimmedContent = content.replace(/^(\S*\s*)(.*)/, '$2');
-            return this.commands.get(split[0]);
-        }
-
-        for(const [trigger, cmd] of this.commands)  {
-            const regex = (trigger instanceof RegExp) ? trigger : new RegExp(`^${trigger}\\s*`, 'i');
-            if(regex.test(content)) {
-                this.trimmedContent = content.replace(regex, '').trim();
-                return cmd;
-            }
-        }
-
-        return new NotACommandError(message);
     }
 
     /**
@@ -203,6 +82,7 @@ class CommandHandler extends EventEmitter   {
             walker.on('errors', err => reject(err));
             walker.on('end', () => resolve(files));
         }).then(files => {
+            const failed = [];
             for(const file of files)    {
 
                 try {
@@ -216,51 +96,26 @@ class CommandHandler extends EventEmitter   {
 
                     // if triggers are iterable
                     if (mod.triggers && typeof mod.triggers[Symbol.iterator] === 'function' && typeof mod.triggers !== 'string' && !(mod.triggers instanceof RegExp)) {
-                        for (const trigger of mod.triggers)  this._setModule(trigger, mod);
+                        for (const trigger of mod.triggers)  this.commands.set(trigger, mod);
 
                     } else if (typeof mod === 'function') { // if a single function is exported
-                        this._setModule(path.basename(file, '.js'), {func: mod});
+                        this.commands.set(path.basename(file, '.js'), {func: mod});
                     } else if (typeof mod.triggers === 'undefined') {   // if no triggers are provided
-                        this._setModule(path.basename(file, '.js'), mod);
+                        this.commands.set(path.basename(file, '.js'), mod);
                     } else  {
-                        this._setModule(mod.triggers, mod);
+                        this.commands.set(mod.triggers, mod);
                     }
                 }   catch(e)    {
-                    //
+                    failed.push(file);
                 }
             }
 
             /**
              * @event EventEmitter#loaded
              */
-            this.emit('loaded');
+            this.emit('loaded', {commands: this.commands, failed});
         });
-    }
-
-    /**
-     * Adds a module to the map.
-     *
-     * @param {String|RegExp} trigger
-     * @param {Command} module
-     * @private
-     */
-    _setModule(trigger, module)  {
-        this.commands.set(trigger, module);
-    }
-
-    /**
-     * Make a string into arguments.
-     * @param {String} string
-     * @returns {Array}
-     * @private
-     */
-    static _argumentify(string)   {
-        const regex = /("([^"]+)")|('([^']+)')|\S+/g;
-        const matches = [];
-        let match;
-        while((match = regex.exec(string)) !== null) matches.push(match[4] || match[2] || match[0]);
-        return matches;
     }
 }
 
-module.exports = CommandHandler;
+module.exports = CommandLoader;

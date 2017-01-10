@@ -29,13 +29,13 @@ class CommandHandler extends EventEmitter {
         this.body = body || this.msg.content;
 
         /**
-         * The unprefixed content of the message.
-         * @type {String|null}
+         * The un-prefixed content of the message.
+         * @type {ResolvedContent}
          */
         this.resolvedContent = null;
 
         /**
-         * The command trigger that was applied.
+         * The command.
          * @type {Command}
          */
         this.command = null;
@@ -54,8 +54,10 @@ class CommandHandler extends EventEmitter {
     }
 
     handle()    {
-        if(!this.resolvePrefix() || !this.resolveCommand()) return Promise.resolve(new NotACommandError(this.msg));
-        return this.validate().then(() => {
+        return new Promise((resolve, reject) => {
+            if(!this.resolvePrefix() || !this.resolveCommand()) return reject(new NotACommandError(this.msg));
+            return this.validate().catch(reason => reject(new InvalidCommandError(this.msg, this.command, reason)));
+        }).then(() => {
             if(typeof this.command.func !== 'function') throw new Error('No command function provided.');
             this.emit('commandStarted', {
                 message: this.msg,
@@ -64,9 +66,21 @@ class CommandHandler extends EventEmitter {
             });
 
             return Promise.resolve(this.command.func(this.msg, this.args, this.loader));
-        }).catch(reason => {
-            return new InvalidCommandError(this.msg, this.command, reason);
-        })
+        }).then(result => {
+            this.emit('commandFinished', {
+                message: this.msg,
+                content: this.resolvedContent,
+                command: this.command,
+                result
+            });
+
+            if((this.config.respond || cmd.respond) && (typeof result === 'string' || typeof result === 'number')) this.msg.channel.sendMessage(result).catch(() => null);
+            return result;
+        }).catch(err => {
+            if(!err) return;
+            if((typeof this.config.ignoreInvalid === 'undefined' || this.config.ignoreInvalid === true) && (err instanceof NotACommandError || err instanceof InvalidCommandError)) return;
+            return Promise.reject(err);
+        });
     }
 
     /**
