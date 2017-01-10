@@ -4,6 +4,8 @@
 
 For those of us who get frustrated with writing command handlers but don't quite want to use a full framework.  Intended for use with [Discord.js](https://github.com/hydrabolt/discord.js).
 
+Documentation is available at [handles.topkek.pw](http://handles.topkek.pw).
+
 ## Installation
 
 ```xl
