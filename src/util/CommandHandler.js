@@ -9,6 +9,7 @@ const InvalidCommandError = require('../errors/InvalidCommand');
 
 class CommandHandler extends EventEmitter {
     constructor(loader, msg, body)    {
+        super();
 
         /**
          * The command loader to use for commands.
@@ -74,7 +75,7 @@ class CommandHandler extends EventEmitter {
                 result
             });
 
-            if((this.config.respond || cmd.respond) && (typeof result === 'string' || typeof result === 'number')) this.msg.channel.sendMessage(result).catch(() => null);
+            if((this.config.respond || this.command.respond) && (typeof result === 'string' || typeof result === 'number')) this.msg.channel.sendMessage(result).catch(() => null);
             return result;
         }).catch(err => {
             if(!err) return;
