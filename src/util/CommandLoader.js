@@ -108,7 +108,7 @@ class CommandLoader extends EventEmitter   {
                     }
                 }   catch(e)    {
                     failed.push(file);
-                    console.error(e);
+                    console.error(e); // eslint-disable-line no-console
                 }
             }
 
