@@ -1,13 +1,20 @@
-/**
- * Created by nelso on 1/9/2017.
- */
 
 const EventEmitter = require('events').EventEmitter;
 
 const NotACommandError = require('../errors/NotACommand');
 const InvalidCommandError = require('../errors/InvalidCommand');
 
-class CommandHandler extends EventEmitter {
+/**
+ * A message to be processed as a command.
+ *
+ * @param {CommandLoader} loader
+ * @param {Message} msg
+ * @param {String} [body]
+ * @extends {EventEmitter}
+ * @constructor
+ */
+class CommandMessage extends EventEmitter {
+
     constructor(loader, msg, body)    {
         super();
 
@@ -49,11 +56,18 @@ class CommandHandler extends EventEmitter {
 
         /**
          * The command arguments.
-         * @type {Array}
+         * @type {Array<String>}
          */
         this.args = [];
     }
 
+    /**
+     * Handles a command.
+     * @fires CommandMessage#commandStarted
+     * @fires CommandMessage#commandFinished
+     * @fires CommandMessage#commandFailed
+     * @return {Promise} - Conditional upon settings and return type of CommandExecutor.
+     */
     handle()    {
         return new Promise((resolve, reject) => {
             if(this.msg.author.bot) return reject(null);
@@ -61,18 +75,59 @@ class CommandHandler extends EventEmitter {
             return this.validate().then(resolve).catch(reason => reject(new InvalidCommandError(this.msg, this.command, reason)));
         }).then(() => {
             if(typeof this.command.func !== 'function') throw new Error('No command function provided.');
+
+            /**
+             * Fired when the command starts.
+             *
+             * @event CommandMessage#commandStarted
+             * @type {object}
+             * @property {Message} message
+             * @property {Command} command
+             * @property {ResolvedContent} content
+             */
             this.emit('commandStarted', {
                 message: this.msg,
                 command: this.command,
                 content: this.resolvedContent
             });
 
-            return Promise.resolve(this.command.func(this.msg, this.args, this.loader));
+            return Promise.resolve(this.command.func(this.msg, this.args, this)).catch(err => {
+
+                /**
+                 * This is only fired if the CommandExecutor returns a promise that rejects.
+                 *
+                 * @event CommandMessage#commandFailed
+                 * @type {object}
+                 * @property {Message} message
+                 * @property {Command} command
+                 * @property {ResolvedContent} content
+                 * @property {*} error - The error of the command.
+                 */
+                this.emit('commandFailed', {
+                    message: this.msg,
+                    command: this.command,
+                    content: this.resolvedContent,
+                    error: err
+                });
+
+                return Promise.reject(err);
+            });
         }).then(result => {
+
+            /**
+             * Fired upon successful completion of the command.
+             *
+             * @event CommandMessage#commandFinished
+             * @type {object}
+             * @property {Message} message
+             * @property {Command} command
+             * @property {ResolvedContent} content
+             * @property {*} result - The returned result of the CommandExecutor.
+             */
             this.emit('commandFinished', {
                 message: this.msg,
-                content: this.resolvedContent,
                 command: this.command,
+                content: this.resolvedContent,
                 result
             });
 
@@ -87,7 +142,7 @@ class CommandHandler extends EventEmitter {
 
     /**
      * Ensure that the command form is valid.
-     * @return {Promise} - Rejects with reason, otherwise resolves.
+     * @return {Promise<*,String>} - Rejects with reason, otherwise resolves.
      */
     validate()  {
         if(!this.command) return Promise.reject('No command to validate.');
@@ -158,4 +213,4 @@ class CommandHandler extends EventEmitter {
     }
 }
 
-module.exports = CommandHandler;
+module.exports = CommandMessage;

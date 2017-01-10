@@ -29,6 +29,7 @@
     "discord.js": ">=10.0.0"
   },
   "devDependencies": {
-    "eslint": "^3.13.0"
+    "eslint": "^3.13.0",
+    "jsdoc": "^3.4.3"
   }
 }

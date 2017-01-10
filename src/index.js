@@ -1,8 +1,6 @@
-/**
- * Created by Will on 12/15/2016.
- */
+
 const CommandLoader = require('./util/CommandLoader');
-const CommandHandler = require('./util/CommandHandler');
+const CommandHandler = require('./util/CommandMessage');
 
 module.exports = config => {
     const loader = new CommandLoader(config);

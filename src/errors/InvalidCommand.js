@@ -1,6 +1,3 @@
-/**
- * Created by Will on 12/15/2016.
- */
 
 class InvalidCommand extends Error   {
     /**

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>Handles</h1><p><a href="https://travis-ci.org/appellation/handles"><img src="https://travis-ci.org/appellation/handles.svg?branch=master" alt="Build Status"></a></p>
+<p>For those of us who get frustrated with writing command handlers but don't quite want to use a full framework.  Intended for use with <a href="https://github.com/hydrabolt/discord.js">Discord.js</a>.</p>
+<h2>Installation</h2><pre class="prettyprint source lang-xl"><code>npm install --save discord-handles</code></pre><p>Or, if you want to risk cutting yourself, install the bleeding edge version:</p>
+<pre class="prettyprint source lang-xl"><code>npm install --save appellation/handles#master</code></pre><p>Usually I try to avoid pushing broken code, but sometimes I move a little too fast.</p>
+<h2>Examples</h2><p>There's a directory called <code>examples</code>; what are you waiting for?  Oh, maybe some context:</p>
+<h3>The simplest it gets</h3><pre class="prettyprint source lang-js"><code>const Discord = require('discord.js');
+const client = new Discord.Client(); 
+const messageHandler = require('discord-handles')();
+
+client.on('message', messageHandler);</code></pre><p>Meanwhile, inside <code>./commands</code>, a file called <code>ping.js</code> exists:</p>
+<pre class="prettyprint source lang-js"><code>module.exports = (message, args) => {
+    return message.channel.sendMessage('pong');
+}</code></pre><p>This assumes a lot of things.  First of all, your commands are in a single directory called <code>commands</code> on the root level of your project.  Secondly, the only prefix is mentions.  In this case, your bot would only respond to <code>@Bot ping</code> (based on the default prefix and the filename) and it would do so by simply saying <code>pong</code>.</p>
+<h3>Command options!!!!!!!</h3><p>Let's face it: most of us like a little customization.  For those who like to tinker, your commands can also export an object of specific structure.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Option</th>
+<th style="text-align:center">Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">func</td>
+<td style="text-align:center">Function</td>
+<td>This is where you command happens; it takes two arguments: a <code>Message</code> object and an array of arguments respectively.</td>
+</tr>
+<tr>
+<td style="text-align:center">triggers</td>
+<td style="text-align:center">Array(String/RegExp)/String/RegExp</td>
+<td>This is what will trigger this command and can be either a string or a regular expression.  If it's an array, all of those triggers will be applied.</td>
+</tr>
+<tr>
+<td style="text-align:center">validator</td>
+<td style="text-align:center">Function</td>
+<td>More below, but this determines whether to call the command or not.</td>
+</tr>
+<tr>
+<td style="text-align:center">respond</td>
+<td style="text-align:center">boolean</td>
+<td>Whether to automatically attempt to send the return value of the command function to the channel the command was issued in.</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>validator</code> is pretty powerful and unfortunately complicated.  It takes two parameters, a <code>Message</code> object and an array of arguments, and should return a value as outlined below.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Return type</th>
+<th>Considered valid when...</th>
+<th>Considered invalid when...</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Promise</td>
+<td>Resolves with anything.</td>
+<td>Rejects with an optional reason.</td>
+</tr>
+<tr>
+<td style="text-align:center">Boolean</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td style="text-align:center">other</td>
+<td>falsy (undefined, for instance)</td>
+<td>truthy (a string reason, for example)</td>
+</tr>
+</tbody>
+</table>
+<p>For example, the below command would be invalid if no arguments are passed:</p>
+<pre class="prettyprint source lang-js"><code>module.exports = {
+    func: (message, args, handler) => {
+        return `hey ${args[0]}, wake up`;
+    },
+    triggers: [
+        'poke',
+        'prod'
+    ],
+    validator: (message, args) =>  {
+        return args.length !== 0;
+    }
+}</code></pre><blockquote>
+<p>n.b. don't use this code if you really want to make a poke command.</p>
+</blockquote>
+<h3>Ooohhhhh, global options</h3><p>Suppose we pass a parameter to our message handler initializer like so:</p>
+<pre class="prettyprint source lang-js"><code>const messageHandler = require('discord-handles')({
+    respond: true
+});</code></pre><p>Now your command handler will take the output of your <code>func</code>, resolve it if it's a promise, and if the result if a string or number, it will automatically send that output to the channel the command was issued in.  This greatly simplifies our example command like so:</p>
+<pre class="prettyprint source lang-js"><code>module.exports = () => 'pong';</code></pre><p>Here's a complete list of options:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Option</th>
+<th style="text-align:center">Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">respond</td>
+<td style="text-align:center">boolean</td>
+<td>Determines whether the command handler should attempt to automatically respond with output from <code>func</code>.  If it's a promise, the promise will be resolved before outputting.  This is exactly the same as the command-level option.</td>
+</tr>
+<tr>
+<td style="text-align:center">prefixes</td>
+<td style="text-align:center">Array</td>
+<td>An array of strings, each of which denotes a prefix to which your bot will respond.  Automatically and always includes mentions. These won't work if you've specified a <code>validator</code> (below).</td>
+</tr>
+<tr>
+<td style="text-align:center">directory</td>
+<td style="text-align:center">String</td>
+<td>When you want to name your command directory <code>folder of awesomeness</code>, simply set this to <code>./folder of awesomeness</code> and put your command files inside.  You can use this option to specify a subdirectory or any other schenanigans you might want.</td>
+</tr>
+<tr>
+<td style="text-align:center">validator</td>
+<td style="text-align:center">Function</td>
+<td>This function accepts one parameter: the <code>Message</code> object of D.js.  It must return the message content (<code>String</code>) without any prefixes if the message is a command, or falsy if the command is not valid.  It will be evaluated for every message your bot receives, so don't do anything inefficient here.</td>
+</tr>
+<tr>
+<td style="text-align:center">ignoreInvalid</td>
+<td style="text-align:center">boolean</td>
+<td>By default, your command handler will ignore any invalid commands.  If, for some reason, you feel inclined to handle them yourself, invalid commands will reject with a <code>NotACommand</code> object that has properties <code>msg</code> of the Message object and <code>message</code> of string <code>Not a command.</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Note that providing a validator will override any prefixes you set.  You'll have to check prefixes manually.</p>
+<h3>Interacting directly with the handler</h3><p>You can call the handler with no arguments to get its instance.  This is useful in cases where you might want to listen for events or otherwise interact directly with the command handler.  For example:</p>
+<pre class="prettyprint source lang-js"><code>const handler = require('discord-handles')();
+
+// listen for events
+handler().on('commandStarted', ({ message, contents, cmd }) => {
+    // do stuff after the command starts
+});
+
+handler().on('commandFinished', ({ message, contents, cmd, result }) => {
+    // do stuff after the command finishes
+});
+
+// interact with the handler directly
+handler().reloadCommands();</code></pre><h3>A couple other things</h3><p>The handler resolves with the result of the command.</p>
+<p>If either the handler or the command specify <code>respond</code>, the handler will respond.  There is no priority given to either (should be an easy fix if you want to PR it).</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CommandLoader.html">CommandLoader</a></li><li><a href="CommandMessage.html">CommandMessage</a></li><li><a href="InvalidCommand.html">InvalidCommand</a></li><li><a href="NotACommand.html">NotACommand</a></li></ul><h3>Events</h3><ul><li><a href="CommandLoader.html#event:commandsLoaded">commandsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">commandFinished</a></li><li><a href="CommandMessage.html#event:commandStarted">commandStarted</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon Jan 09 2017 20:40:50 GMT-0800 (Pacific Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,6 +1,3 @@
-/**
- * Created by Will on 12/15/2016.
- */
 
 /**
  * Used whenever a potential command has been determined as not a command.
