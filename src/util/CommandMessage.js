@@ -135,7 +135,7 @@ class CommandMessage extends EventEmitter {
             return result;
         }).catch(err => {
             if(!err) return;
-            if((typeof this.config.ignoreInvalid === 'undefined' || this.config.ignoreInvalid === true) && (err instanceof NotACommandError || err instanceof InvalidCommandError)) return;
+            if((typeof this.loader.config.ignoreInvalid === 'undefined' || this.loader.config.ignoreInvalid === true) && (err instanceof NotACommandError || err instanceof InvalidCommandError)) return;
             return Promise.reject(err);
         });
     }
