@@ -5,8 +5,7 @@
 class NotACommand extends Error {
     constructor(message)   {
         super();
-        this.msg = message;
-        this.message = 'Not a command.';
+        this.message = message;
     }
 }
 

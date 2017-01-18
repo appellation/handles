@@ -1,8 +1,8 @@
 
 const EventEmitter = require('events').EventEmitter;
 
-const NotACommandError = require('../errors/NotACommand');
-const InvalidCommandError = require('../errors/InvalidCommand');
+const NotACommand = require('../errors/NotACommand');
+const InvalidCommand = require('../errors/InvalidCommand');
 
 /**
  * A message to be processed as a command.
@@ -63,16 +63,40 @@ class CommandMessage extends EventEmitter {
 
     /**
      * Handles a command.
+     *
+     * @fires CommandMessage#notACommand
+     * @fires CommandMessage#invalidCommand
      * @fires CommandMessage#commandStarted
      * @fires CommandMessage#commandFinished
      * @fires CommandMessage#commandFailed
+     * @throws {Error} If no command function is provided (this really should not happen, ever).
      * @return {Promise} - Conditional upon settings and return type of CommandExecutor.
      */
     handle()    {
-        return new Promise((resolve, reject) => {
-            if(this.message.author.bot) return reject(null);
-            if(!this.resolvePrefix() || !this.resolveCommand()) return reject(new NotACommandError(this.message));
-            return this.validate().then(resolve).catch(reason => reject(new InvalidCommandError(this.message, this.command, reason)));
+        new Promise((resolve, reject) => {
+            if(this.message.author.bot || !this.resolvePrefix() || !this.resolveCommand()) {
+
+                /**
+                 * Fired if the message is not a command.
+                 *
+                 * @event CommandMessage#notACommand
+                 * @type {NotACommand}
+                 */
+                this.emit('notACommand', new NotACommand(this));
+                return reject();
+            }
+
+            return this.validate().then(resolve).catch(reason => {
+
+                /**
+                 * Fired if the command is invalid.
+                 *
+                 * @event CommandMessage#invalidCommand
+                 * @type {InvalidCommand}
+                 */
+                this.emit('invalidCommand', new InvalidCommand(this, reason));
+                return reject();
+            });
         }).then(() => {
             if(typeof this.command.func !== 'function') throw new Error('No command function provided.');
 
@@ -102,12 +126,10 @@ class CommandMessage extends EventEmitter {
                  * @property {*} error - The error of the command.
                  * @see CommandExecutor
                  */
-                this.emit('commandFailed', {
+                return this.emit('commandFailed', {
                     command: this,
                     error: err
                 });
-
-                return Promise.reject(err);
             });
         }).then(result => {
 
@@ -128,9 +150,8 @@ class CommandMessage extends EventEmitter {
             if((this.loader.config.respond || this.command.respond) && (typeof result === 'string' || typeof result === 'number')) this.message.channel.sendMessage(result);
             return result;
         }).catch(err => {
-            if(!err) return;
-            if((typeof this.loader.config.ignoreInvalid === 'undefined' || this.loader.config.ignoreInvalid === true) && (err instanceof NotACommandError || err instanceof InvalidCommandError)) return;
-            return Promise.reject(err);
+            if(typeof err === 'undefined') return;
+            this.emit('error', err);
         });
     }
 
@@ -175,7 +196,7 @@ class CommandMessage extends EventEmitter {
      */
     resolveCommand()  {
         if(!this.resolvedContent) this.resolvePrefix();
-        if(!this.resolvedContent) throw new NotACommandError(this.message);
+        if(!this.resolvedContent) throw new NotACommand(this.message);
 
         const split = this.resolvedContent.trim().toLowerCase().split(' ');
         if(typeof split[0] === 'string' && this.loader.commands.has(split[0])) {
@@ -193,7 +214,7 @@ class CommandMessage extends EventEmitter {
             }
         }
 
-        return new NotACommandError(this.message);
+        return new NotACommand(this.message);
     }
 
     /**

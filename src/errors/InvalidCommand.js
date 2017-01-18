@@ -2,14 +2,12 @@
 class InvalidCommand extends Error   {
     /**
      * @constructor
-     * @param {Message} message
-     * @param {Command} command
+     * @param {CommandMessage} message
      * @param {String} reason
      */
-    constructor(message, command, reason)   {
+    constructor(message, reason)   {
         super();
-        this.msg = message;
-        this.command = command;
+        this.message = message;
         this.message = reason;
     }
 }
