@@ -1,13 +1,16 @@
 
 const CommandLoader = require('./util/CommandLoader');
-const CommandHandler = require('./util/CommandMessage');
+const CommandMessage = require('./util/CommandMessage');
 
 module.exports = config => {
     const loader = new CommandLoader(config);
     return (msg, body) => {
         if(msg) {
-            const handler = new CommandHandler(loader, msg, body);
-            return handler.handle();
+            const commandMessage = new CommandMessage(loader, msg, body);
+            return {
+                commandMessage,
+                result: commandMessage.handle()
+            };
         }   else {
             return loader;
         }

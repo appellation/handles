@@ -8,14 +8,14 @@ const InvalidCommandError = require('../errors/InvalidCommand');
  * A message to be processed as a command.
  *
  * @param {CommandLoader} loader
- * @param {Message} msg
+ * @param {Message} message
  * @param {String} [body]
  * @extends {EventEmitter}
  * @constructor
  */
 class CommandMessage extends EventEmitter {
 
-    constructor(loader, msg, body)    {
+    constructor(loader, message, body)    {
         super();
 
         /**
@@ -28,13 +28,13 @@ class CommandMessage extends EventEmitter {
          * The message that triggered this command.
          * @type {Message}
          */
-        this.msg = msg;
+        this.message = message;
 
         /**
          * The body of the command.
          * @type {String}
          */
-        this.body = body || this.msg.content;
+        this.body = body || this.message.content;
 
         /**
          * The un-prefixed content of the message.
@@ -55,7 +55,7 @@ class CommandMessage extends EventEmitter {
         this.commandBody = null;
 
         /**
-         * The command arguments.
+         * The command arguments.  Delimited by space unless quoted.
          * @type {Array<String>}
          */
         this.args = [];
@@ -70,9 +70,9 @@ class CommandMessage extends EventEmitter {
      */
     handle()    {
         return new Promise((resolve, reject) => {
-            if(this.msg.author.bot) return reject(null);
-            if(!this.resolvePrefix() || !this.resolveCommand()) return reject(new NotACommandError(this.msg));
-            return this.validate().then(resolve).catch(reason => reject(new InvalidCommandError(this.msg, this.command, reason)));
+            if(this.message.author.bot) return reject(null);
+            if(!this.resolvePrefix() || !this.resolveCommand()) return reject(new NotACommandError(this.message));
+            return this.validate().then(resolve).catch(reason => reject(new InvalidCommandError(this.message, this.command, reason)));
         }).then(() => {
             if(typeof this.command.func !== 'function') throw new Error('No command function provided.');
 
@@ -86,27 +86,24 @@ class CommandMessage extends EventEmitter {
              * @property {ResolvedContent} content
              */
             this.emit('commandStarted', {
-                message: this.msg,
+                message: this.message,
                 command: this.command,
                 content: this.resolvedContent
             });
 
-            return Promise.resolve(this.command.func(this.msg, this.args, this)).catch(err => {
+            return Promise.resolve(this.command.func(this.message, this.args, this)).catch(err => {
 
                 /**
                  * This is only fired if the CommandExecutor returns a promise that rejects.
                  *
                  * @event CommandMessage#commandFailed
                  * @type {object}
-                 * @property {Message} message
-                 * @property {Command} command
-                 * @property {ResolvedContent} content
+                 * @property {CommandMessage} command
                  * @property {*} error - The error of the command.
+                 * @see CommandExecutor
                  */
                 this.emit('commandFailed', {
-                    message: this.msg,
-                    command: this.command,
-                    content: this.resolvedContent,
+                    command: this,
                     error: err
                 });
 
@@ -119,19 +116,16 @@ class CommandMessage extends EventEmitter {
              *
              * @event CommandMessage#commandFinished
              * @type {object}
-             * @property {Message} message
-             * @property {Command} command
-             * @property {ResolvedContent} content
+             * @property {CommandMessage} command
              * @property {*} result - The returned result of the CommandExecutor.
+             * @see CommandExecutor
              */
             this.emit('commandFinished', {
-                message: this.msg,
-                command: this.command,
-                content: this.resolvedContent,
+                command: this,
                 result
             });
 
-            if((this.loader.config.respond || this.command.respond) && (typeof result === 'string' || typeof result === 'number')) this.msg.channel.sendMessage(result).catch(() => null);
+            if((this.loader.config.respond || this.command.respond) && (typeof result === 'string' || typeof result === 'number')) this.message.channel.sendMessage(result);
             return result;
         }).catch(err => {
             if(!err) return;
@@ -148,7 +142,7 @@ class CommandMessage extends EventEmitter {
         if(!this.command) return Promise.reject('No command to validate.');
         if(typeof this.command.validator !== 'function') return Promise.resolve(true);
 
-        const validate = this.command.validator(this.msg, this.args);
+        const validate = this.command.validator(this.message, this.args);
         if(validate instanceof Promise)    {
             return validate;
         }   else if(typeof validate === 'boolean')    {
@@ -166,10 +160,10 @@ class CommandMessage extends EventEmitter {
     resolvePrefix() {
         const config = this.loader.config;
         if(config.validator && typeof config.validator === 'function')    {
-            return this.resolvedContent = config.validator(this.msg);
+            return this.resolvedContent = config.validator(this.message);
         }   else    {
 
-            config.prefixes.concat([ `<@${this.msg.client.user.id}>`, `<@!${this.msg.client.user.id}>` ]);
+            config.prefixes.concat([ `<@${this.message.client.user.id}>`, `<@!${this.message.client.user.id}>` ]);
             for(const pref of config.prefixes) if(this.body.startsWith(pref)) return this.resolvedContent = this.body.substring(pref.length).trim();
             return this.resolvedContent = null;
         }
@@ -177,11 +171,11 @@ class CommandMessage extends EventEmitter {
 
     /**
      * Resolve a command from the resolved content.
-     * @return {String|NotACommand}
+     * @return {Command|NotACommand}
      */
     resolveCommand()  {
         if(!this.resolvedContent) this.resolvePrefix();
-        if(!this.resolvedContent) throw new NotACommandError(this.msg);
+        if(!this.resolvedContent) throw new NotACommandError(this.message);
 
         const split = this.resolvedContent.trim().toLowerCase().split(' ');
         if(typeof split[0] === 'string' && this.loader.commands.has(split[0])) {
@@ -198,6 +192,8 @@ class CommandMessage extends EventEmitter {
                 return this.command = cmd;
             }
         }
+
+        return new NotACommandError(this.message);
     }
 
     /**
@@ -205,9 +201,10 @@ class CommandMessage extends EventEmitter {
      * @return {Array}
      */
     resolveArgs()   {
-        const regex = /("([^"]+)")|('([^']+)')|\S+/g;
-        const matches = [];
-        let match;
+        let regex = /("([^"]+)")|('([^']+)')|\S+/g,
+            matches = [],
+            match;
+
         while((match = regex.exec(this.commandBody)) !== null) matches.push(match[4] || match[2] || match[0]);
         return this.args = matches;
     }
