@@ -184,8 +184,8 @@ class CommandMessage extends EventEmitter {
             return this.resolvedContent = config.validator(this.message);
         }   else    {
 
-            config.prefixes.concat([ `<@${this.message.client.user.id}>`, `<@!${this.message.client.user.id}>` ]);
-            for(const pref of config.prefixes) if(this.body.startsWith(pref)) return this.resolvedContent = this.body.substring(pref.length).trim();
+            const prefixes = config.prefixes.concat([ `<@${this.message.client.user.id}>`, `<@!${this.message.client.user.id}>` ]);
+            for(const pref of prefixes) if(this.body.startsWith(pref)) return this.resolvedContent = this.body.substring(pref.length).trim();
             return this.resolvedContent = null;
         }
     }
