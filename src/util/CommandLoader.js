@@ -6,7 +6,7 @@ const clearRequire = require('clear-require');
 
 /**
  * @typedef {Object|Function} Command - Structure of exported commands.  Can also be a single function.
- * @property {Iterable<Trigger>|Trigger} triggers
+ * @property {Iterable<Trigger>|Trigger} [triggers] - Defaults to the file name.
  * @property {boolean} [disabled] - Whether the command is globally disabled
  * @property {CommandExecutor} func - The command function to execute.
  * @property {Validator} [validator] - Function to call to determine whether the command is valid.
@@ -19,7 +19,7 @@ const clearRequire = require('clear-require');
 
 /**
  * @typedef {Object} Config - Structure of command handler options.
- * @property {Array<String>} [prefixes] - Prefixes to use, if any.
+ * @property {Array<String>} [prefixes] - Prefixes to use, if any (automatically includes mentions).
  * @property {String} [directory] - Where your command files are located; defaults to `./commands`
  * @property {Validator} [validator] - Valid command forms (defaults to prefixed).
  * @property {boolean} [respond] - Whether to automatically send the CommandExecutor response to the channel the command was sent in.
@@ -37,7 +37,7 @@ const clearRequire = require('clear-require');
  * @typedef {Function} CommandExecutor - Structure of any command execution functions.
  * @param {Message} message
  * @param {Array} args
- * @param {CommandMessage} handler
+ * @param {CommandMessage} command
  * @returns {*} - The result of the command.
  */
 
@@ -86,29 +86,32 @@ class CommandLoader extends EventEmitter   {
             const failed = [];
             for(const file of files)    {
 
+                /**
+                 * @type {Command}
+                 */
+                let mod;
+
                 try {
                     clearRequire(file);
-
-                    /**
-                     * @type {Command}
-                     */
-                    const mod = require(file);
-                    if (mod.disabled === true) continue;
-
-                    // if triggers are iterable
-                    if (mod.triggers && typeof mod.triggers[Symbol.iterator] === 'function' && typeof mod.triggers !== 'string' && !(mod.triggers instanceof RegExp)) {
-                        for (const trigger of mod.triggers)  this.commands.set(trigger, mod);
-
-                    } else if (typeof mod === 'function') { // if a single function is exported
-                        this.commands.set(path.basename(file, '.js'), {func: mod});
-                    } else if (typeof mod.triggers === 'undefined') {   // if no triggers are provided
-                        this.commands.set(path.basename(file, '.js'), mod);
-                    } else  {
-                        this.commands.set(mod.triggers, mod);
-                    }
+                    mod = require(file);
                 }   catch(e)    {
                     failed.push(file);
                     console.error(e); // eslint-disable-line no-console
+                    continue;
+                }
+
+                if (mod.disabled === true) continue;
+
+                // if triggers are iterable
+                if (mod.triggers && typeof mod.triggers[Symbol.iterator] === 'function' && typeof mod.triggers !== 'string' && !(mod.triggers instanceof RegExp)) {
+                    for (const trigger of mod.triggers)  this.commands.set(trigger, mod);
+
+                } else if (typeof mod === 'function') { // if a single function is exported
+                    this.commands.set(path.basename(file, '.js'), {func: mod});
+                } else if (typeof mod.triggers === 'undefined') {   // if no triggers are provided
+                    this.commands.set(path.basename(file, '.js'), mod);
+                } else  {
+                    this.commands.set(mod.triggers, mod);
                 }
             }
 
@@ -118,7 +121,7 @@ class CommandLoader extends EventEmitter   {
              * @property {Map<Trigger, Command>} commands - Currently loaded commands.
              * @property {Array} failed - Directory listing of commands that failed to load.
              */
-            this.emit('loaded', {commands: this.commands, failed});
+            this.emit('commandsLoaded', {commands: this.commands, failed});
         });
     }
 }
