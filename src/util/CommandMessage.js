@@ -104,16 +104,9 @@ class CommandMessage extends EventEmitter {
              * Fired when the command starts.
              *
              * @event CommandMessage#commandStarted
-             * @type {object}
-             * @property {Message} message
-             * @property {Command} command
-             * @property {ResolvedContent} content
+             * @type {CommandMessage}
              */
-            this.emit('commandStarted', {
-                message: this.message,
-                command: this.command,
-                content: this.resolvedContent
-            });
+            this.emit('commandStarted', this);
 
             return Promise.resolve(this.command.func(this.message, this.args, this)).catch(err => {
 
@@ -126,10 +119,12 @@ class CommandMessage extends EventEmitter {
                  * @property {*} error - The error of the command.
                  * @see CommandExecutor
                  */
-                return this.emit('commandFailed', {
+                this.emit('commandFailed', {
                     command: this,
                     error: err
                 });
+
+                return Promise.reject();
             });
         }).then(result => {
 

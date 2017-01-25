@@ -12,7 +12,8 @@ module.exports = config => {
                 'invalidCommand',
                 'commandStarted',
                 'commandFinished',
-                'commandFailed'
+                'commandFailed',
+                'error'
             ]);
 
             return {
