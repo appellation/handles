@@ -16,10 +16,7 @@ module.exports = config => {
                 'error'
             ]);
 
-            return {
-                commandMessage,
-                result: commandMessage.handle()
-            };
+            return commandMessage.handle();
         }   else {
             return loader;
         }

@@ -70,10 +70,10 @@ class CommandMessage extends EventEmitter {
      * @fires CommandMessage#commandFinished
      * @fires CommandMessage#commandFailed
      * @throws {Error} If no command function is provided (this really should not happen, ever).
-     * @return {Promise} - Conditional upon settings and return type of CommandExecutor.
+     * @return {Promise.<undefined>} - Resolves when the command has finished processing.
      */
     handle()    {
-        new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             if(this.message.author.bot || !this.resolvePrefix() || !this.resolveCommand()) {
 
                 /**
