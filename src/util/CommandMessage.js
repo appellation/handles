@@ -1,9 +1,6 @@
 
 const EventEmitter = require('events').EventEmitter;
 
-const NotACommand = require('../errors/NotACommand');
-const InvalidCommand = require('../errors/InvalidCommand');
-
 /**
  * A message to be processed as a command.
  *
@@ -80,9 +77,9 @@ class CommandMessage extends EventEmitter {
                  * Fired if the message is not a command.
                  *
                  * @event CommandMessage#notACommand
-                 * @type {NotACommand}
+                 * @type {CommandMessage}
                  */
-                this.emit('notACommand', new NotACommand(this));
+                this.emit('notACommand', this);
                 return reject();
             }
 
@@ -92,9 +89,14 @@ class CommandMessage extends EventEmitter {
                  * Fired if the command is invalid.
                  *
                  * @event CommandMessage#invalidCommand
-                 * @type {InvalidCommand}
+                 * @type {Object}
+                 * @property {CommandMessage} command - The invalid command message.
+                 * @property {String} reason - The reason the command is invalid.
                  */
-                this.emit('invalidCommand', new InvalidCommand(this, reason));
+                this.emit('invalidCommand', {
+                    command: this,
+                    reason
+                });
                 return reject();
             });
         }).then(() => {
@@ -187,11 +189,11 @@ class CommandMessage extends EventEmitter {
 
     /**
      * Resolve a command from the resolved content.
-     * @return {Command|NotACommand}
+     * @return {Command|undefined}
      */
     resolveCommand()  {
         if(!this.resolvedContent) this.resolvePrefix();
-        if(!this.resolvedContent) throw new NotACommand(this.message);
+        if(!this.resolvedContent) return;
 
         const split = this.resolvedContent.trim().toLowerCase().split(' ');
         if(typeof split[0] === 'string' && this.loader.commands.has(split[0])) {
@@ -208,8 +210,6 @@ class CommandMessage extends EventEmitter {
                 return this.command = cmd;
             }
         }
-
-        return new NotACommand(this.message);
     }
 
     /**
