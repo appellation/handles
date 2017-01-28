@@ -1,6 +1,6 @@
 const remit = require('re-emitter');
-const CommandLoader = require('./util/CommandLoader');
-const CommandMessage = require('./util/CommandMessage');
+const CommandLoader = require('./CommandLoader');
+const CommandMessage = require('./CommandMessage');
 
 module.exports = config => {
     const loader = new CommandLoader(config);
