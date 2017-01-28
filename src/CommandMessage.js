@@ -1,5 +1,6 @@
 
 const EventEmitter = require('events').EventEmitter;
+const Response = require('./Response');
 
 /**
  * A message to be processed as a command.
@@ -110,7 +111,7 @@ class CommandMessage extends EventEmitter {
              */
             this.emit('commandStarted', this);
 
-            return Promise.resolve(this.command.func(this.message, this.args, this)).catch(err => {
+            return Promise.resolve(this.command.func(this.message, this.args, new Response(this.message), this)).catch(err => {
 
                 /**
                  * This is only fired if the CommandExecutor returns a promise that rejects.

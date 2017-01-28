@@ -37,6 +37,7 @@ const clearRequire = require('clear-require');
  * @typedef {Function} CommandExecutor - Structure of any command execution functions.
  * @param {Message} message
  * @param {Array} args
+ * @param {Response} response
  * @param {CommandMessage} command
  * @returns {*} - The result of the command.
  */
