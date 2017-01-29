@@ -57,6 +57,12 @@ class CommandMessage extends EventEmitter {
          * @type {Array<String>}
          */
         this.args = [];
+
+        /**
+         * The response object for this command.
+         * @type {Response}
+         */
+        this.response = new Response(this.message);
     }
 
     /**
@@ -68,7 +74,7 @@ class CommandMessage extends EventEmitter {
      * @fires CommandMessage#commandFinished
      * @fires CommandMessage#commandFailed
      * @throws {Error} If no command function is provided (this really should not happen, ever).
-     * @return {Promise.<undefined>} - Resolves when the command has finished processing.
+     * @return {Promise.<CommandMessage>} - Resolves when the command has finished processing (does not reject).
      */
     handle()    {
         return new Promise((resolve, reject) => {
@@ -98,6 +104,9 @@ class CommandMessage extends EventEmitter {
                     command: this,
                     reason
                 });
+
+                this._handleError(reason);
+
                 return reject();
             });
         }).then(() => {
@@ -111,7 +120,7 @@ class CommandMessage extends EventEmitter {
              */
             this.emit('commandStarted', this);
 
-            return Promise.resolve(this.command.func(this.message, this.args, new Response(this.message), this)).catch(err => {
+            return Promise.resolve(this.command.func(this.response, this.message, this.args, this)).catch(err => {
 
                 /**
                  * This is only fired if the CommandExecutor returns a promise that rejects.
@@ -126,6 +135,8 @@ class CommandMessage extends EventEmitter {
                     command: this,
                     error: err
                 });
+
+                this._handleError(err);
 
                 return Promise.reject();
             });
@@ -145,12 +156,22 @@ class CommandMessage extends EventEmitter {
                 result
             });
 
-            if((this.loader.config.respond || this.command.respond) && (typeof result === 'string' || typeof result === 'number')) this.message.channel.sendMessage(result);
-            return result;
+            return this;
         }).catch(err => {
             if(typeof err === 'undefined') return;
             this.emit('error', err);
+            this._handleError(err);
+            return this;
         });
+    }
+
+    /**
+     * Handle any errors.
+     * @param {String} text
+     * @private
+     */
+    _handleError(text)    {
+        if(this.loader.config.respond) this.response.error(text).catch(() => null);
     }
 
     /**

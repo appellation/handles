@@ -22,10 +22,11 @@ module.exports = class Response {
     /**
      * Send a message indicating success.
      * @param {String} text
+     * @param {String} [prefix] - Content to prefix the message with (mainly intended for mentions).
      * @return {Promise.<Message>}
      */
-    success(text)   {
-        return this.channel.sendMessage(`\`✅\` | **Success:** ${text}`);
+    success(text, prefix)   {
+        return this.send(`${prefix ? `${prefix} | ` : ''}\`✅\` | ${text}`);
     }
 
     /**
@@ -34,6 +35,6 @@ module.exports = class Response {
      * @return {Promise.<Message>}
      */
     error(text) {
-        return this.channel.sendMessage(`\`❌\` | **Error:** ${text}`)
+        return this.send(`\`❌\` | **Error:** ${text}`)
     }
 };
