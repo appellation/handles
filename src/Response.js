@@ -35,6 +35,6 @@ module.exports = class Response {
      * @return {Promise.<Message>}
      */
     error(text) {
-        return this.send(`\`❌\` | **Error:** ${text}`)
+        return this.send(`\`❌\` | **Error:** ${text}`);
     }
 };
