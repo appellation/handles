@@ -9,7 +9,7 @@ const clearRequire = require('clear-require');
  * @property {Iterable<Trigger>|Trigger} [triggers] - Defaults to the file name.
  * @property {boolean} [disabled=false] - Whether the command is globally disabled
  * @property {CommandExecutor} func - The command function to execute.
- * @property {Validator} [validator] - Function to call to determine whether the command is valid.
+ * @property {CommandValidator} [validator] - Function to call to determine whether the command is valid.
  */
 
 /**
@@ -21,15 +21,22 @@ const clearRequire = require('clear-require');
  * @property {Array<String>} [prefixes] - Prefixes to use, if any (automatically includes mentions).
  * @property {Boolean} [respond=false] - Whether to automatically output validation and command failure errors.
  * @property {String} [directory] - Where your command files are located; defaults to `./commands`
- * @property {Validator} [validator] - Valid command forms (defaults to prefixed).
- * @property {boolean} [ignoreInvalid] - Whether to internally ignore invalid command errors.
+ * @property {MessageValidator} [validator] - Valid command forms (defaults to prefixed).
+ * @property {boolean} [ignoreInvalid=true] - Whether to internally ignore invalid command errors.
+ * @property {Function<ValidationProcessor>} ValidationProcessor - A reference to a validation processor that extends the internal one (uninstantiated).
  */
 
 /**
- * @typedef {Function} Validator - Structure of any validator functions.
+ * @typedef {Function} MessageValidator - Function to determine if a message contains a command.
  * @param {Message} message
- * @param {Array} [args] - Args are only passed to command-level validators.
  * @returns {ResolvedContent}
+ */
+
+/**
+ * @typedef {Function} CommandValidator - Validates whether a command is valid to be executed.
+ * @param {ValidationProcessor} validator
+ * @param {CommandMessage} message
+ * @returns {ValidationProcessor|boolean|Promise|string}
  */
 
 /**

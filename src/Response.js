@@ -1,13 +1,18 @@
 /**
  * Created by Will on 1/28/2017.
  */
-module.exports = class Response {
+module.exports = class {
 
     /**
      * @constructor
      * @param {Message} message
      */
     constructor(message)    {
+
+        /**
+         * @type {Message}
+         */
+        this.message = message;
 
         /**
          * @type {TextChannel}
@@ -17,6 +22,10 @@ module.exports = class Response {
 
     send(data)  {
         return this.channel.send(data);
+    }
+
+    dm(data)    {
+        return this.message.author.sendMessage(data);
     }
 
     /**
@@ -35,6 +44,6 @@ module.exports = class Response {
      * @return {Promise.<Message>}
      */
     error(text) {
-        return this.send(`\`❌\` | **Error:** ${text}`);
+        return this.send(`\`❌\` | ${text}`);
     }
 };

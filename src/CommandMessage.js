@@ -1,6 +1,7 @@
 
 const EventEmitter = require('events').EventEmitter;
 const Response = require('./Response');
+const ValidationProcessor = require('./ValidationProcessor');
 
 /**
  * A message to be processed as a command.
@@ -29,7 +30,7 @@ class CommandMessage extends EventEmitter {
         this.message = message;
 
         /**
-         * The body of the command.
+         * The text body of the message being processed as a command.
          * @type {String}
          */
         this.body = body || this.message.content;
@@ -63,6 +64,12 @@ class CommandMessage extends EventEmitter {
          * @type {Response}
          */
         this.response = new Response(this.message);
+
+        /**
+         * The validator object for this command.
+         * @type {ValidationProcessor}
+         */
+        this.validator = this.loader.config.ValidationProcessor ? (new this.loader.config.ValidationProcessor(this)) : (new ValidationProcessor(this));
     }
 
     /**
@@ -90,23 +97,18 @@ class CommandMessage extends EventEmitter {
                 return reject();
             }
 
-            return this.validate().then(resolve).catch(reason => {
+            return this.validate().then(validator => {
+
+                if(validator.valid) return resolve();
 
                 /**
                  * Fired if the command is invalid.
                  *
                  * @event CommandMessage#invalidCommand
-                 * @type {Object}
-                 * @property {CommandMessage} command - The invalid command message.
-                 * @property {String} reason - The reason the command is invalid.
+                 * @type {ValidationProcessor}
                  */
-                this.emit('invalidCommand', {
-                    command: this,
-                    reason
-                });
-
-                this._handleError(reason);
-
+                this.emit('invalidCommand', validator);
+                this._handleError(validator.reason);
                 return reject();
             });
         }).then(() => {
@@ -126,14 +128,14 @@ class CommandMessage extends EventEmitter {
                  * This is only fired if the CommandExecutor returns a promise that rejects.
                  *
                  * @event CommandMessage#commandFailed
-                 * @type {object}
+                 * @type {Object}
                  * @property {CommandMessage} command
-                 * @property {*} error - The error of the command.
+                 * @property err
                  * @see CommandExecutor
                  */
                 this.emit('commandFailed', {
                     command: this,
-                    error: err
+                    err
                 });
 
                 this._handleError(err);
@@ -176,21 +178,18 @@ class CommandMessage extends EventEmitter {
 
     /**
      * Ensure that the command form is valid.
-     * @return {Promise<*,String>} - Rejects with reason, otherwise resolves.
+     * @return {Promise<ValidationProcessor>} - Rejects with reason, otherwise resolves.
      */
     validate()  {
-        if(!this.command) return Promise.reject('No command to validate.');
-        if(typeof this.command.validator !== 'function') return Promise.resolve(true);
+        if(!this.command) throw new Error('No command to validate');
+        if(typeof this.command.validator !== 'function') return Promise.resolve(this.validator);
 
-        const validate = this.command.validator(this.message, this.args);
-        if(validate instanceof Promise)    {
-            return validate;
-        }   else if(typeof validate === 'boolean')    {
-            return validate ? Promise.resolve(true) : Promise.reject('Invalid command.');
-        }   else if(validate)  {
-            return Promise.reject(validate);
-        }
-        return Promise.resolve(true);
+        const validate = this.command.validator(this.validator, this);
+
+        return Promise.resolve(validate).then(valid => {
+            this.validator.valid = !!valid;
+            return this.validator;
+        });
     }
 
     /**
@@ -225,7 +224,7 @@ class CommandMessage extends EventEmitter {
         }
 
         for(const [trigger, cmd] of this.loader.commands)  {
-            const regex = (trigger instanceof RegExp) ? trigger : new RegExp(`^${trigger}\\s+`, 'i');
+            const regex = (trigger instanceof RegExp) ? trigger : new RegExp(`^${trigger}\\s*`, 'i');
             if(regex.test(this.resolvedContent)) {
                 this.commandBody = this.resolvedContent.replace(regex, '').trim();
                 this.resolveArgs();
