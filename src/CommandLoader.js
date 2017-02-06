@@ -36,7 +36,7 @@ const clearRequire = require('clear-require');
  * @typedef {Function} CommandValidator - Validates whether a command is valid to be executed.
  * @param {ValidationProcessor} validator
  * @param {CommandMessage} message
- * @returns {ValidationProcessor|boolean|Promise|string}
+ * @returns {*} - Evaluated for truthiness when determining validity.
  */
 
 /**
