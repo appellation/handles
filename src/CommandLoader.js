@@ -1,5 +1,4 @@
-
-const fsX = require('fs-extra');
+const fs = require('fs');
 const EventEmitter = require('events').EventEmitter;
 const path = require('path');
 const clearRequire = require('clear-require');
@@ -80,15 +79,13 @@ class CommandLoader extends EventEmitter   {
     loadCommands() {
         this.commands = new Map();
         return new Promise((resolve, reject) => {
-            const files = [];
-            const walker = fsX.walk(this.config.directory);
+            fs.readdir(this.config.directory, (err, files) => {
+                if(err) return reject(err);
 
-            walker.on('data', (data) => {
-                if(data.stats.isFile() && path.extname(data.path) === '.js') files.push(data.path);
+                const jsFiles = [];
+                for(const f of files) if(path.extname(f) === '.js') jsFiles.push(f);
+                return resolve(jsFiles);
             });
-
-            walker.on('errors', err => reject(err));
-            walker.on('end', () => resolve(files));
         }).then(files => {
             const failed = [];
             for(const file of files)    {
@@ -97,10 +94,11 @@ class CommandLoader extends EventEmitter   {
                  * @type {Command}
                  */
                 let mod;
+                const location = path.join(this.config.directory, file);
 
                 try {
-                    clearRequire(file);
-                    mod = require(file);
+                    clearRequire(location);
+                    mod = require(location);
                 }   catch(e)    {
                     failed.push(file);
                     console.error(e); // eslint-disable-line no-console
