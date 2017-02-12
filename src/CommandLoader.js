@@ -66,6 +66,17 @@ class CommandLoader extends EventEmitter   {
         this.config = config;
         if(!this.config.prefixes) this.config.prefixes = [];
         if(!this.config.directory) this.config.directory = './commands';
+        
+        fs.stat('./commands', function(err) {
+            if (err) {
+                console.log('Creating commands folder').then(() => {
+                    console.log('Done.');
+                });
+            } else {
+                console.log('Commands folder exists');
+                err;
+            }
+        });
 
         this.loadCommands();
     }
