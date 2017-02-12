@@ -63,20 +63,10 @@ class CommandLoader extends EventEmitter   {
     constructor(config = {}) {
         super();
 
-        this.config = config;
-        if(!this.config.prefixes) this.config.prefixes = [];
-        if(!this.config.directory) this.config.directory = './commands';
-        
-        fs.stat('./commands', function(err) {
-            if (err) {
-                console.log('Creating commands folder').then(() => { //eslint-disable-line no-console
-                    console.log('Done.'); //eslint-disable-line no-console
-                });
-            } else {
-                console.log('Commands folder exists'); //eslint-disable-line no-console
-                err;
-            }
-        });
+        this.config = Object.assign({
+            prefixes: [],
+            directory: './commands'
+        }, config);
 
         this.loadCommands();
     }
@@ -91,7 +81,7 @@ class CommandLoader extends EventEmitter   {
         this.commands = new Map();
         return new Promise((resolve, reject) => {
             fs.readdir(this.config.directory, (err, files) => {
-                if(err) return reject(err);
+                if(err) return fs.mkdir(this.config.directory) && reject(err);
 
                 const jsFiles = [];
                 for(const f of files) if(path.extname(f) === '.js') jsFiles.push(f);
