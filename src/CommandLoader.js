@@ -69,11 +69,11 @@ class CommandLoader extends EventEmitter   {
         
         fs.stat('./commands', function(err) {
             if (err) {
-                console.log('Creating commands folder').then(() => {
-                    console.log('Done.');
+                console.log('Creating commands folder').then(() => { //eslint-disable-line no-console
+                    console.log('Done.'); //eslint-disable-line no-console
                 });
             } else {
-                console.log('Commands folder exists');
+                console.log('Commands folder exists'); //eslint-disable-line no-console
                 err;
             }
         });
