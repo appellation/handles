@@ -138,9 +138,7 @@ class CommandMessage extends EventEmitter {
                     err
                 });
 
-                this._handleError(err);
-
-                return Promise.reject();
+                return Promise.reject(err);
             });
         }).then(result => {
 
