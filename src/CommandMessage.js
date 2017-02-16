@@ -121,25 +121,15 @@ class CommandMessage extends EventEmitter {
              * @type {CommandMessage}
              */
             this.emit('commandStarted', this);
+            
+            let result;
+            try {
+                result = this.command.func(this.response, this.message, this.args, this);
+            } catch (e) {
+                return this._commandFailed(e);
+            }
 
-            return Promise.resolve(this.command.func(this.response, this.message, this.args, this)).catch(err => {
-
-                /**
-                 * This is only fired if the CommandExecutor returns a promise that rejects.
-                 *
-                 * @event CommandMessage#commandFailed
-                 * @type {Object}
-                 * @property {CommandMessage} command
-                 * @property err
-                 * @see CommandExecutor
-                 */
-                this.emit('commandFailed', {
-                    command: this,
-                    err
-                });
-
-                return Promise.reject(err);
-            });
+            return Promise.resolve(result).catch(this._commandFailed.bind(this));
         }).then(result => {
 
             /**
@@ -163,6 +153,25 @@ class CommandMessage extends EventEmitter {
             this._handleError(err);
             return this;
         });
+    }
+    
+    _commandFailed(err) {
+        
+        /**
+         * This is only fired if the CommandExecutor returns a promise that rejects.
+         *
+         * @event CommandMessage#commandFailed
+         * @type {Object}
+         * @property {CommandMessage} command
+         * @property err
+         * @see CommandExecutor
+         */
+        this.emit('commandFailed', {
+            command: this,
+            err
+        });
+
+        return Promise.reject(err);
     }
 
     /**
