@@ -10,14 +10,15 @@ class Handles extends EventEmitter {
         super();
 
         this.loader = new CommandLoader(config);
+        remit(this.loader, this, [ 'commandsLoaded' ]);
     }
 
     /**
      * @param {Message} msg
-     * @param {String} body
+     * @param {String} [body]
      * @return {Promise.<CommandMessage>}
      */
-    handler(msg, body) {
+    handle(msg, body) {
         const commandMessage = new CommandMessage(this.loader, msg, body);
         remit(commandMessage, this, [
             'notACommand',
