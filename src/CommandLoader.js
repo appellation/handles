@@ -81,7 +81,7 @@ class CommandLoader extends EventEmitter   {
         this.commands = new Map();
         return new Promise((resolve, reject) => {
             fs.readdir(this.config.directory, (err, files) => {
-                if(err) return reject(err);
+                if(err) return fs.mkdir(this.config.directory) && reject(err);
 
                 const jsFiles = [];
                 for(const f of files) if(path.extname(f) === '.js') jsFiles.push(f);
