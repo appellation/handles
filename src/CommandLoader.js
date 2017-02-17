@@ -79,15 +79,7 @@ class CommandLoader extends EventEmitter   {
      */
     loadCommands() {
         this.commands = new Map();
-        return new Promise((resolve, reject) => {
-            fs.readdir(this.config.directory, (err, files) => {
-                if(err) return reject(err);
-
-                const jsFiles = [];
-                for(const f of files) if(path.extname(f) === '.js') jsFiles.push(f);
-                return resolve(jsFiles);
-            });
-        }).then(files => {
+        return this._loadDir(this.config.directory).then(files => {
             const failed = [];
             for(const file of files)    {
 
@@ -95,7 +87,7 @@ class CommandLoader extends EventEmitter   {
                  * @type {Command}
                  */
                 let mod;
-                const location = path.join(this.config.directory, file);
+                const location = path.join(process.cwd(), file);
 
                 try {
                     clearRequire(location);
@@ -128,6 +120,42 @@ class CommandLoader extends EventEmitter   {
              * @property {Array} failed - Directory listing of commands that failed to load.
              */
             this.emit('commandsLoaded', {commands: this.commands, failed});
+        });
+    }
+
+    _loadDir(dir) {
+        return new Promise((resolve, reject) => {
+            fs.readdir(dir, (err, files) => {
+                if(err) return reject(err);
+
+                const loading = [];
+                const list = [];
+
+                for(const f of files) {
+                    const currentPath = path.join(dir, f);
+
+                    loading.push(
+                        new Promise((resolve, reject) => {
+                            fs.stat(currentPath, (err, stat) => {
+                                if(err) return reject(err);
+
+                                if(stat.isFile() && path.extname(currentPath) === '.js') {
+                                    list.push(currentPath);
+                                    resolve();
+                                }
+
+                                if(stat.isDirectory()) {
+                                    this._loadDir(currentPath).then(files => {
+                                        for(const file of files) list.push(file);
+                                        resolve();
+                                    });
+                                }
+                            });
+                        }).catch(console.error) // eslint-disble-line no-console
+                    )
+                }
+                return Promise.all(loading).then(() => resolve(list));
+            });
         });
     }
 }
