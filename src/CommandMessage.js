@@ -80,6 +80,7 @@ class CommandMessage extends EventEmitter {
      * @fires CommandMessage#commandStarted
      * @fires CommandMessage#commandFinished
      * @fires CommandMessage#commandFailed
+     * @fires CommandMessage#error
      * @throws {Error} If no command function is provided (this really should not happen, ever).
      * @return {Promise.<CommandMessage>} - Resolves when the command has finished processing (does not reject).
      */
@@ -149,6 +150,12 @@ class CommandMessage extends EventEmitter {
             return this;
         }).catch(err => {
             if(typeof err === 'undefined') return;
+
+            /**
+             * Fired on any error in the command processing stack.  Does not fire with invalid commands.
+             *
+             * @event CommandMessage#error
+             */
             this.emit('error', err);
             this._handleError(err);
             return this;
@@ -158,13 +165,14 @@ class CommandMessage extends EventEmitter {
     _commandFailed(err) {
         
         /**
-         * This is only fired if the CommandExecutor returns a promise that rejects.
+         * This is fired if the CommandExecutor rejects or throws an error.  An `error` event will also fire.
          *
          * @event CommandMessage#commandFailed
          * @type {Object}
          * @property {CommandMessage} command
          * @property err
          * @see CommandExecutor
+         * @see CommandMessage#error
          */
         this.emit('commandFailed', {
             command: this,
