@@ -49,7 +49,7 @@ class CommandMessage extends EventEmitter {
 
         /**
          * The body of the message without the command.
-         * @type {String|null}
+         * @type {?String}
          */
         this.commandBody = null;
 
@@ -69,7 +69,7 @@ class CommandMessage extends EventEmitter {
          * The validator object for this command.
          * @type {ValidationProcessor}
          */
-        this.validator = this.loader.config.ValidationProcessor ? (new this.loader.config.ValidationProcessor(this)) : (new ValidationProcessor(this));
+        this.validator = new (this.loader.config.ValidationProcessor || ValidationProcessor)(this);
     }
 
     /**
@@ -218,7 +218,7 @@ class CommandMessage extends EventEmitter {
 
         const split = this.resolvedContent.trim().toLowerCase().split(' ');
         if(typeof split[0] === 'string' && this.loader.commands.has(split[0])) {
-            this.commandBody = this.resolvedContent.replace(/^(\S*\s*)(.*)/, '$2');
+            this.commandBody = this.resolvedContent.replace(/^(\S+\s*)(.*)/, '$2');
             this.resolveArgs();
             return this.command = this.loader.commands.get(split[0]);
         }
