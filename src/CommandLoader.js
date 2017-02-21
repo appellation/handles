@@ -151,8 +151,8 @@ class CommandLoader extends EventEmitter   {
                                     resolve();
                                 }
                             });
-                        }).catch(console.error) // eslint-disble-line no-console
-                    )
+                        }).catch(console.error) // eslint-disable-line no-console
+                    );
                 }
                 return Promise.all(loading).then(() => resolve(list));
             });
