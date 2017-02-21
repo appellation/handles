@@ -146,7 +146,7 @@ class CommandLoader extends EventEmitter   {
 
                                 if(stat.isDirectory()) {
                                     this._loadDir(currentPath).then(files => {
-                                        for(const file of files) list.push(file);
+                                        list.concat(files);
                                         resolve();
                                     });
                                 }
