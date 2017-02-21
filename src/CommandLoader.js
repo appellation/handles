@@ -142,13 +142,13 @@ class CommandLoader extends EventEmitter   {
                                 if(stat.isFile() && path.extname(currentPath) === '.js') {
                                     list.push(currentPath);
                                     resolve();
-                                }
-
-                                if(stat.isDirectory()) {
+                                } else if(stat.isDirectory()) {
                                     this._loadDir(currentPath).then(files => {
                                         list.concat(files);
                                         resolve();
                                     });
+                                } else {
+                                    resolve();
                                 }
                             });
                         }).catch(console.error) // eslint-disble-line no-console
