@@ -144,7 +144,7 @@ class CommandLoader extends EventEmitter   {
                                     resolve();
                                 } else if(stat.isDirectory()) {
                                     this._loadDir(currentPath).then(files => {
-                                        list.concat(files);
+                                        list.push(...files);
                                         resolve();
                                     });
                                 } else {
