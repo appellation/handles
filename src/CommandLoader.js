@@ -142,17 +142,17 @@ class CommandLoader extends EventEmitter   {
                                 if(stat.isFile() && path.extname(currentPath) === '.js') {
                                     list.push(currentPath);
                                     resolve();
-                                }
-
-                                if(stat.isDirectory()) {
+                                } else if(stat.isDirectory()) {
                                     this._loadDir(currentPath).then(files => {
-                                        for(const file of files) list.push(file);
+                                        list.push(...files);
                                         resolve();
                                     });
+                                } else {
+                                    resolve();
                                 }
                             });
-                        }).catch(console.error) // eslint-disble-line no-console
-                    )
+                        }).catch(console.error) // eslint-disable-line no-console
+                    );
                 }
                 return Promise.all(loading).then(() => resolve(list));
             });
