@@ -9,7 +9,7 @@ const ValidationProcessor = require('./ValidationProcessor');
  * @param {CommandLoader} loader
  * @param {Message} message
  * @param {String} [body]
- * @extends {EventEmitter}
+ * @extends EventEmitter
  * @constructor
  */
 class CommandMessage extends EventEmitter {
@@ -239,7 +239,7 @@ class CommandMessage extends EventEmitter {
         }
 
         for(const [trigger, cmd] of this.loader.commands)  {
-            const regex = (trigger instanceof RegExp) ? trigger : new RegExp(`^${trigger}\\s*`, 'i');
+            const regex = (trigger instanceof RegExp) ? trigger : new RegExp(`^${trigger}(\\s+|$)`, 'i');
             if(regex.test(this.resolvedContent)) {
                 this.commandBody = this.resolvedContent.replace(regex, '').trim();
                 this.resolveArgs();

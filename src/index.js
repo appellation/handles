@@ -4,6 +4,19 @@ const CommandLoader = require('./CommandLoader');
 const CommandMessage = require('./CommandMessage');
 const ValidationProcessor = require('./ValidationProcessor');
 
+/**
+ * @fires CommandMessage#notACommand
+ * @fires CommandMessage#invalidCommand
+ * @fires CommandMessage#commandStarted
+ * @fires CommandMessage#commandFinished
+ * @fires CommandMessage#commandFailed
+ * @fires CommandMessage#error
+ * @fires CommandLoader#commandsLoaded
+ *
+ * @param {Config} config
+ * @extends EventEmitter
+ * @constructor
+ */
 class Handles extends EventEmitter {
 
     constructor(config) {
@@ -14,9 +27,12 @@ class Handles extends EventEmitter {
     }
 
     /**
+     * Handle a message.
+     *
      * @param {Message} msg
      * @param {String} [body]
      * @return {Promise.<CommandMessage>}
+     *
      */
     handle(msg, body) {
         const commandMessage = new CommandMessage(this.loader, msg, body);
@@ -40,7 +56,4 @@ Object.assign(Handles, {
     ValidationProcessor
 });
 
-/**
- * @param {Config} config
- */
 module.exports = Handles;
