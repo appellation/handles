@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Handles Index</title>
+	<title>Handles Class: ValidationProcessor</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,47 +79,708 @@
 		<div id="main">
 			
 
+	<h1 class="page-title">Class: ValidationProcessor</h1>
+<section>
+
+<header>
+    
+        <h2>
+        ValidationProcessor
+        </h2>
+        
+            <div class="class-description">Passed as a parameter to command validators.</div>
+        
+    
+</header>
+
+
+<article>
+    <div class="container-overview">
+    
+        
+<hr>
+<dt>
+    <h4 class="name" id="ValidationProcessor"><span class="type-signature"></span>new ValidationProcessor(command)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="CommandMessage.html">CommandMessage</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
 	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
 	
 
 
 
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		ValidationProcessor.js
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">// Using a custom validator.
+class CustomValidationProcessor extends ValidationProcessor {
+  ensureArgs() {
+    return this.applyValid(this.command.args.length &gt; 0, &#x27;No arguments provided.&#x27;);
+  }
+}
+
+// Usage in command
+exports.validator = processor =&gt; {
+  return processor.ensureArgs();
+}
+
+// Usage without a custom validator
+exports.validator = (processor, command) =&gt; {
+  return processor.applyValid(command.args.length &gt; 0, &#x27;No arguments provided.&#x27;);
+}</pre>
+
+
+    
+</dd>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        <dl>
+            
+<hr>
+<dt class="name" id="command">
+    <h4 id="command"><span class="type-signature"></span>command<span class="type-signature"> :<a href="CommandMessage.html">CommandMessage</a></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The command message.
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="CommandMessage.html">CommandMessage</a></span>
 
 
 
+            </li>
+        </ul>
+    
 
+    
+<dl class="details">
+    
 
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
 
 
 
 	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		ValidationProcessor.js
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="message">
+    <h4 id="message"><span class="type-signature"></span>message<span class="type-signature"> :Message</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The message to validate.
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Message</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
 	
 
 
 
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		ValidationProcessor.js
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
 
 
-    <section class="readme-section">
-        <article><h1>Handles</h1><p><a href="https://travis-ci.org/appellation/handles"><img src="https://travis-ci.org/appellation/handles.svg?branch=master" alt="Build Status"></a></p>
-<p>For those of us who get frustrated with writing command handlers but don't quite want to use a full framework.  Intended for use with <a href="https://github.com/hydrabolt/discord.js">Discord.js</a>.</p>
-<p>Documentation is available at <a href="http://handles.topkek.pw">handles.topkek.pw</a>.</p>
-<h2>Getting started</h2><h3>Installation</h3><pre class="prettyprint source lang-xl"><code>npm install --save discord-handles</code></pre><p>Or, if you want to risk cutting yourself, install the bleeding edge version:</p>
-<pre class="prettyprint source lang-xl"><code>npm install --save appellation/handles#master</code></pre><p>Usually I try to avoid pushing broken code, but sometimes I move a little too fast.</p>
-<h2>The basics</h2><pre class="prettyprint source lang-js"><code>const Discord = require('discord.js');
-const Handles = require('discord-handles');
+    
+</dd>
 
-const client = new Discord.Client();
-const handler = new Handles();
+        
+            
+<hr>
+<dt class="name" id="reason">
+    <h4 id="reason"><span class="type-signature">&lt;nullable> </span>reason<span class="type-signature"> :string</span></h4>
 
-client.on('message', m => {
-    handler.handle(m);
-});
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The reason this command is invalid.
+    </div>
+    
 
-client.login('token');</code></pre><p>This will automatically load all commands in the <code>./commands</code> directory and handle incoming messages.  See <code>Command</code> in the docs for information on how to format the exports of the files you place in <code>./commands</code>.</p></article>
-    </section>
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">string</span>
 
 
 
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		ValidationProcessor.js
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="valid">
+    <h4 id="valid"><span class="type-signature"></span>valid<span class="type-signature"> :boolean</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Whether the command is valid.
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">boolean</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		ValidationProcessor.js
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id="applyValid"><span class="type-signature"></span>applyValid(test, reason)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Test a new boolean for validity.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>test</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+|
+
+<span class="param-type">*</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>reason</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		ValidationProcessor.js
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

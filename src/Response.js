@@ -1,7 +1,4 @@
-/**
- * Created by Will on 1/28/2017.
- */
-module.exports = class {
+class Response {
 
     /**
      * @constructor
@@ -46,4 +43,6 @@ module.exports = class {
     error(text) {
         return this.send(`\`❌\` | ${text}`);
     }
-};
+}
+
+module.exports = Response;

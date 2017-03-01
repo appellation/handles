@@ -1,67 +1,123 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>JSDoc: Class: CommandMessage</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Handles Class: CommandMessage</title>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.yeti.css">
+
 </head>
 
 <body>
 
-<div id="main">
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Handles</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="CommandLoader.html">CommandLoader</a></li><li><a href="CommandMessage.html">CommandMessage</a></li><li><a href="Handles.html">Handles</a></li><li><a href="Response.html">Response</a></li><li><a href="ValidationProcessor.html">ValidationProcessor</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="CommandLoader.html#event:commandsLoaded">CommandLoader#event:commandsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">CommandMessage#event:commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">CommandMessage#event:commandFinished</a></li><li><a href="CommandMessage.html#event:commandStarted">CommandMessage#event:commandStarted</a></li><li><a href="CommandMessage.html#event:error">CommandMessage#event:error</a></li><li><a href="CommandMessage.html#event:invalidCommand">CommandMessage#event:invalidCommand</a></li><li><a href="CommandMessage.html#event:notACommand">CommandMessage#event:notACommand</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="global.html">Global</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
 
-    <h1 class="page-title">Class: CommandMessage</h1>
-
-    
-
+</div>
+</div>
 
 
+<div class="container" id="toc-content">
+<div class="row">
 
+	
+	<div class="col-md-8">
+	
+		<div id="main">
+			
+
+	<h1 class="page-title">Class: CommandMessage</h1>
 <section>
 
 <header>
     
-        <h2>CommandMessage</h2>
+        <h2>
+        CommandMessage
+        </h2>
         
             <div class="class-description">A message to be processed as a command.</div>
         
     
 </header>
 
+
 <article>
     <div class="container-overview">
     
         
+<hr>
+<dt>
+    <h4 class="name" id="CommandMessage"><span class="type-signature"></span>new CommandMessage(loader, message [, body])</h4>
+    
+    
+</dt>
+<dd>
 
     
-    <h2>Constructor</h2>
-    
-
-    <h4 class="name" id="CommandMessage"><span class="type-signature"></span>new CommandMessage<span class="signature">(loader, msg, body<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
     
 
-<table class="params">
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
     <thead>
     <tr>
         
@@ -71,7 +127,7 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
+        <th>Argument</th>
         
 
         
@@ -92,6 +148,7 @@
             
                 
 <span class="param-type"><a href="CommandLoader.html">CommandLoader</a></span>
+
 
 
             
@@ -116,13 +173,14 @@
 
         <tr>
             
-                <td class="name"><code>msg</code></td>
+                <td class="name"><code>message</code></td>
             
 
             <td class="type">
             
                 
 <span class="param-type">Message</span>
+
 
 
             
@@ -156,6 +214,7 @@
 <span class="param-type">String</span>
 
 
+
             
             </td>
 
@@ -180,12 +239,17 @@
     </tbody>
 </table>
 
+    
 
-
-
-
-
+    
 <dl class="details">
+    
+
+	
+
+	
+
+	
 
     
 
@@ -195,50 +259,47 @@
 
     
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_CommandMessage.js.html">util/CommandMessage.js</a>, <a href="util_CommandMessage.js.html#line16">line 16</a>
-    </li></ul></dd>
-    
+	
 
-    
+	
 
-    
-
-    
+	
 </dl>
 
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
-
-
-
-
-
-
-
+    
+</dd>
 
     
     </div>
@@ -260,41 +321,50 @@
 
     
 
-     
+    
 
     
 
     
         <h3 class="subsection-title">Members</h3>
 
-        
+        <dl>
             
-<h4 class="name" id="args"><span class="type-signature"></span>args<span class="type-signature"> :Array.&lt;String></span></h4>
+<hr>
+<dt class="name" id="args">
+    <h4 id="args"><span class="type-signature"></span>args<span class="type-signature"> :Array.&lt;String></span></h4>
 
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The command arguments.  Delimited by space unless quoted.
+    </div>
+    
 
-
-
-<div class="description">
-    The command arguments.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
 <span class="param-type">Array.&lt;String></span>
 
 
-        </li>
-    </ul>
 
+            </li>
+        </ul>
+    
 
-
-
-
+    
 <dl class="details">
+    
+
+	
+
+	
+
+	
 
     
 
@@ -304,69 +374,73 @@
 
     
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_CommandMessage.js.html">util/CommandMessage.js</a>, <a href="util_CommandMessage.js.html#line61">line 61</a>
-    </li></ul></dd>
-    
+	
 
-    
+	
 
-    
-
-    
+	
 </dl>
 
 
-
-
-
+    
+</dd>
 
         
             
-<h4 class="name" id="body"><span class="type-signature"></span>body<span class="type-signature"> :String</span></h4>
+<hr>
+<dt class="name" id="body">
+    <h4 id="body"><span class="type-signature"></span>body<span class="type-signature"> :String</span></h4>
 
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The text body of the message being processed as a command.
+    </div>
+    
 
-
-
-<div class="description">
-    The body of the command.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
 <span class="param-type">String</span>
 
 
-        </li>
-    </ul>
 
+            </li>
+        </ul>
+    
 
-
-
-
+    
 <dl class="details">
+    
+
+	
+
+	
+
+	
 
     
 
@@ -376,69 +450,73 @@
 
     
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_CommandMessage.js.html">util/CommandMessage.js</a>, <a href="util_CommandMessage.js.html#line37">line 37</a>
-    </li></ul></dd>
-    
+	
 
-    
+	
 
-    
-
-    
+	
 </dl>
 
 
-
-
-
+    
+</dd>
 
         
             
-<h4 class="name" id="command"><span class="type-signature"></span>command<span class="type-signature"> :<a href="global.html#Command">Command</a></span></h4>
+<hr>
+<dt class="name" id="command">
+    <h4 id="command"><span class="type-signature"></span>command<span class="type-signature"> :<a href="global.html#Command">Command</a></span></h4>
 
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The command.
+    </div>
+    
 
-
-
-<div class="description">
-    The command.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
 <span class="param-type"><a href="global.html#Command">Command</a></span>
 
 
-        </li>
-    </ul>
 
+            </li>
+        </ul>
+    
 
-
-
-
+    
 <dl class="details">
+    
+
+	
+
+	
+
+	
 
     
 
@@ -448,72 +526,73 @@
 
     
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_CommandMessage.js.html">util/CommandMessage.js</a>, <a href="util_CommandMessage.js.html#line49">line 49</a>
-    </li></ul></dd>
-    
+	
 
-    
+	
 
-    
-
-    
+	
 </dl>
 
 
-
-
-
+    
+</dd>
 
         
             
-<h4 class="name" id="commandBody"><span class="type-signature"></span>commandBody<span class="type-signature"> :String|null</span></h4>
+<hr>
+<dt class="name" id="commandBody">
+    <h4 id="commandBody"><span class="type-signature">&lt;nullable> </span>commandBody<span class="type-signature"> :String</span></h4>
 
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The body of the message without the command.
+    </div>
+    
 
-
-
-<div class="description">
-    The body of the message without the command.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
 <span class="param-type">String</span>
-|
-
-<span class="param-type">null</span>
-
-
-        </li>
-    </ul>
 
 
 
+            </li>
+        </ul>
+    
 
-
+    
 <dl class="details">
+    
+
+	
+
+	
+
+	
 
     
 
@@ -523,69 +602,73 @@
 
     
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_CommandMessage.js.html">util/CommandMessage.js</a>, <a href="util_CommandMessage.js.html#line55">line 55</a>
-    </li></ul></dd>
-    
+	
 
-    
+	
 
-    
-
-    
+	
 </dl>
 
 
-
-
-
+    
+</dd>
 
         
             
-<h4 class="name" id="loader"><span class="type-signature"></span>loader<span class="type-signature"> :<a href="CommandLoader.html">CommandLoader</a></span></h4>
+<hr>
+<dt class="name" id="loader">
+    <h4 id="loader"><span class="type-signature"></span>loader<span class="type-signature"> :<a href="CommandLoader.html">CommandLoader</a></span></h4>
 
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The command loader to use for commands.
+    </div>
+    
 
-
-
-<div class="description">
-    The command loader to use for commands.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
 <span class="param-type"><a href="CommandLoader.html">CommandLoader</a></span>
 
 
-        </li>
-    </ul>
 
+            </li>
+        </ul>
+    
 
-
-
-
+    
 <dl class="details">
+    
+
+	
+
+	
+
+	
 
     
 
@@ -595,69 +678,73 @@
 
     
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_CommandMessage.js.html">util/CommandMessage.js</a>, <a href="util_CommandMessage.js.html#line25">line 25</a>
-    </li></ul></dd>
-    
+	
 
-    
+	
 
-    
-
-    
+	
 </dl>
 
 
-
-
-
+    
+</dd>
 
         
             
-<h4 class="name" id="msg"><span class="type-signature"></span>msg<span class="type-signature"> :Message</span></h4>
+<hr>
+<dt class="name" id="message">
+    <h4 id="message"><span class="type-signature"></span>message<span class="type-signature"> :Message</span></h4>
 
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The message that triggered this command.
+    </div>
+    
 
-
-
-<div class="description">
-    The message that triggered this command.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
 <span class="param-type">Message</span>
 
 
-        </li>
-    </ul>
 
+            </li>
+        </ul>
+    
 
-
-
-
+    
 <dl class="details">
+    
+
+	
+
+	
+
+	
 
     
 
@@ -667,69 +754,73 @@
 
     
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_CommandMessage.js.html">util/CommandMessage.js</a>, <a href="util_CommandMessage.js.html#line31">line 31</a>
-    </li></ul></dd>
-    
+	
 
-    
+	
 
-    
-
-    
+	
 </dl>
 
 
-
-
-
+    
+</dd>
 
         
             
-<h4 class="name" id="resolvedContent"><span class="type-signature"></span>resolvedContent<span class="type-signature"> :<a href="global.html#ResolvedContent">ResolvedContent</a></span></h4>
+<hr>
+<dt class="name" id="resolvedContent">
+    <h4 id="resolvedContent"><span class="type-signature"></span>resolvedContent<span class="type-signature"> :<a href="global.html#ResolvedContent">ResolvedContent</a></span></h4>
 
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The un-prefixed content of the message.
+    </div>
+    
 
-
-
-<div class="description">
-    The un-prefixed content of the message.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
 <span class="param-type"><a href="global.html#ResolvedContent">ResolvedContent</a></span>
 
 
-        </li>
-    </ul>
 
+            </li>
+        </ul>
+    
 
-
-
-
+    
 <dl class="details">
+    
+
+	
+
+	
+
+	
 
     
 
@@ -739,75 +830,226 @@
 
     
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_CommandMessage.js.html">util/CommandMessage.js</a>, <a href="util_CommandMessage.js.html#line43">line 43</a>
-    </li></ul></dd>
-    
+	
 
-    
+	
 
-    
-
-    
+	
 </dl>
 
 
-
-
-
+    
+</dd>
 
         
+            
+<hr>
+<dt class="name" id="response">
+    <h4 id="response"><span class="type-signature"></span>response<span class="type-signature"> :<a href="Response.html">Response</a></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The response object for this command.
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="Response.html">Response</a></span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="validator">
+    <h4 id="validator"><span class="type-signature"></span>validator<span class="type-signature"> :<a href="ValidationProcessor.html">ValidationProcessor</a></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The validator object for this command.
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="ValidationProcessor.html">ValidationProcessor</a></span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        </dl>
     
 
     
         <h3 class="subsection-title">Methods</h3>
 
-        
+        <dl>
             
+<hr>
+<dt>
+    <h4 class="name" id="handle"><span class="type-signature"></span>handle()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Handles a command.
+    </div>
+    
 
     
 
-    <h4 class="name" id="handle"><span class="type-signature"></span>handle<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;*, (<a href="NotACommand.html">NotACommand</a>|<a href="InvalidCommand.html">InvalidCommand</a>|null)>}</span></h4>
-
     
 
+    
+    
 
-
-<div class="description">
-    Handles a command.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 <dl class="details">
+    
+
+	
+
+	
+
+	
 
     
 
@@ -817,60 +1059,94 @@
 
     
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_CommandMessage.js.html">util/CommandMessage.js</a>, <a href="util_CommandMessage.js.html#line71">line 71</a>
-    </li></ul></dd>
-    
+	
 
-    
+	
 
-    
-
-    
+	
 </dl>
 
 
+    
+
+    
+    <h5>Fires:</h5>
+    <ul>
+        <li><a href="CommandMessage.html#event:notACommand">CommandMessage#event:notACommand</a></li>
+    
+        <li><a href="CommandMessage.html#event:invalidCommand">CommandMessage#event:invalidCommand</a></li>
+    
+        <li><a href="CommandMessage.html#event:commandStarted">CommandMessage#event:commandStarted</a></li>
+    
+        <li><a href="CommandMessage.html#event:commandFinished">CommandMessage#event:commandFinished</a></li>
+    
+        <li><a href="CommandMessage.html#event:commandFailed">CommandMessage#event:commandFailed</a></li>
+    
+        <li><a href="CommandMessage.html#event:error">CommandMessage#event:error</a></li>
+    </ul>
+    
+
+    
+
+    
+
+    
+    <h5>Throws:</h5>
+    
+            
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        If no command function is provided (this really should not happen, ever).
+        </div>
+    </dt>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">Error</span>
 
 
 
-<h5>Fires:</h5>
-<ul>
-    <li><a href="CommandMessage.html#event:commandStarted">CommandMessage#event:commandStarted</a></li>
+            </dd>
+        </dl>
+    </dt>
+</dl>
 
-    <li><a href="CommandMessage.html#event:commandFinished">CommandMessage#event:commandFinished</a></li>
-
-    <li><a href="CommandMessage.html#event:commandFailed">CommandMessage#event:commandFailed</a></li>
-</ul>
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
 
         
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    - Resolves when the command has finished processing (does not reject).
+</div>
+
 
 
 <dl>
@@ -879,44 +1155,51 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;*, (<a href="NotACommand.html">NotACommand</a>|<a href="InvalidCommand.html">InvalidCommand</a>|null)></span>
+<span class="param-type">Promise.&lt;<a href="CommandMessage.html">CommandMessage</a>></span>
+
 
 
     </dd>
 </dl>
 
+
+        
+
     
-
-
+</dd>
 
         
             
+<hr>
+<dt>
+    <h4 class="name" id="resolveArgs"><span class="type-signature"></span>resolveArgs()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Parse the arguments of the command body.
+    </div>
+    
 
     
 
-    <h4 class="name" id="resolveArgs"><span class="type-signature"></span>resolveArgs<span class="signature">()</span><span class="type-signature"> &rarr; {Array}</span></h4>
-
     
 
+    
+    
 
-
-<div class="description">
-    Parse the arguments of the command body.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 <dl class="details">
+    
+
+	
+
+	
+
+	
 
     
 
@@ -926,51 +1209,47 @@
 
     
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_CommandMessage.js.html">util/CommandMessage.js</a>, <a href="util_CommandMessage.js.html#line207">line 207</a>
-    </li></ul></dd>
-    
+	
 
-    
+	
 
-    
-
-    
+	
 </dl>
 
 
+    
 
+    
 
+    
 
+    
 
+    
 
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
+    
+    <h5>Returns:</h5>
+    
+            
 
 
 <dl>
@@ -982,41 +1261,48 @@
 <span class="param-type">Array</span>
 
 
+
     </dd>
 </dl>
 
+
+        
+
     
-
-
+</dd>
 
         
             
+<hr>
+<dt>
+    <h4 class="name" id="resolveCommand"><span class="type-signature"></span>resolveCommand()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Resolve a command from the resolved content.
+    </div>
+    
 
     
 
-    <h4 class="name" id="resolveCommand"><span class="type-signature"></span>resolveCommand<span class="signature">()</span><span class="type-signature"> &rarr; {String|<a href="NotACommand.html">NotACommand</a>}</span></h4>
-
     
 
+    
+    
 
-
-<div class="description">
-    Resolve a command from the resolved content.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 <dl class="details">
+    
+
+	
+
+	
+
+	
 
     
 
@@ -1026,51 +1312,47 @@
 
     
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_CommandMessage.js.html">util/CommandMessage.js</a>, <a href="util_CommandMessage.js.html#line182">line 182</a>
-    </li></ul></dd>
-    
+	
 
-    
+	
 
-    
-
-    
+	
 </dl>
 
 
+    
 
+    
 
+    
 
+    
 
+    
 
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
+    
+    <h5>Returns:</h5>
+    
+            
 
 
 <dl>
@@ -1079,47 +1361,54 @@
     </dt>
     <dd>
         
-<span class="param-type">String</span>
+<span class="param-type"><a href="global.html#Command">Command</a></span>
 |
 
-<span class="param-type"><a href="NotACommand.html">NotACommand</a></span>
+<span class="param-type">undefined</span>
+
 
 
     </dd>
 </dl>
 
+
+        
+
     
-
-
+</dd>
 
         
             
+<hr>
+<dt>
+    <h4 class="name" id="resolvePrefix"><span class="type-signature"></span>resolvePrefix()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Validate the command form and set the prefix-less message content.
+    </div>
+    
 
     
 
-    <h4 class="name" id="resolvePrefix"><span class="type-signature"></span>resolvePrefix<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#ResolvedContent">ResolvedContent</a>}</span></h4>
-
     
 
+    
+    
 
-
-<div class="description">
-    Validate the command form and set the prefix-less message content.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 <dl class="details">
+    
+
+	
+
+	
+
+	
 
     
 
@@ -1129,51 +1418,47 @@
 
     
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_CommandMessage.js.html">util/CommandMessage.js</a>, <a href="util_CommandMessage.js.html#line166">line 166</a>
-    </li></ul></dd>
-    
+	
 
-    
+	
 
-    
-
-    
+	
 </dl>
 
 
+    
 
+    
 
+    
 
+    
 
+    
 
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
+    
+    <h5>Returns:</h5>
+    
+            
 
 
 <dl>
@@ -1185,41 +1470,48 @@
 <span class="param-type"><a href="global.html#ResolvedContent">ResolvedContent</a></span>
 
 
+
     </dd>
 </dl>
 
+
+        
+
     
-
-
+</dd>
 
         
             
+<hr>
+<dt>
+    <h4 class="name" id="validate"><span class="type-signature"></span>validate()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Ensure that the command form is valid.
+    </div>
+    
 
     
 
-    <h4 class="name" id="validate"><span class="type-signature"></span>validate<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;*, String>}</span></h4>
-
     
 
+    
+    
 
-
-<div class="description">
-    Ensure that the command form is valid.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 <dl class="details">
+    
+
+	
+
+	
+
+	
 
     
 
@@ -1229,51 +1521,47 @@
 
     
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_CommandMessage.js.html">util/CommandMessage.js</a>, <a href="util_CommandMessage.js.html#line147">line 147</a>
-    </li></ul></dd>
-    
+	
 
-    
+	
 
-    
-
-    
+	
 </dl>
 
 
+    
 
+    
 
+    
 
+    
 
+    
 
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
+    
+    <h5>Returns:</h5>
+    
+            
 <div class="param-desc">
     - Rejects with reason, otherwise resolves.
 </div>
@@ -1286,17 +1574,20 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;*, String></span>
+<span class="param-type">Promise.&lt;<a href="ValidationProcessor.html">ValidationProcessor</a>></span>
+
 
 
     </dd>
 </dl>
 
-    
-
-
 
         
+
+    
+</dd>
+
+        </dl>
     
 
     
@@ -1304,48 +1595,44 @@
     
         <h3 class="subsection-title">Events</h3>
 
-        
+        <dl>
             
-
-    
-
+<hr>
+<dt>
     <h4 class="name" id="event:commandFailed">commandFailed</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        This is fired if the CommandExecutor rejects or throws an error.  An `error` event will also fire.
+    </div>
+    
 
     
 
+    
+        <h5>Type: 
+<span class="param-type">Object</span>
 
 
-<div class="description">
-    This is only fired if the CommandExecutor returns a promise that rejects.
-</div>
+</h5>
+    
 
+    
+    
 
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-
-
+    
+<dl class="details">
+    
 
     <h5 class="subsection-title">Properties:</h5>
 
-    
+    <dl>
 
-<table class="props">
+<table class="props table table-striped">
     <thead>
     <tr>
         
@@ -1367,59 +1654,14 @@
 
         <tr>
             
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Message</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>command</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#Command">Command</a></span>
+<span class="param-type"><a href="CommandMessage.html">CommandMessage</a></span>
 
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>content</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#ResolvedContent">ResolvedContent</a></span>
 
 
             
@@ -1436,15 +1678,10 @@
 
         <tr>
             
-                <td class="name"><code>error</code></td>
+                <td class="name"><code>err</code></td>
             
 
             <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
             
             </td>
 
@@ -1452,17 +1689,21 @@
 
             
 
-            <td class="description last">The error of the command.</td>
+            <td class="description last"></td>
         </tr>
 
     
     </tbody>
 </table>
+</dl>
 
+    
 
+	
 
+	
 
-<dl class="details">
+	
 
     
 
@@ -1472,93 +1713,95 @@
 
     
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_CommandMessage.js.html">util/CommandMessage.js</a>, <a href="util_CommandMessage.js.html#line96">line 96</a>
-    </li></ul></dd>
-    
+	
 
-    
+	
+	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li><a href="global.html#CommandExecutor">CommandExecutor</a></li>
+			
+			<li>CommandMessage#error</li>
+			</ul>
+	</dd>
+	
 
-    
-
-    
+	
 </dl>
 
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
-
-
-
-
-
-
-
+    
+</dd>
 
         
             
-
-    
-
+<hr>
+<dt>
     <h4 class="name" id="event:commandFinished">commandFinished</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Fired upon successful completion of the command.
+    </div>
+    
 
     
 
-
-
-<div class="description">
-    Fired upon successful completion of the command.
-</div>
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
+    
+        <h5>Type: 
 <span class="param-type">object</span>
 
 
-        </li>
-    </ul>
+</h5>
+    
 
+    
+    
 
-
-
-
-
-
-
+    
+<dl class="details">
+    
 
     <h5 class="subsection-title">Properties:</h5>
 
-    
+    <dl>
 
-<table class="props">
+<table class="props table table-striped">
     <thead>
     <tr>
         
@@ -1580,59 +1823,14 @@
 
         <tr>
             
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Message</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>command</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#Command">Command</a></span>
+<span class="param-type"><a href="CommandMessage.html">CommandMessage</a></span>
 
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>content</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#ResolvedContent">ResolvedContent</a></span>
 
 
             
@@ -1658,6 +1856,7 @@
 <span class="param-type">*</span>
 
 
+
             
             </td>
 
@@ -1671,11 +1870,15 @@
     
     </tbody>
 </table>
+</dl>
 
+    
 
+	
 
+	
 
-<dl class="details">
+	
 
     
 
@@ -1685,187 +1888,93 @@
 
     
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_CommandMessage.js.html">util/CommandMessage.js</a>, <a href="util_CommandMessage.js.html#line117">line 117</a>
-    </li></ul></dd>
-    
+	
 
-    
+	
+	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li><a href="global.html#CommandExecutor">CommandExecutor</a></li>
+			</ul>
+	</dd>
+	
 
-    
-
-    
+	
 </dl>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
+    
 
     
 
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
     <h4 class="name" id="event:commandStarted">commandStarted</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Fired when the command starts.
+    </div>
+    
 
     
 
+    
+        <h5>Type: 
+<span class="param-type"><a href="CommandMessage.html">CommandMessage</a></span>
 
 
-<div class="description">
-    Fired when the command starts.
-</div>
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
+</h5>
     
 
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
+    
     
 
-        <tr>
-            
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Message</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
     
-
-        <tr>
-            
-                <td class="name"><code>command</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#Command">Command</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>content</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#ResolvedContent">ResolvedContent</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
 <dl class="details">
+    
+
+	
+
+	
+
+	
 
     
 
@@ -1875,52 +1984,310 @@
 
     
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
 
-    
 
-    
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="util_CommandMessage.js.html">util/CommandMessage.js</a>, <a href="util_CommandMessage.js.html#line79">line 79</a>
-    </li></ul></dd>
-    
+	
 
-    
+	
 
-    
-
-    
+	
 </dl>
 
 
+    
 
+    
 
+    
 
+    
 
+    
 
+    
 
-
-
-
-
-
-
-
+    
+</dd>
 
         
+            
+<hr>
+<dt>
+    <h4 class="name" id="event:error">error</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Fired on any error in the command processing stack.  Does not fire with invalid commands.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="event:invalidCommand">invalidCommand</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Fired if the command is invalid.
+    </div>
+    
+
+    
+
+    
+        <h5>Type: 
+<span class="param-type"><a href="ValidationProcessor.html">ValidationProcessor</a></span>
+
+
+</h5>
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="event:notACommand">notACommand</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Fired if the message is not a command.
+    </div>
+    
+
+    
+
+    
+        <h5>Type: 
+<span class="param-type"><a href="CommandMessage.html">CommandMessage</a></span>
+
+
+</h5>
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        </dl>
     
 </article>
 
@@ -1929,19 +2296,171 @@
 
 
 
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+		</div>
+	
+
+</div>
 </div>
 
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CommandLoader.html">CommandLoader</a></li><li><a href="CommandMessage.html">CommandMessage</a></li><li><a href="InvalidCommand.html">InvalidCommand</a></li><li><a href="NotACommand.html">NotACommand</a></li></ul><h3>Events</h3><ul><li><a href="CommandLoader.html#event:commandsLoaded">commandsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">commandFinished</a></li><li><a href="CommandMessage.html#event:commandStarted">commandStarted</a></li></ul><h3><a href="global.html">Global</a></h3>
-</nav>
 
-<br class="clear">
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon Jan 09 2017 20:40:50 GMT-0800 (Pacific Standard Time)
+
+
+	<span class="copyright">
+	© 2016 Will Nelson
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
+	
+		on Tuesday, February 28th 2017, 7:49:26 pm
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+<script>
+	$( function () {
+		$( '#main' ).localScroll( {
+			offset : { top : 60 } //offset by the height of your header (give or take a few px, see what works for you)
+		} );
+		$( "dt.name" ).each( function () {
+			var $this = $( this ).find("h4");
+			var icon = $( "<i/>" ).addClass( "icon-plus-sign" ).addClass( "pull-right" ).addClass( "icon-white" );
+			var dt = $(this);
+			var children = dt.next( "dd" );
+
+			dt.prepend( icon ).css( {cursor : "pointer"} );
+			dt.addClass( "member-collapsed" ).addClass( "member" );
+
+
+			children.hide();
+
+			dt.children().on( "click", function () {
+				children = dt.next( "dd" );
+				children.slideToggle( "fast", function () {
+
+					if ( children.is( ":visible" ) ) {
+						icon.addClass( "icon-minus-sign" ).removeClass( "icon-plus-sign" ).removeClass( "icon-white" );
+						dt.addClass( "member-open" ).animate( "member-collapsed" );
+					} else {
+						icon.addClass( "icon-plus-sign" ).removeClass( "icon-minus-sign" ).addClass( "icon-white" );
+						dt.addClass( "member-collapsed" ).removeClass( "member-open" );
+					}
+				} );
+			} );
+
+		} );
+	} );
+</script>
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
 </body>
 </html>

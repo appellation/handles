@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Handles Global</title>
+	<title>Handles Classes</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,7 +79,7 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Global</h1>
+	<h1 class="page-title">Classes</h1>
 <section>
 
 <header>
@@ -146,36 +146,59 @@
     
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Type Definitions</h3>
+        <h3 class="subsection-title">Classes</h3>
 
         <dl>
-                
+            <dt><a href="CommandLoader.html">CommandLoader</a></dt>
+            <dd></dd>
+        
+            <dt><a href="CommandMessage.html">CommandMessage</a></dt>
+            <dd></dd>
+        
+            <dt><a href="Handles.html">Handles</a></dt>
+            <dd></dd>
+        
+            <dt><a href="Response.html">Response</a></dt>
+            <dd></dd>
+        
+            <dt><a href="ValidationProcessor.html">ValidationProcessor</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Events</h3>
+
+        <dl>
+            
 <hr>
 <dt>
-    <h4 class="name" id="Command"><span class="type-signature"></span>Command()</h4>
+    <h4 class="name" id="event:commandsLoaded">commandsLoaded</h4>
     
     
 </dt>
 <dd>
 
     
-    <div class="description">
-        Structure of exported commands.  Can also be a single function.
-    </div>
-    
 
     
 
+    
+        <h5>Type: 
+<span class="param-type">object</span>
+
+
+</h5>
     
 
     
@@ -199,11 +222,7 @@
         <th>Type</th>
 
         
-        <th>Argument</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -215,16 +234,13 @@
 
         <tr>
             
-                <td class="name"><code>triggers</code></td>
+                <td class="name"><code>commands</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Iterable.&lt;<a href="global.html#Trigger">Trigger</a>></span>
-|
-
-<span class="param-type"><a href="global.html#Trigger">Trigger</a></span>
+<span class="param-type">Map.&lt;<a href="global.html#Trigger">Trigger</a>, <a href="global.html#Command">Command</a>></span>
 
 
 
@@ -232,35 +248,23 @@
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                </td>
-            
 
-            <td class="description last">Defaults to the file name.</td>
+            <td class="description last">Currently loaded commands.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>disabled</code></td>
+                <td class="name"><code>failed</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type">Array</span>
 
 
 
@@ -268,94 +272,10 @@
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
 
-            <td class="description last">Whether the command is globally disabled</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>func</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#CommandExecutor">CommandExecutor</a></span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The command function to execute.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>validator</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#CommandValidator">CommandValidator</a></span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Function to call to determine whether the command is valid.</td>
+            <td class="description last">Directory listing of commands that failed to load.</td>
         </tr>
 
     
@@ -421,11 +341,11 @@
     
 </dd>
 
+        
             
-                
 <hr>
 <dt>
-    <h4 class="name" id="CommandExecutor"><span class="type-signature"></span>CommandExecutor(response, message, args, command)</h4>
+    <h4 class="name" id="event:commandFailed">commandFailed</h4>
     
     
 </dt>
@@ -433,20 +353,32 @@
 
     
     <div class="description">
-        Structure of any command execution functions.
+        This is fired if the CommandExecutor rejects or throws an error.  An `error` event will also fire.
     </div>
     
 
     
 
     
+        <h5>Type: 
+<span class="param-type">Object</span>
+
+
+</h5>
+    
 
     
     
-        <h5>Parameters:</h5>
-        
 
-<table class="params table table-striped">
+    
+<dl class="details">
+    
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props table table-striped">
     <thead>
     <tr>
         
@@ -464,78 +396,6 @@
     </thead>
 
     <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>response</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Response.html">Response</a></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Message</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>args</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;String></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
     
 
         <tr>
@@ -561,13 +421,28 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>err</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
     </tbody>
 </table>
+</dl>
 
-    
-
-    
-<dl class="details">
     
 
 	
@@ -599,13 +474,22 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		CommandLoader.js
+		CommandMessage.js
 	</dd>
 	
 
 	
 
 	
+	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li><a href="global.html#CommandExecutor">CommandExecutor</a></li>
+			
+			<li>CommandMessage#error</li>
+			</ul>
+	</dd>
+	
 
 	
 </dl>
@@ -622,39 +506,15 @@
     
 
     
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    - The result of the command.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">*</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
 
     
 </dd>
 
+        
             
-                
 <hr>
 <dt>
-    <h4 class="name" id="CommandValidator"><span class="type-signature"></span>CommandValidator(validator, message)</h4>
+    <h4 class="name" id="event:commandFinished">commandFinished</h4>
     
     
 </dt>
@@ -662,201 +522,21 @@
 
     
     <div class="description">
-        Validates whether a command is valid to be executed.
+        Fired upon successful completion of the command.
     </div>
     
 
     
 
     
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>validator</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="ValidationProcessor.html">ValidationProcessor</a></span>
+        <h5>Type: 
+<span class="param-type">object</span>
 
 
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="CommandMessage.html">CommandMessage</a></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
+</h5>
     
 
     
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		CommandLoader.js
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    - Evaluated for truthiness when determining validity.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">*</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-            
-                
-<hr>
-<dt class="name" id="Config">
-    <h4 id="Config">Config</h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Structure of command handler options.
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Object</span>
-
-
-
-            </li>
-        </ul>
     
 
     
@@ -877,326 +557,6 @@
         <th>Type</th>
 
         
-        <th>Argument</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>prefixes</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;String></span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Prefixes to use, if any (automatically includes mentions).</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>respond</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
-
-            <td class="description last">Whether to automatically output validation and command failure errors.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>directory</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">String</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    './commands'
-                
-                </td>
-            
-
-            <td class="description last">Where your command files are located.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>validator</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#MessageValidator">MessageValidator</a></span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Valid command forms (defaults to prefixed).</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>ignoreInvalid</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    true
-                
-                </td>
-            
-
-            <td class="description last">Whether to internally ignore invalid command errors.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>ValidationProcessor</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="ValidationProcessor.html">ValidationProcessor</a></span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">A reference to a validation processor that extends the internal one (uninstantiated).</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-</dl>
-
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		CommandLoader.js
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-            
-                
-<hr>
-<dt>
-    <h4 class="name" id="MessageValidator"><span class="type-signature"></span>MessageValidator(message)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Function to determine if a message contains a command.
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
 
         
 
@@ -1209,13 +569,13 @@
 
         <tr>
             
-                <td class="name"><code>message</code></td>
+                <td class="name"><code>command</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Message</span>
+<span class="param-type"><a href="CommandMessage.html">CommandMessage</a></span>
 
 
 
@@ -1230,13 +590,34 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>result</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The returned result of the CommandExecutor.</td>
+        </tr>
+
+    
     </tbody>
 </table>
+</dl>
 
-    
-
-    
-<dl class="details">
     
 
 	
@@ -1268,13 +649,20 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		CommandLoader.js
+		CommandMessage.js
 	</dd>
 	
 
 	
 
 	
+	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li><a href="global.html#CommandExecutor">CommandExecutor</a></li>
+			</ul>
+	</dd>
+	
 
 	
 </dl>
@@ -1291,59 +679,37 @@
     
 
     
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="global.html#ResolvedContent">ResolvedContent</a></span>
-
-
-
-    </dd>
-</dl>
-
-
-        
 
     
 </dd>
 
+        
             
-                
 <hr>
-<dt class="name" id="ResolvedContent">
-    <h4 id="ResolvedContent">ResolvedContent</h4>
-
+<dt>
+    <h4 class="name" id="event:commandStarted">commandStarted</h4>
+    
     
 </dt>
 <dd>
+
     
     <div class="description">
-        Message content without any prefixes, null if invalid.
+        Fired when the command starts.
     </div>
     
 
     
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">String</span>
-|
 
-<span class="param-type">null</span>
+    
+        <h5>Type: 
+<span class="param-type"><a href="CommandMessage.html">CommandMessage</a></span>
 
 
+</h5>
+    
 
-            </li>
-        </ul>
+    
     
 
     
@@ -1379,7 +745,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		CommandLoader.js
+		CommandMessage.js
 	</dd>
 	
 
@@ -1392,37 +758,41 @@
 
 
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 </dd>
 
+        
             
-                
 <hr>
-<dt class="name" id="Trigger">
-    <h4 id="Trigger">Trigger</h4>
-
+<dt>
+    <h4 class="name" id="event:error">error</h4>
+    
     
 </dt>
 <dd>
+
     
     <div class="description">
-        A command trigger.
+        Fired on any error in the command processing stack.  Does not fire with invalid commands.
     </div>
     
 
     
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">String</span>
-|
 
-<span class="param-type">RegExp</span>
+    
 
-
-
-            </li>
-        </ul>
+    
     
 
     
@@ -1458,7 +828,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		CommandLoader.js
+		CommandMessage.js
 	</dd>
 	
 
@@ -1471,11 +841,199 @@
 
 
     
-</dd>
 
-            </dl>
     
 
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="event:invalidCommand">invalidCommand</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Fired if the command is invalid.
+    </div>
+    
+
+    
+
+    
+        <h5>Type: 
+<span class="param-type"><a href="ValidationProcessor.html">ValidationProcessor</a></span>
+
+
+</h5>
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="event:notACommand">notACommand</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Fired if the message is not a command.
+    </div>
+    
+
+    
+
+    
+        <h5>Type: 
+<span class="param-type"><a href="CommandMessage.html">CommandMessage</a></span>
+
+
+</h5>
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		CommandMessage.js
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        </dl>
     
 </article>
 

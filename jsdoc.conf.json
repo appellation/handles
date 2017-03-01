@@ -1,0 +1,29 @@
+{
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc","closure"]
+  },
+  "source": {
+    "includePattern": ".+\\.js(doc|x)?$",
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "plugins": [],
+  "templates": {
+    "cleverLinks": true,
+    "monospaceLinks": true,
+    "systemName"            : "Handles",
+    "copyright"             : "© 2016 Will Nelson",
+    "includeDate"           : "true",
+    "navType"               : "{vertical}",
+    "theme"                 : "yeti",
+    "linenums"              : "true",
+    "collapseSymbols"       : "false",
+    "inverseNav"            : "false",
+    "outputSourceFiles"     : "false" ,
+    "outputSourcePath"      : "false",
+    "dateFormat"            : "dddd, MMMM Do YYYY, h:mm:ss a",
+    "syntaxTheme"           : "default",
+    "search"                : "true"
+  }
+}
+

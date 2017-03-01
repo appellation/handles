@@ -22,6 +22,9 @@ class Handles extends EventEmitter {
     constructor(config) {
         super();
 
+        /**
+         * @type {CommandLoader}
+         */
         this.loader = new CommandLoader(config);
         remit(this.loader, this, [ 'commandsLoaded' ]);
     }

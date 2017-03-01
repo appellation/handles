@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Handles Index</title>
+	<title>Handles Class: Handles</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,47 +79,478 @@
 		<div id="main">
 			
 
+	<h1 class="page-title">Class: Handles</h1>
+<section>
+
+<header>
+    
+        <h2>
+        Handles
+        </h2>
+        
+    
+</header>
+
+
+<article>
+    <div class="container-overview">
+    
+        
+<hr>
+<dt>
+    <h4 class="name" id="Handles"><span class="type-signature"></span>new Handles(config)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#Config">Config</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
 	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
 	
 
 
 
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		index.js
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+    <h5>Fires:</h5>
+    <ul>
+        <li><a href="CommandMessage.html#event:notACommand">CommandMessage#event:notACommand</a></li>
+    
+        <li><a href="CommandMessage.html#event:invalidCommand">CommandMessage#event:invalidCommand</a></li>
+    
+        <li><a href="CommandMessage.html#event:commandStarted">CommandMessage#event:commandStarted</a></li>
+    
+        <li><a href="CommandMessage.html#event:commandFinished">CommandMessage#event:commandFinished</a></li>
+    
+        <li><a href="CommandMessage.html#event:commandFailed">CommandMessage#event:commandFailed</a></li>
+    
+        <li><a href="CommandMessage.html#event:error">CommandMessage#event:error</a></li>
+    
+        <li><a href="CommandLoader.html#event:commandsLoaded">CommandLoader#event:commandsLoaded</a></li>
+    </ul>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li>EventEmitter</li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        <dl>
+            
+<hr>
+<dt class="name" id="loader">
+    <h4 id="loader"><span class="type-signature"></span>loader<span class="type-signature"> :<a href="CommandLoader.html">CommandLoader</a></span></h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="CommandLoader.html">CommandLoader</a></span>
 
 
 
+            </li>
+        </ul>
+    
 
+    
+<dl class="details">
+    
 
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
 
 
 
 	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		index.js
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id="handle"><span class="type-signature"></span>handle(msg [, body])</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Handle a message.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Message</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>body</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
 	
 
 
 
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		index.js
+	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
 
 
-    <section class="readme-section">
-        <article><h1>Handles</h1><p><a href="https://travis-ci.org/appellation/handles"><img src="https://travis-ci.org/appellation/handles.svg?branch=master" alt="Build Status"></a></p>
-<p>For those of us who get frustrated with writing command handlers but don't quite want to use a full framework.  Intended for use with <a href="https://github.com/hydrabolt/discord.js">Discord.js</a>.</p>
-<p>Documentation is available at <a href="http://handles.topkek.pw">handles.topkek.pw</a>.</p>
-<h2>Getting started</h2><h3>Installation</h3><pre class="prettyprint source lang-xl"><code>npm install --save discord-handles</code></pre><p>Or, if you want to risk cutting yourself, install the bleeding edge version:</p>
-<pre class="prettyprint source lang-xl"><code>npm install --save appellation/handles#master</code></pre><p>Usually I try to avoid pushing broken code, but sometimes I move a little too fast.</p>
-<h2>The basics</h2><pre class="prettyprint source lang-js"><code>const Discord = require('discord.js');
-const Handles = require('discord-handles');
+    
 
-const client = new Discord.Client();
-const handler = new Handles();
+    
 
-client.on('message', m => {
-    handler.handle(m);
-});
+    
 
-client.login('token');</code></pre><p>This will automatically load all commands in the <code>./commands</code> directory and handle incoming messages.  See <code>Command</code> in the docs for information on how to format the exports of the files you place in <code>./commands</code>.</p></article>
-    </section>
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
 
 
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="CommandMessage.html">CommandMessage</a>></span>
 
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

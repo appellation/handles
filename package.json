@@ -4,7 +4,8 @@
   "description": "A simple Discord command handler.",
   "main": "src/index.js",
   "scripts": {
-    "test": "eslint src/**"
+    "test": "eslint src/**",
+    "docs": "jsdoc -c jsdoc.conf.json -t ./node_modules/ink-docstrap/template -R README.md -r -d docs src"
   },
   "repository": {
     "type": "git",
