@@ -22,7 +22,7 @@ npm install --save appellation/handles#master
 
 Usually I try to avoid pushing broken code, but sometimes I move a little too fast.
 
-## The basics
+### The basics
 
 ```js
 const Discord = require('discord.js');
