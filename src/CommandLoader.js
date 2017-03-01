@@ -19,7 +19,7 @@ const clearRequire = require('clear-require');
  * @typedef {Object} Config - Structure of command handler options.
  * @property {Array<String>} [prefixes] - Prefixes to use, if any (automatically includes mentions).
  * @property {Boolean} [respond=false] - Whether to automatically output validation and command failure errors.
- * @property {String} [directory] - Where your command files are located; defaults to `./commands`
+ * @property {String} [directory='./commands'] - Where your command files are located; defaults to `./commands`
  * @property {MessageValidator} [validator] - Valid command forms (defaults to prefixed).
  * @property {boolean} [ignoreInvalid=true] - Whether to internally ignore invalid command errors.
  * @property {Function<ValidationProcessor>} ValidationProcessor - A reference to a validation processor that extends the internal one (uninstantiated).
@@ -68,7 +68,7 @@ class CommandLoader extends EventEmitter   {
             directory: './commands'
         }, config);
 
-        this.loadCommands();
+        this.loadCommands().catch(console.error); // eslint-disable-line no-console
     }
 
     /**

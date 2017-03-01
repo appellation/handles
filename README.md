@@ -37,3 +37,5 @@ client.on('message', m => {
 
 client.login('token');
 ```
+
+This will automatically load all commands in the `./commands` directory and handle incoming messages.  See `Command` in the docs for information on how to format the exports of the files you place in `./commands`.
