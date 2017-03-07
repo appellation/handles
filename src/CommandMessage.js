@@ -47,7 +47,7 @@ class CommandMessage extends EventEmitter {
 
         /**
          * The command.
-         * @type {Command}
+         * @type {?Command}
          */
         this.command = null;
 
@@ -159,6 +159,7 @@ class CommandMessage extends EventEmitter {
              * Fired on any error in the command processing stack.  Does not fire with invalid commands.
              *
              * @event CommandMessage#error
+             * @type {Error}
              */
             this.emit('error', err);
             this._handleError(err);

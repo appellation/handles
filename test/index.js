@@ -16,7 +16,7 @@ handler.once('error', err => { throw err });
 handler.once('commandsLoaded', (cmds, errs) => {
     if(errs && errs.length) throw new Error(`Failed to load files: ${errs.join(', ')}`);
 });
-client.on('message', handler.handle.bind(handler));
+client.on('message', handler.handle);
 
 user.once('ready', () => {
     const chan = user.channels.get(process.env.CHANNEL_ID);

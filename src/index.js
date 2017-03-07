@@ -13,7 +13,7 @@ const ValidationProcessor = require('./ValidationProcessor');
  * @fires CommandMessage#error
  * @fires CommandLoader#commandsLoaded
  *
- * @param {Config} config
+ * @param {Config} config - Configuration options for this handler.
  * @extends EventEmitter
  * @return {Function} - Command handler.
  *
@@ -24,7 +24,7 @@ const ValidationProcessor = require('./ValidationProcessor');
  * const client = new Discord.Client();
  * const handler = new Handles();
  *
- * client.on('message', handler.handle.bind(handler));
+ * client.on('message', handler.handle);
  * client.login('token');
  *
  * @constructor
@@ -42,10 +42,8 @@ class Handles extends EventEmitter {
     }
 
     /**
-     * Handle a message as a command.
-     * @param {Message} msg
-     * @param {String} body
-     * @return {Promise.<CommandMessage>}
+     * The actual command handling.
+     * @see Handles.handle
      * @private
      */
     _handle(msg, body) {
@@ -65,9 +63,25 @@ class Handles extends EventEmitter {
 
     /**
      * Handle a message as a command.
-     * @param {Message} msg
-     * @param {String} body
+     * @function
+     * @param {Message} msg - The message to handle as a command.
+     * @param {String} [body] - An optional, separate command body.
      * @return {Promise.<CommandMessage>}
+     *
+     * @example
+     * const client = new Discord.Client();
+     * const handler = new Handles();
+     *
+     * client.on('message', handler.handle);
+     *
+     * @example
+     * const client = new Discord.Client();
+     * const handler = new Handles();
+     *
+     * client.on('message', message => {
+     *   // do other stuff
+     *   handler.handle(message);
+     * });
      */
     get handle() {
         if (this._readyHandle) return this._readyHandle;

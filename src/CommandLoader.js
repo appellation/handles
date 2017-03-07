@@ -27,9 +27,8 @@ const clearRequire = require('clear-require');
  * @typedef {Object} Config - Structure of command handler options.
  * @property {Array<String>} [prefixes] - Prefixes to use, if any (automatically includes mentions).
  * @property {Boolean} [respond=false] - Whether to automatically output validation and command failure errors.
- * @property {String} [directory='./commands'] - Where your command files are located.
+ * @property {String} [directory='./commands'] - Where your command files are located, relative to the current working directory.
  * @property {MessageValidator} [validator] - Valid command forms (defaults to prefixed).
- * @property {boolean} [ignoreInvalid=true] - Whether to internally ignore invalid command errors.
  * @property {ValidationProcessor} [ValidationProcessor] - A reference to a validation processor that extends the internal one (uninstantiated).
  */
 
@@ -41,6 +40,7 @@ const clearRequire = require('clear-require');
  * @example
  * const handler = new Handles({
  *   validator: (msg) => {
+ *     // this will validate any message in a DM and/or starting with `memes` as a command.
  *     const prefix = /^memes/;
  *     if(prefix.test(msg.content) || msg.channel.type === 'dm') return msg.content.replace(prefix, '');
  *   }
