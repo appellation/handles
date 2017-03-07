@@ -31,11 +31,8 @@ const Handles = require('discord-handles');
 const client = new Discord.Client();
 const handler = new Handles();
 
-client.on('message', m => {
-    handler.handle(m);
-});
-
+client.on('message', handler);
 client.login('token');
 ```
 
-This will automatically load all commands in the `./commands` directory and handle incoming messages.  See `Command` in the docs for information on how to format the exports of the files you place in `./commands`.
+This will automatically load all commands in the `./commands` directory and handle incoming messages.  See [`Command`](/global.html#Command) in the docs for information on how to format the exports of the files you place in `./commands`.

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>Response.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,41 +27,66 @@
 
 <div id="main">
     
+    <h1 class="page-title">Response.js</h1>
+    
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>class Response {
 
+    /**
+     * @constructor
+     * @param {Message} message
+     */
+    constructor(message)    {
 
+        /**
+         * @type {Message}
+         */
+        this.message = message;
 
+        /**
+         * @type {TextChannel}
+         */
+        this.channel = message.channel;
+    }
 
+    send(data)  {
+        return this.channel.send(data);
+    }
 
+    dm(data)    {
+        return this.message.author.sendMessage(data);
+    }
 
+    /**
+     * Send a message indicating success.
+     * @param {String} text
+     * @param {String} [prefix] - Content to prefix the message with (mainly intended for mentions).
+     * @return {Promise.&lt;Message>}
+     */
+    success(text, prefix)   {
+        return this.send(`${prefix ? `${prefix} | ` : ''}\`✅\` | ${text}`);
+    }
 
+    /**
+     * Send an error message.
+     * @param {String} text
+     * @return {Promise.&lt;Message>}
+     */
+    error(text) {
+        return this.send(`\`❌\` | ${text}`);
+    }
+}
 
-
-    
-
-
-    <section class="readme">
-        <article><h1>Handles</h1><p><a href="https://travis-ci.org/appellation/handles"><img src="https://travis-ci.org/appellation/handles.svg?branch=master" alt="Build Status"></a></p>
-<p>For those of us who get frustrated with writing command handlers but don't quite want to use a full framework.  Intended for use with <a href="https://github.com/hydrabolt/discord.js">Discord.js</a>.</p>
-<p>Documentation is available at <a href="http://handles.topkek.pw">handles.topkek.pw</a>.</p>
-<h2>Getting started</h2><h3>Installation</h3><pre class="prettyprint source lang-xl"><code>npm install --save discord-handles</code></pre><p>Or, if you want to risk cutting yourself, install the bleeding edge version:</p>
-<pre class="prettyprint source lang-xl"><code>npm install --save appellation/handles#master</code></pre><p>Usually I try to avoid pushing broken code, but sometimes I move a little too fast.</p>
-<h3>The basics</h3><pre class="prettyprint source lang-js"><code>const Discord = require('discord.js');
-const Handles = require('discord-handles');
-
-const client = new Discord.Client();
-const handler = new Handles();
-
-client.on('message', handler);
-client.login('token');</code></pre><p>This will automatically load all commands in the <code>./commands</code> directory and handle incoming messages.  See <a href="/global.html#Command"><code>Command</code></a> in the docs for information on how to format the exports of the files you place in <code>./commands</code>.</p></article>
+module.exports = Response;</code></pre>
+        </article>
     </section>
-
-
 
 
 

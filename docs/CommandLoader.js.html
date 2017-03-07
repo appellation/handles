@@ -1,11 +1,50 @@
-const fs = require('fs');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>CommandLoader.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CommandLoader.html">CommandLoader</a><ul class='methods'><li data-type='method'><a href="CommandLoader.html#loadCommands">loadCommands</a></li></ul></li><li><a href="CommandMessage.html">CommandMessage</a><ul class='methods'><li data-type='method'><a href="CommandMessage.html#handle">handle</a></li><li data-type='method'><a href="CommandMessage.html#resolveArgs">resolveArgs</a></li><li data-type='method'><a href="CommandMessage.html#resolveCommand">resolveCommand</a></li><li data-type='method'><a href="CommandMessage.html#resolvePrefix">resolvePrefix</a></li><li data-type='method'><a href="CommandMessage.html#validate">validate</a></li></ul></li><li><a href="Handles.html">Handles</a><ul class='methods'><li data-type='method'><a href="Handles.html#handle">handle</a></li></ul></li><li><a href="Response.html">Response</a><ul class='methods'><li data-type='method'><a href="Response.html#error">error</a></li><li data-type='method'><a href="Response.html#success">success</a></li></ul></li><li><a href="ValidationProcessor.html">ValidationProcessor</a><ul class='methods'><li data-type='method'><a href="ValidationProcessor.html#applyValid">applyValid</a></li></ul></li></ul><h3>Events</h3><ul><li><a href="CommandLoader.html#event:commandsLoaded">commandsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">commandFinished</a></li><li><a href="CommandMessage.html#event:commandStarted">commandStarted</a></li><li><a href="CommandMessage.html#event:error">error</a></li><li><a href="CommandMessage.html#event:invalidCommand">invalidCommand</a></li><li><a href="CommandMessage.html#event:notACommand">notACommand</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">CommandLoader.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const fs = require('fs');
 const EventEmitter = require('events').EventEmitter;
 const path = require('path');
 const clearRequire = require('clear-require');
 
 /**
  * @typedef {Object} Command - Structure of exported commands.  Can also be a single function.
- * @property {Iterable<Trigger>|Trigger} [triggers] - Defaults to the file name.
+ * @property {Iterable&lt;Trigger>|Trigger} [triggers] - Defaults to the file name.
  * @property {boolean} [disabled=false] - Whether the command is globally disabled
  * @property {CommandExecutor} func - The command function to execute.
  * @property {CommandValidator} [validator] - Function to call to determine whether the command is valid.
@@ -25,7 +64,7 @@ const clearRequire = require('clear-require');
 
 /**
  * @typedef {Object} Config - Structure of command handler options.
- * @property {Array<String>} [prefixes] - Prefixes to use, if any (automatically includes mentions).
+ * @property {Array&lt;String>} [prefixes] - Prefixes to use, if any (automatically includes mentions).
  * @property {Boolean} [respond=false] - Whether to automatically output validation and command failure errors.
  * @property {String} [directory='./commands'] - Where your command files are located.
  * @property {MessageValidator} [validator] - Valid command forms (defaults to prefixed).
@@ -63,7 +102,7 @@ const clearRequire = require('clear-require');
  * @typedef {Function} CommandExecutor - Structure of any command execution functions.
  * @param {Response} response
  * @param {Message} message
- * @param {Array<String>} args
+ * @param {Array&lt;String>} args
  * @param {CommandMessage} command
  * @returns {*} - The result of the command.
  */
@@ -92,7 +131,7 @@ class CommandLoader extends EventEmitter   {
      * Load all commands into memory.  Use when reloading commands.
      *
      * @fires CommandLoader#commandsLoaded
-     * @returns {Promise.<Map.<Trigger, Command>>}
+     * @returns {Promise.&lt;Map.&lt;Trigger, Command>>}
      */
     loadCommands() {
         this.commands = new Map();
@@ -118,7 +157,7 @@ class CommandLoader extends EventEmitter   {
                 if (mod.disabled === true) continue;
 
                 // if triggers are iterable
-                if (mod.triggers && typeof mod.triggers[Symbol.iterator] === 'function' && typeof mod.triggers !== 'string' && !(mod.triggers instanceof RegExp)) {
+                if (mod.triggers &amp;&amp; typeof mod.triggers[Symbol.iterator] === 'function' &amp;&amp; typeof mod.triggers !== 'string' &amp;&amp; !(mod.triggers instanceof RegExp)) {
                     for (const trigger of mod.triggers)  this.commands.set(trigger, mod);
 
                 } else if (typeof mod === 'function') { // if a single function is exported
@@ -133,7 +172,7 @@ class CommandLoader extends EventEmitter   {
             /**
              * @event CommandLoader#commandsLoaded
              * @type {object}
-             * @property {Map<Trigger, Command>} commands - Currently loaded commands.
+             * @property {Map&lt;Trigger, Command>} commands - Currently loaded commands.
              * @property {Array} failed - Directory listing of commands that failed to load.
              */
             this.emit('commandsLoaded', {commands: this.commands, failed});
@@ -156,7 +195,7 @@ class CommandLoader extends EventEmitter   {
                             fs.stat(currentPath, (err, stat) => {
                                 if(err) return reject(err);
 
-                                if(stat.isFile() && path.extname(currentPath) === '.js') {
+                                if(stat.isFile() &amp;&amp; path.extname(currentPath) === '.js') {
                                     list.push(currentPath);
                                     resolve();
                                 } else if(stat.isDirectory()) {
@@ -177,4 +216,22 @@ class CommandLoader extends EventEmitter   {
     }
 }
 
-module.exports = CommandLoader;
+module.exports = CommandLoader;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon Mar 06 2017 16:04:23 GMT-0800 (Pacific Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

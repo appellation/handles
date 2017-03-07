@@ -17,10 +17,14 @@
  *   return processor.ensureArgs();
  * }
  *
+ * @example
  * // Usage without a custom validator
  * exports.validator = (processor, command) => {
  *   return processor.applyValid(command.args.length > 0, 'No arguments provided.');
  * }
+ *
+ * @see Command
+ * @see CommandValidator
  * @constructor
  */
 class ValidationProcessor {
@@ -57,7 +61,7 @@ class ValidationProcessor {
 
     /**
      * Test a new boolean for validity.
-     * @param {boolean|*} test
+     * @param {boolean|*} test - If falsy, applies `reason` to the now invalid command.
      * @param {?string} reason
      * @return {boolean}
      */

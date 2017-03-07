@@ -15,6 +15,18 @@ const ValidationProcessor = require('./ValidationProcessor');
  *
  * @param {Config} config
  * @extends EventEmitter
+ * @return {Function} - Command handler.
+ *
+ * @example
+ * const Discord = require('discord.js');
+ * const Handles = require('discord-handles');
+ *
+ * const client = new Discord.Client();
+ * const handler = new Handles();
+ *
+ * client.on('message', handler);
+ * client.login('token');
+ *
  * @constructor
  */
 class Handles extends EventEmitter {
@@ -27,17 +39,22 @@ class Handles extends EventEmitter {
          */
         this.loader = new CommandLoader(config);
         remit(this.loader, this, [ 'commandsLoaded' ]);
+
+        return this._handle.bind(this);
     }
 
     /**
-     * Handle a message.
-     *
+     * Handle a message as a command.
      * @param {Message} msg
-     * @param {String} [body]
+     * @param {String} body
      * @return {Promise.<CommandMessage>}
-     *
+     * @deprecated
      */
     handle(msg, body) {
+        return this._handle.call(this, msg, body);
+    }
+
+    _handle(msg, body) {
         const commandMessage = new CommandMessage(this.loader, msg, body);
         remit(commandMessage, this, [
             'notACommand',

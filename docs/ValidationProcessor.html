@@ -1,85 +1,40 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width">
-	<title>Handles Class: ValidationProcessor</title>
+    <meta charset="utf-8">
+    <title>ValidationProcessor - Documentation</title>
 
-	<!--[if lt IE 9]>
-	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
-
-	<link type="text/css" rel="stylesheet" href="styles/site.yeti.css">
-
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
 </head>
-
 <body>
 
-<div class="navbar navbar-default navbar-fixed-top navbar-inverse">
-<div class="container">
-	<div class="navbar-header">
-		<a class="navbar-brand" href="index.html">Handles</a>
-		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-        </button>
-	</div>
-	<div class="navbar-collapse collapse" id="topNavigation">
-		<ul class="nav navbar-nav">
-			
-			<li class="dropdown">
-				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
-				<ul class="dropdown-menu ">
-					<li><a href="CommandLoader.html">CommandLoader</a></li><li><a href="CommandMessage.html">CommandMessage</a></li><li><a href="Handles.html">Handles</a></li><li><a href="Response.html">Response</a></li><li><a href="ValidationProcessor.html">ValidationProcessor</a></li>
-				</ul>
-			</li>
-			
-			<li class="dropdown">
-				<a href="events.list.html" class="dropdown-toggle" data-toggle="dropdown">Events<b class="caret"></b></a>
-				<ul class="dropdown-menu ">
-					<li><a href="CommandLoader.html#event:commandsLoaded">CommandLoader#event:commandsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">CommandMessage#event:commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">CommandMessage#event:commandFinished</a></li><li><a href="CommandMessage.html#event:commandStarted">CommandMessage#event:commandStarted</a></li><li><a href="CommandMessage.html#event:error">CommandMessage#event:error</a></li><li><a href="CommandMessage.html#event:invalidCommand">CommandMessage#event:invalidCommand</a></li><li><a href="CommandMessage.html#event:notACommand">CommandMessage#event:notACommand</a></li>
-				</ul>
-			</li>
-			
-			<li class="dropdown">
-				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
-				<ul class="dropdown-menu ">
-					<li><a href="global.html">Global</a></li>
-				</ul>
-			</li>
-			
-		</ul>
-        
-            <div class="col-sm-3 col-md-3">
-                <form class="navbar-form" role="search">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
-                        <div class="input-group-btn">
-                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        
-	</div>
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-</div>
-</div>
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CommandLoader.html">CommandLoader</a><ul class='methods'><li data-type='method'><a href="CommandLoader.html#loadCommands">loadCommands</a></li></ul></li><li><a href="CommandMessage.html">CommandMessage</a><ul class='methods'><li data-type='method'><a href="CommandMessage.html#handle">handle</a></li><li data-type='method'><a href="CommandMessage.html#resolveArgs">resolveArgs</a></li><li data-type='method'><a href="CommandMessage.html#resolveCommand">resolveCommand</a></li><li data-type='method'><a href="CommandMessage.html#resolvePrefix">resolvePrefix</a></li><li data-type='method'><a href="CommandMessage.html#validate">validate</a></li></ul></li><li><a href="Handles.html">Handles</a><ul class='methods'><li data-type='method'><a href="Handles.html#handle">handle</a></li></ul></li><li><a href="Response.html">Response</a><ul class='methods'><li data-type='method'><a href="Response.html#error">error</a></li><li data-type='method'><a href="Response.html#success">success</a></li></ul></li><li><a href="ValidationProcessor.html">ValidationProcessor</a><ul class='methods'><li data-type='method'><a href="ValidationProcessor.html#applyValid">applyValid</a></li></ul></li></ul><h3>Events</h3><ul><li><a href="CommandLoader.html#event:commandsLoaded">commandsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">commandFinished</a></li><li><a href="CommandMessage.html#event:commandStarted">commandStarted</a></li><li><a href="CommandMessage.html#event:error">error</a></li><li><a href="CommandMessage.html#event:invalidCommand">invalidCommand</a></li><li><a href="CommandMessage.html#event:notACommand">notACommand</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">ValidationProcessor</h1>
+    
+
+    
 
 
-<div class="container" id="toc-content">
-<div class="row">
 
-	
-	<div class="col-md-8">
-	
-		<div id="main">
-			
 
-	<h1 class="page-title">Class: ValidationProcessor</h1>
 <section>
 
 <header>
@@ -88,23 +43,35 @@
         ValidationProcessor
         </h2>
         
-            <div class="class-description">Passed as a parameter to command validators.</div>
+            <div class="class-description"><p>Passed as a parameter to command validators.</p></div>
         
     
 </header>
-
 
 <article>
     <div class="container-overview">
     
         
-<hr>
-<dt>
-    <h4 class="name" id="ValidationProcessor"><span class="type-signature"></span>new ValidationProcessor(command)</h4>
+
     
+    <h2>Constructor</h2>
     
-</dt>
-<dd>
+
+    <h4 class="name" id="ValidationProcessor"><span class="type-signature"></span>new ValidationProcessor<span class="signature">(command)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ValidationProcessor.js.html">ValidationProcessor.js</a>, <a href="ValidationProcessor.js.html#line30">line 30</a>
+    </li></ul></dd>
+    
 
     
 
@@ -113,11 +80,77 @@
     
 
     
+
     
-        <h5>Parameters:</h5>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="global.html#Command">Command</a></li>
         
+            <li><a href="global.html#CommandValidator">CommandValidator</a></li>
+        </ul>
+    </dd>
+    
 
-<table class="params table table-striped">
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>// Using a custom validator.
+class CustomValidationProcessor extends ValidationProcessor {
+  ensureArgs() {
+    return this.applyValid(this.command.args.length > 0, 'No arguments provided.');
+  }
+}
+
+// Usage in command
+exports.validator = processor => {
+  return processor.ensureArgs();
+}</code></pre>
+
+    <pre class="prettyprint"><code>// Usage without a custom validator
+exports.validator = (processor, command) => {
+  return processor.applyValid(command.args.length > 0, 'No arguments provided.');
+}</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
     <thead>
     <tr>
         
@@ -148,7 +181,6 @@
 <span class="param-type"><a href="CommandMessage.html">CommandMessage</a></span>
 
 
-
             
             </td>
 
@@ -163,88 +195,20 @@
     </tbody>
 </table>
 
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
 
 
 
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		ValidationProcessor.js
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
 
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h5>Example</h5>
-        
-    <pre class="sunlight-highlight-javascript">// Using a custom validator.
-class CustomValidationProcessor extends ValidationProcessor {
-  ensureArgs() {
-    return this.applyValid(this.command.args.length &gt; 0, &#x27;No arguments provided.&#x27;);
-  }
-}
-
-// Usage in command
-exports.validator = processor =&gt; {
-  return processor.ensureArgs();
-}
-
-// Usage without a custom validator
-exports.validator = (processor, command) =&gt; {
-  return processor.applyValid(command.args.length &gt; 0, &#x27;No arguments provided.&#x27;);
-}</pre>
 
 
-    
-</dd>
+
+
+
+
+
+
+
 
     
     </div>
@@ -255,349 +219,385 @@ exports.validator = (processor, command) =&gt; {
 
     
 
-    
+     
 
     
 
     
         <h3 class="subsection-title">Members</h3>
 
-        <dl>
+        
             
-<hr>
-<dt class="name" id="command">
-    <h4 id="command"><span class="type-signature"></span>command<span class="type-signature"> :<a href="CommandMessage.html">CommandMessage</a></span></h4>
+<h4 class="name" id="command"><span class="type-signature"></span>command<span class="type-signature"> :<a href="CommandMessage.html">CommandMessage</a></span></h4>
+
+
+
+
+
+<dl class="details">
 
     
-</dt>
-<dd>
-    
-    <div class="description">
-        The command message.
-    </div>
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ValidationProcessor.js.html">ValidationProcessor.js</a>, <a href="ValidationProcessor.js.html#line41">line 41</a>
+    </li></ul></dd>
     
 
     
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>The command message.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
 <span class="param-type"><a href="CommandMessage.html">CommandMessage</a></span>
 
 
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
+        </li>
+    </ul>
 
 
 
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		ValidationProcessor.js
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
 
 
-    
-</dd>
 
         
             
-<hr>
-<dt class="name" id="message">
-    <h4 id="message"><span class="type-signature"></span>message<span class="type-signature"> :Message</span></h4>
+<h4 class="name" id="message"><span class="type-signature"></span>message<span class="type-signature"> :Message</span></h4>
+
+
+
+
+
+<dl class="details">
 
     
-</dt>
-<dd>
-    
-    <div class="description">
-        The message to validate.
-    </div>
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ValidationProcessor.js.html">ValidationProcessor.js</a>, <a href="ValidationProcessor.js.html#line47">line 47</a>
+    </li></ul></dd>
     
 
     
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>The message to validate.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
 <span class="param-type">Message</span>
 
 
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
+        </li>
+    </ul>
 
 
 
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		ValidationProcessor.js
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
 
 
-    
-</dd>
 
         
             
-<hr>
-<dt class="name" id="reason">
-    <h4 id="reason"><span class="type-signature">&lt;nullable> </span>reason<span class="type-signature"> :string</span></h4>
+<h4 class="name" id="reason"><span class="type-signature">(nullable) </span>reason<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
 
     
-</dt>
-<dd>
-    
-    <div class="description">
-        The reason this command is invalid.
-    </div>
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ValidationProcessor.js.html">ValidationProcessor.js</a>, <a href="ValidationProcessor.js.html#line53">line 53</a>
+    </li></ul></dd>
     
 
     
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>The reason this command is invalid.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
 <span class="param-type">string</span>
 
 
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
+        </li>
+    </ul>
 
 
 
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		ValidationProcessor.js
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
 
 
-    
-</dd>
 
         
             
-<hr>
-<dt class="name" id="valid">
-    <h4 id="valid"><span class="type-signature"></span>valid<span class="type-signature"> :boolean</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Whether the command is valid.
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">boolean</span>
+<h4 class="name" id="valid"><span class="type-signature"></span>valid<span class="type-signature"> :boolean</span></h4>
 
 
 
-            </li>
-        </ul>
-    
 
-    
+
 <dl class="details">
-    
-
-	
-
-	
-
-	
 
     
-
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ValidationProcessor.js.html">ValidationProcessor.js</a>, <a href="ValidationProcessor.js.html#line59">line 59</a>
+    </li></ul></dd>
     
 
     
 
     
 
-	
+    
 
-	
+    
 
-	
+    
 
-	
+    
 
-	
+    
 
+    
 
+    
 
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		ValidationProcessor.js
-	</dd>
-	
+    
 
-	
+    
 
-	
+    
 
-	
+    
+
+    
+
+    
 </dl>
 
 
-    
-</dd>
 
-        </dl>
+
+
+<div class="description">
+    <p>Whether the command is valid.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
     
 
     
         <h3 class="subsection-title">Methods</h3>
 
-        <dl>
-            
-<hr>
-<dt>
-    <h4 class="name" id="applyValid"><span class="type-signature"></span>applyValid(test, reason)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Test a new boolean for validity.
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
         
+            
 
-<table class="params table table-striped">
+    
+
+    <h4 class="name" id="applyValid"><span class="type-signature"></span>applyValid<span class="signature">(test, reason<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ValidationProcessor.js.html">ValidationProcessor.js</a>, <a href="ValidationProcessor.js.html#line68">line 68</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Test a new boolean for validity.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
     <thead>
     <tr>
         
@@ -607,7 +607,7 @@ exports.validator = (processor, command) =&gt; {
         <th>Type</th>
 
         
-        <th>Argument</th>
+        <th>Attributes</th>
         
 
         
@@ -633,7 +633,6 @@ exports.validator = (processor, command) =&gt; {
 <span class="param-type">*</span>
 
 
-
             
             </td>
 
@@ -649,7 +648,7 @@ exports.validator = (processor, command) =&gt; {
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>If falsy, applies <code>reason</code> to the now invalid command.</p></td>
         </tr>
 
     
@@ -663,7 +662,6 @@ exports.validator = (processor, command) =&gt; {
             
                 
 <span class="param-type">string</span>
-
 
 
             
@@ -690,70 +688,25 @@ exports.validator = (processor, command) =&gt; {
     </tbody>
 </table>
 
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
 
 
 
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		ValidationProcessor.js
-	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
 
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
 
 
-<dl>
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
     <dt>
         Type
     </dt>
@@ -762,17 +715,13 @@ exports.validator = (processor, command) =&gt; {
 <span class="param-type">boolean</span>
 
 
-
     </dd>
 </dl>
 
+    
+
 
         
-
-    
-</dd>
-
-        </dl>
     
 
     
@@ -785,171 +734,15 @@ exports.validator = (processor, command) =&gt; {
 
 
 
-		</div>
-	</div>
-
-	<div class="clearfix"></div>
-
-	
-		<div class="col-md-3">
-			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
-		</div>
-	
-
-</div>
 </div>
 
-
-    <div class="modal fade" id="searchResults">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Search results</h4>
-          </div>
-          <div class="modal-body"></div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div>
-
+<br class="clear">
 
 <footer>
-
-
-	<span class="copyright">
-	© 2016 Will Nelson
-	</span>
-
-<span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
-	
-		on Tuesday, February 28th 2017, 8:03:52 pm
-	
-	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
-</span>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon Mar 06 2017 16:04:24 GMT-0800 (Pacific Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
-<script src="scripts/docstrap.lib.js"></script>
-<script src="scripts/toc.js"></script>
-
-    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
-
-
-<script>
-$( function () {
-	$( "[id*='$']" ).each( function () {
-		var $this = $( this );
-
-		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
-	} );
-
-	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
-		var $this = $( this );
-
-		var example = $this.find( "code" );
-		exampleText = example.html();
-		var lang = /{@lang (.*?)}/.exec( exampleText );
-		if ( lang && lang[1] ) {
-			exampleText = exampleText.replace( lang[0], "" );
-			example.html( exampleText );
-			lang = lang[1];
-		} else {
-			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
-			lang = langClassMatch ? langClassMatch[1] : "javascript";
-		}
-
-		if ( lang ) {
-
-			$this
-			.addClass( "sunlight-highlight-" + lang )
-			.addClass( "linenums" )
-			.html( example.html() );
-
-		}
-	} );
-
-	Sunlight.highlightAll( {
-		lineNumbers : true,
-		showMenu : true,
-		enableDoclinks : true
-	} );
-
-	$.catchAnchorLinks( {
-        navbarOffset: 10
-	} );
-	$( "#toc" ).toc( {
-		anchorName  : function ( i, heading, prefix ) {
-			return $( heading ).attr( "id" ) || ( prefix + i );
-		},
-		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
-		showAndHide : false,
-		smoothScrolling: true
-	} );
-
-	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
-	$( '.dropdown-toggle' ).dropdown();
-
-    $( "table" ).each( function () {
-      var $this = $( this );
-      $this.addClass('table');
-    } );
-
-} );
-</script>
-
-
-
-<!--Navigation and Symbol Display-->
-
-<script>
-	$( function () {
-		$( '#main' ).localScroll( {
-			offset : { top : 60 } //offset by the height of your header (give or take a few px, see what works for you)
-		} );
-		$( "dt.name" ).each( function () {
-			var $this = $( this ).find("h4");
-			var icon = $( "<i/>" ).addClass( "icon-plus-sign" ).addClass( "pull-right" ).addClass( "icon-white" );
-			var dt = $(this);
-			var children = dt.next( "dd" );
-
-			dt.prepend( icon ).css( {cursor : "pointer"} );
-			dt.addClass( "member-collapsed" ).addClass( "member" );
-
-
-			children.hide();
-
-			dt.children().on( "click", function () {
-				children = dt.next( "dd" );
-				children.slideToggle( "fast", function () {
-
-					if ( children.is( ":visible" ) ) {
-						icon.addClass( "icon-minus-sign" ).removeClass( "icon-plus-sign" ).removeClass( "icon-white" );
-						dt.addClass( "member-open" ).animate( "member-collapsed" );
-					} else {
-						icon.addClass( "icon-plus-sign" ).removeClass( "icon-minus-sign" ).addClass( "icon-white" );
-						dt.addClass( "member-collapsed" ).removeClass( "member-open" );
-					}
-				} );
-			} );
-
-		} );
-	} );
-</script>
-
-
-<!--Google Analytics-->
-
-
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-            SearcherDisplay.init();
-        });
-    </script>
-
-
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
 </body>
 </html>

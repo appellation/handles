@@ -1,29 +1,25 @@
 {
   "tags": {
-    "allowUnknownTags": true,
-    "dictionaries": ["jsdoc","closure"]
+    "allowUnknownTags": false
   },
   "source": {
-    "includePattern": ".+\\.js(doc|x)?$",
-    "excludePattern": "(^|\\/|\\\\)_"
+    "include": "./src",
+    "includePattern": ".js$",
+    "excludePattern": "(node_modules/|docs)"
   },
-  "plugins": [],
+  "plugins": [
+    "plugins/markdown"
+  ],
+  "opts": {
+    "template": "node_modules/docdash/",
+    "encoding": "utf8",
+    "destination": "./docs/",
+    "recurse": true,
+    "verbose": true,
+    "readme": "./README.md"
+  },
   "templates": {
-    "cleverLinks": true,
-    "monospaceLinks": true,
-    "systemName"            : "Handles",
-    "copyright"             : "© 2016 Will Nelson",
-    "includeDate"           : "true",
-    "navType"               : "{vertical}",
-    "theme"                 : "yeti",
-    "linenums"              : "true",
-    "collapseSymbols"       : "false",
-    "inverseNav"            : "false",
-    "outputSourceFiles"     : "false" ,
-    "outputSourcePath"      : "false",
-    "dateFormat"            : "dddd, MMMM Do YYYY, h:mm:ss a",
-    "syntaxTheme"           : "default",
-    "search"                : "true"
+    "cleverLinks": false,
+    "monospaceLinks": false
   }
 }
-
