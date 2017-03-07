@@ -71,7 +71,7 @@ class Handles extends EventEmitter {
      */
     get handle() {
         if (this._readyHandle) return this._readyHandle;
-        return this._readyHandle = this.handle.bind(this);
+        return this._readyHandle = this._handle.bind(this);
     }
 }
 
