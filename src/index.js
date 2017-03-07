@@ -46,8 +46,9 @@ class Handles extends EventEmitter {
      * @param {Message} msg
      * @param {String} body
      * @return {Promise.<CommandMessage>}
+     * @private
      */
-    handle(msg, body) {
+    _handle(msg, body) {
         const commandMessage = new CommandMessage(this.loader, msg, body);
         remit(commandMessage, this, [
             'notACommand',
@@ -60,6 +61,17 @@ class Handles extends EventEmitter {
         ]);
 
         return commandMessage.handle();
+    }
+
+    /**
+     * Handle a message as a command.
+     * @param {Message} msg
+     * @param {String} body
+     * @return {Promise.<CommandMessage>}
+     */
+    get handle() {
+        if (this._readyHandle) return this._readyHandle;
+        return this._readyHandle = this.handle.bind(this);
     }
 }
 
