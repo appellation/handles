@@ -31,7 +31,7 @@ const Handles = require('discord-handles');
 const client = new Discord.Client();
 const handler = new Handles();
 
-client.on('message', handler);
+client.on('message', handler.handle.bind(handler));
 client.login('token');
 ```
 
