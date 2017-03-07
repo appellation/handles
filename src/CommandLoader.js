@@ -85,7 +85,7 @@ class CommandLoader extends EventEmitter   {
             directory: './commands'
         }, config);
 
-        this.loadCommands().catch(console.error); // eslint-disable-line no-console
+        this.loadCommands();
     }
 
     /**

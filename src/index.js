@@ -39,8 +39,6 @@ class Handles extends EventEmitter {
          */
         this.loader = new CommandLoader(config);
         remit(this.loader, this, [ 'commandsLoaded' ]);
-
-        return this._handle.bind(this);
     }
 
     /**
@@ -48,13 +46,8 @@ class Handles extends EventEmitter {
      * @param {Message} msg
      * @param {String} body
      * @return {Promise.<CommandMessage>}
-     * @deprecated
      */
     handle(msg, body) {
-        return this._handle.call(this, msg, body);
-    }
-
-    _handle(msg, body) {
         const commandMessage = new CommandMessage(this.loader, msg, body);
         remit(commandMessage, this, [
             'notACommand',

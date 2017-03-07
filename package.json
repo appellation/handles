@@ -4,7 +4,7 @@
   "description": "A simple Discord command handler.",
   "main": "src/index.js",
   "scripts": {
-    "test": "eslint src/**",
+    "test": "eslint src/** && node test/index.js",
     "docs": "jsdoc -c jsdoc.conf.json"
   },
   "repository": {
@@ -30,7 +30,9 @@
     "discord.js": ">=10.0.0"
   },
   "devDependencies": {
+    "discord.js": "^11.0.0",
     "docdash": "^0.4.0",
+    "dotenv": "^4.0.0",
     "eslint": "^3.13.0",
     "jsdoc": "^3.4.3",
     "minami": "^1.1.1"
