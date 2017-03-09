@@ -1,0 +1,1 @@
+exports.func = response => response.success('pong');
