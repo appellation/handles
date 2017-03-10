@@ -39,31 +39,12 @@ class Handles extends EventEmitter {
          */
         this.loader = new CommandLoader(config);
         remit(this.loader, this, [ 'commandsLoaded' ]);
-    }
 
-    /**
-     * The actual command handling.
-     * @see Handles.handle
-     * @private
-     */
-    _handle(msg, body) {
-        const commandMessage = new CommandMessage(this.loader, msg, body);
-        remit(commandMessage, this, [
-            'notACommand',
-            'invalidCommand',
-            'commandStarted',
-            'commandFinished',
-            'commandFailed',
-            'error',
-            'warn'
-        ]);
-
-        return commandMessage.handle();
+        this.handle = this.handle.bind(this);
     }
 
     /**
      * Handle a message as a command.
-     * @function
      * @param {Message} msg - The message to handle as a command.
      * @param {String} [body] - An optional, separate command body.
      * @return {Promise.<CommandMessage>}
@@ -83,9 +64,19 @@ class Handles extends EventEmitter {
      *   handler.handle(message);
      * });
      */
-    get handle() {
-        if (this._readyHandle) return this._readyHandle;
-        return this._readyHandle = this._handle.bind(this);
+    handle(msg, body) {
+        const commandMessage = new CommandMessage(this.loader, msg, body);
+        remit(commandMessage, this, [
+            'notACommand',
+            'invalidCommand',
+            'commandStarted',
+            'commandFinished',
+            'commandFailed',
+            'error',
+            'warn'
+        ]);
+
+        return commandMessage.handle();
     }
 }
 
