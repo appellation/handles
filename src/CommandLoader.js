@@ -95,6 +95,10 @@ class CommandLoader extends EventEmitter   {
      * @returns {Promise.<Map.<Trigger, Command>>}
      */
     loadCommands() {
+        /**
+         * Currently loaded commands.
+         * @type {Map<Trigger, Command>}
+         */
         this.commands = new Map();
         return this._loadDir(this.config.directory).then(files => {
             const failed = [];
