@@ -2,6 +2,7 @@ const remit = require('re-emitter');
 const {EventEmitter} = require('events');
 const CommandLoader = require('./CommandLoader');
 const CommandMessage = require('./CommandMessage');
+const CommandResolver = require('./CommandResolver');
 const ValidationProcessor = require('./ValidationProcessor');
 
 /**
@@ -31,14 +32,23 @@ const ValidationProcessor = require('./ValidationProcessor');
  */
 class Handles extends EventEmitter {
 
-    constructor(config) {
+    constructor(client, config) {
         super();
+
+        this.config = Object.assign({}, {
+            prefixes: [],
+            directory: './commands',
+        }, config);
+
+        this.config.prefixes.push(`<@${client.user.id}>`, `<@!${client.user.id}>`);
 
         /**
          * @type {CommandLoader}
          */
-        this.loader = new CommandLoader(config);
+        this.loader = new CommandLoader(this.config);
         remit(this.loader, this, [ 'commandsLoaded' ]);
+
+        this.resolver = new CommandResolver(this.config, this.loader);
 
         this.handle = this.handle.bind(this);
     }

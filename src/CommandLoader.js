@@ -80,10 +80,7 @@ class CommandLoader extends EventEmitter   {
     constructor(config = {}) {
         super();
 
-        this.config = Object.assign({
-            prefixes: [],
-            directory: './commands'
-        }, config);
+        this.config = config;
 
         this.loadCommands();
     }

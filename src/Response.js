@@ -19,6 +19,11 @@ class Response {
         this.channel = message.channel;
 
         /**
+         * @type {boolean} edit Whether to edit previous responses.
+         */
+        this.edit = true;
+
+        /**
          * @type {Message} responseMessage Previously sent responses will be edited.
          */
         this.responseMessage = null;
@@ -41,7 +46,7 @@ class Response {
     send(data, force = false)  {
         return new Promise((resolve, reject) => {
             this._q.push(cb => {
-                if(this.responseMessage && !force) {
+                if(this.responseMessage && this.edit && !force) {
                     const edited = this.responseMessage.edit(data);
                     edited.then((m) => {
                         cb(null, m);
