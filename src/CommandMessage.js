@@ -85,7 +85,7 @@ class CommandMessage extends EventEmitter {
                 if(arg.optional) { // if the resolver failed but the argument is optional, resolve with null
                     resolve(null);
                 } else { // if the resolver failed and the argument is not optional, prompt
-                    prompter.collectPrompt(arg).then(response => {
+                    prompter.collectPrompt(arg, matched.length === 0).then(response => {
                         if(response === null) throw new Error(`Argument ${arg} not provided.`);
                         this.args.push(response);
                         resolve(response);
