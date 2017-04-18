@@ -2,10 +2,7 @@
 const EventEmitter = require('events').EventEmitter;
 const Response = require('./Response');
 const ValidationProcessor = require('./ValidationProcessor');
-
-/**
- * @typedef {String|null} ResolvedContent - Message content without any prefixes, null if invalid.
- */
+const Prompter = require('./Prompter');
 
 /**
  * A message to be processed as a command.
@@ -18,14 +15,14 @@ const ValidationProcessor = require('./ValidationProcessor');
  */
 class CommandMessage extends EventEmitter {
 
-    constructor(loader, message, body)    {
+    constructor(command, message, content)    {
         super();
 
         /**
          * The command loader to use for commands.
-         * @type {CommandLoader}
+         * @type {Command}
          */
-        this.loader = loader;
+        this.command = command;
 
         /**
          * The message that triggered this command.
@@ -34,36 +31,16 @@ class CommandMessage extends EventEmitter {
         this.message = message;
 
         /**
-         * The text body of the message being processed as a command.
+         * The body of the command, as provided in the original message.
          * @type {String}
          */
-        this.body = body || this.message.content;
-
-        /**
-         * The un-prefixed content of the message.
-         * @type {ResolvedContent}
-         */
-        this.resolvedContent = CommandMessage.resolveContent(this.loader.config, this.message, this.body);
-
-        /**
-         * The command.
-         * @property {?Command} command
-         */
-        /**
-         * The body of the message without the command.
-         * @property {ResolvedContent} resolvedContent
-         */
-        /**
-         * The trigger for this command.
-         * @property {?String} trigger
-         */
-        Object.assign(this, CommandMessage.resolveCommand(this.loader, this.resolvedContent));
+        this.body = content;
 
         /**
          * The command arguments.  Delimited by space unless quoted.
-         * @type {Array<String>}
+         * @type {?Array<String>}
          */
-        this.args = CommandMessage.resolveArgs(this.resolvedContent);
+        this.args = null;
 
         /**
          * The response object for this command.
@@ -75,58 +52,50 @@ class CommandMessage extends EventEmitter {
          * The validator object for this command.
          * @type {ValidationProcessor}
          */
-        this.validator = new (this.loader.config.ValidationProcessor || ValidationProcessor)(this);
-    }
-
-    /**
-     * Validate the command form and set the prefix-less message content.
-     * @return {ResolvedContent}
-     */
-    static resolveContent(config, message, content) {
-        if(config.validator && typeof config.validator === 'function')
-            return config.validator(this.message);
-
-        for(const pref of config.prefixes) if(content.startsWith(pref)) return content.substring(pref.length).trim();
-        return null;
-    }
-
-    /**
-     * Resolve a command from the resolved content.
-     * @return {{resolvedContent: ResolvedContent, command: Command, trigger: String}}
-     */
-    static resolveCommand(loader, content)  {
-        const parsed = content.trim().match(/^(\S+)(\s*)(.*)/i);
-        if(loader.commands.has(parsed[1])) {
-            return {
-                trigger: parsed[1],
-                resolvedContent: parsed[3] || '',
-                command: loader.commands.get(parsed[1])
-            };
-        }
-
-        for(const [trigger, cmd] of loader.commands)  {
-            const regex = (trigger instanceof RegExp) ? trigger : new RegExp(`^${trigger}(\\s+|$)`, 'i');
-            if(regex.test(content)) {
-                return {
-                    trigger,
-                    resolvedContent: content.replace(regex, '').trim(),
-                    command: cmd
-                };
-            }
-        }
+        this.validator = new (ValidationProcessor)(this);
     }
 
     /**
      * Parse the arguments of the command body.
      * @return {Array.<String>}
      */
-    static resolveArgs(content)   {
-        let regex = /("([^"]+)")|('([^']+)')|\S+/g,
-            matches = [],
-            match;
+    resolveArgs()   {
+        if(!Array.isArray(this.args)) this.args = [];
+        if(typeof this.command.arguments !== 'function') return Promise.resolve();
+        return this._iterateArgs(this.command.arguments(), this.body);
+    }
 
-        while((match = regex.exec(content)) !== null) matches.push(match[4] || match[2] || match[0]);
-        return matches;
+    _iterateArgs(generator, content, result = null) {
+        const next = generator.next(result);
+        if(next.done) return;
+
+        const arg = next.value;
+        const matched = arg.matcher(content);
+        const prompter = new Prompter(new Response(this.message, true));
+
+        if(typeof matched !== 'string') throw new Error('Argument matchers must return a string representing an argument segment.');
+
+        return new Promise(resolve => {
+            content = content.substring(0, matched.length).trim();
+            const resolved = arg.resolver(matched, this.message);
+            if(resolved === null) {
+                if(arg.optional) { // if the resolver failed but the argument is optional, resolve with null
+                    resolve(null);
+                } else { // if the resolver failed and the argument is not optional, prompt
+                    prompter.collectPrompt(arg).then(response => {
+                        if(response === null) throw new Error(`Argument ${arg} not provided.`);
+                        this.args.push(response);
+                        resolve(response);
+                    });
+                }
+            } else {
+                this.args.push(resolved);
+                resolve(resolved);
+            }
+        }).then(value => {
+            if(value === null) return this._iterateArgs(generator, content, null);
+            return this._iterateArgs(generator, content, value);
+        });
     }
 }
 

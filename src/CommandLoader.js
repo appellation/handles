@@ -123,7 +123,7 @@ class CommandLoader extends EventEmitter   {
                     for (const trigger of mod.triggers)  this.commands.set(trigger, mod);
 
                 } else if (typeof mod === 'function') { // if a single function is exported
-                    this.commands.set(path.basename(file, '.js'), {func: mod});
+                    this.commands.set(path.basename(file, '.js'), Object.assign(mod,{func: mod}));
                 } else if (typeof mod.triggers === 'undefined') {   // if no triggers are provided
                     this.commands.set(path.basename(file, '.js'), mod);
                 } else  {

@@ -1,8 +1,17 @@
 class Argument {
-    constructor(prompt) {
+    constructor(prompt, reprompt) {
         this.prompt = prompt;
+        this.rePrompt = reprompt;
         this.optional = false;
-        this.resolver = () => {};
+        this.resolver = () => null;
+        this.pattern = /^\S+/;
+    }
+
+    set pattern(regex) {
+        this.matcher = content => {
+            const m = content.match(regex);
+            return m === null ? '' : m[0];
+        };
     }
 
     setPrompt(prompt = null) {
@@ -15,7 +24,7 @@ class Argument {
         return this;
     }
 
-    setResolver(resolver = () => {}) {
+    setResolver(resolver = () => null) {
         this.resolver = resolver;
         return this;
     }

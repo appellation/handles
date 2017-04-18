@@ -3,6 +3,7 @@ const {EventEmitter} = require('events');
 const CommandLoader = require('./CommandLoader');
 const CommandMessage = require('./CommandMessage');
 const CommandResolver = require('./CommandResolver');
+const CommandExecutor = require('./CommandExecutor');
 const ValidationProcessor = require('./ValidationProcessor');
 
 /**
@@ -32,7 +33,7 @@ const ValidationProcessor = require('./ValidationProcessor');
  */
 class Handles extends EventEmitter {
 
-    constructor(client, config) {
+    constructor(config) {
         super();
 
         this.config = Object.assign({}, {
@@ -40,7 +41,7 @@ class Handles extends EventEmitter {
             directory: './commands',
         }, config);
 
-        this.config.prefixes.push(`<@${client.user.id}>`, `<@!${client.user.id}>`);
+        if(this.config.userID) this.config.prefixes.push(`<@${this.config.userID}>`, `<@!${this.config.userID}>`);
 
         /**
          * @type {CommandLoader}
@@ -48,7 +49,7 @@ class Handles extends EventEmitter {
         this.loader = new CommandLoader(this.config);
         remit(this.loader, this, [ 'commandsLoaded' ]);
 
-        this.resolver = new CommandResolver(this.config, this.loader);
+        this.resolver = new CommandResolver(this);
 
         this.handle = this.handle.bind(this);
     }
@@ -74,19 +75,10 @@ class Handles extends EventEmitter {
      *   handler.handle(message);
      * });
      */
-    handle(msg, body) {
-        const commandMessage = new CommandMessage(this.loader, msg, body);
-        remit(commandMessage, this, [
-            'notACommand',
-            'invalidCommand',
-            'commandStarted',
-            'commandFinished',
-            'commandFailed',
-            'error',
-            'warn'
-        ]);
-
-        return commandMessage.handle();
+    handle(msg) {
+        const cmd = this.resolver.resolve(msg);
+        if(!cmd) return;
+        return CommandExecutor(cmd);
     }
 }
 

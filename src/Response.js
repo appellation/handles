@@ -6,7 +6,7 @@ class Response {
      * @constructor
      * @param {Message} message
      */
-    constructor(message)    {
+    constructor(message, edit = true)    {
 
         /**
          * @type {Message}
@@ -21,7 +21,7 @@ class Response {
         /**
          * @type {boolean} edit Whether to edit previous responses.
          */
-        this.edit = true;
+        this.edit = edit;
 
         /**
          * @type {Message} responseMessage Previously sent responses will be edited.
