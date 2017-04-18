@@ -73,7 +73,10 @@ class CommandMessage extends EventEmitter {
         const matched = arg.matcher(content);
         const prompter = new Prompter(new Response(this.message, true));
 
-        if(typeof matched !== 'string') throw new Error('Argument matchers must return a string representing an argument segment.');
+        if(typeof matched !== 'string') {
+            generator.throw(new Error('Argument matchers must return a string representing an argument segment.'));
+            return;
+        }
 
         return new Promise(resolve => {
             content = content.substring(0, matched.length).trim();
