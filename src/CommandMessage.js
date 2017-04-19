@@ -71,24 +71,27 @@ class CommandMessage extends EventEmitter {
 
         const arg = next.value;
         const matched = arg.matcher(content);
-        const prompter = new Prompter(new Response(this.message, true));
 
         if(typeof matched !== 'string') {
             generator.throw(new Error('Argument matchers must return a string representing an argument segment.'));
             return;
         }
 
-        return new Promise(resolve => {
-            content = content.substring(0, matched.length).trim();
+        return new Promise((resolve, reject) => {
+            content = content.substring(matched.length).trim();
             const resolved = arg.resolver(matched, this.message);
             if(resolved === null) {
                 if(arg.optional) { // if the resolver failed but the argument is optional, resolve with null
                     resolve(null);
                 } else { // if the resolver failed and the argument is not optional, prompt
+                    const prompter = new Prompter(new Response(this.message, false));
                     prompter.collectPrompt(arg, matched.length === 0).then(response => {
-                        if(response === null) throw new Error(`Argument ${arg} not provided.`);
                         this.args.push(response);
                         resolve(response);
+                    }).catch(reason => {
+                        return Promise.resolve(reason);
+                    }).then(reason => {
+                        reject({argument: arg, reason });
                     });
                 }
             } else {
@@ -98,6 +101,9 @@ class CommandMessage extends EventEmitter {
         }).then(value => {
             if(value === null) return this._iterateArgs(generator, content, null);
             return this._iterateArgs(generator, content, value);
+        }).catch(e => {
+            generator.return(null);
+            return Promise.reject(e);
         });
     }
 }

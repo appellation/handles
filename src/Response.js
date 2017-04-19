@@ -19,7 +19,7 @@ class Response {
         this.channel = message.channel;
 
         /**
-         * @type {boolean} edit Whether to edit previous responses.
+         * @type {boolean} edit Whether to edit previous responses. half a
          */
         this.edit = edit;
 
