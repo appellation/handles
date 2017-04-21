@@ -1,5 +1,5 @@
 const remit = require('re-emitter');
-const {EventEmitter} = require('events');
+const { EventEmitter } = require('events');
 const CommandLoader = require('./CommandLoader');
 const CommandMessage = require('./CommandMessage');
 const CommandResolver = require('./CommandResolver');
@@ -78,6 +78,15 @@ class Handles extends EventEmitter {
     handle(msg) {
         const cmd = this.resolver.resolve(msg);
         if(!cmd) return;
+
+        remit(cmd, this, [
+            'argumentsLoaded',
+            'argumentsError',
+            'commandStarted',
+            'commandFinished',
+            'commandFailed'
+        ]);
+
         return CommandExecutor(cmd);
     }
 }

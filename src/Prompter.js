@@ -7,13 +7,12 @@ class ArgsCollector {
     collectPrompt(arg, valid = true) {
         const text = valid ? arg.prompt : arg.rePrompt;
         return this.awaitResponse(text).then(response => {
-            if(response.content === 'cancel') return Promise.reject('cancelled');
-
+            if(response.content === 'cancel') throw 'cancelled';
             const resolved = arg.resolver(response.content, response);
             if(resolved === null) return this.collectPrompt(arg, false);
             return resolved;
         }).catch(reason => {
-            return Promise.reject(this.response.error('Command cancelled.').then(() => reason).catch(() => reason));
+            return this.response.error('Command cancelled.').then(() => reason).catch(() => reason).then(r => Promise.reject(r));
         });
     }
 

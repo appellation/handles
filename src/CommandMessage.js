@@ -67,7 +67,10 @@ class CommandMessage extends EventEmitter {
 
     _iterateArgs(generator, content, result = null) {
         const next = generator.next(result);
-        if(next.done) return;
+        if(next.done) {
+            this.emit('argumentsLoaded', this.args);
+            return;
+        }
 
         const arg = next.value;
         const matched = arg.matcher(content);
@@ -89,8 +92,6 @@ class CommandMessage extends EventEmitter {
                         this.args.push(response);
                         resolve(response);
                     }).catch(reason => {
-                        return Promise.resolve(reason);
-                    }).then(reason => {
                         reject({argument: arg, reason });
                     });
                 }
@@ -99,7 +100,6 @@ class CommandMessage extends EventEmitter {
                 resolve(resolved);
             }
         }).then(value => {
-            if(value === null) return this._iterateArgs(generator, content, null);
             return this._iterateArgs(generator, content, value);
         }).catch(e => {
             generator.return(null);

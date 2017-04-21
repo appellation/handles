@@ -1,13 +1,15 @@
-module.exports = (commandMessage) => {
-    const msg = commandMessage;
+/**
+ * @param {CommandMessage} msg The command message to execute.
+ */
+module.exports = (msg) => {
     msg.resolveArgs().then(() => {
         msg.emit('commandStarted', msg);
-        return msg.command.exec(msg);
+        return Promise.resolve(msg.command.exec(msg));
     }, e => {
-        msg.emit('argumentError', e);
+        msg.emit('argumentsError', { message: msg, error: e });
     }).then(result => {
         msg.emit('commandFinished', { message: msg, result });
-    }).catch(e => {
+    }, e => {
         msg.emit('commandFailed', { message: msg, error: e });
     });
 };
