@@ -7,15 +7,17 @@ const Prompter = require('./Prompter');
 /**
  * A message to be processed as a command.
  *
- * @param {CommandLoader} loader
- * @param {Message} message
- * @param {String} [body]
+ * @param {Object} data
+ * @param {Command} data.command
+ * @param {Message} data.message
+ * @param {String} data.body
+ * @param {Config} data.config
  * @extends EventEmitter
  * @constructor
  */
 class CommandMessage extends EventEmitter {
 
-    constructor(command, message, content)    {
+    constructor({ command, message, body, config } = {})    {
         super();
 
         /**
@@ -31,13 +33,20 @@ class CommandMessage extends EventEmitter {
         this.message = message;
 
         /**
-         * The body of the command, as provided in the original message.
+         * The body of the command (without prefix or command), as provided in the original message.
          * @type {String}
          */
-        this.body = content;
+        this.body = body;
 
         /**
-         * The command arguments.  Delimited by space unless quoted.
+         * The config.
+         * @type {Config}
+         */
+        this.config = config;
+
+        /**
+         * The command arguments as returned by the resolver.
+         * @see Argument#resolver
          * @type {?Array<String>}
          */
         this.args = null;
@@ -52,7 +61,7 @@ class CommandMessage extends EventEmitter {
          * The validator object for this command.
          * @type {ValidationProcessor}
          */
-        this.validator = new (ValidationProcessor)(this);
+        this.validator = new (this.config.ValidationProcessor || ValidationProcessor)(this);
     }
 
     /**
@@ -62,7 +71,7 @@ class CommandMessage extends EventEmitter {
     resolveArgs()   {
         if(!Array.isArray(this.args)) this.args = [];
         if(typeof this.command.arguments !== 'function') return Promise.resolve();
-        return this._iterateArgs(this.command.arguments(), this.body);
+        return this._iterateArgs(this.command.arguments(this), this.body);
     }
 
     _iterateArgs(generator, content, result = null) {
@@ -92,7 +101,7 @@ class CommandMessage extends EventEmitter {
                         this.args.push(response);
                         resolve(response);
                     }).catch(reason => {
-                        reject({argument: arg, reason });
+                        reject({ argument: arg, reason });
                     });
                 }
             } else {

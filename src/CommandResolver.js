@@ -24,11 +24,21 @@ class CommandResolver {
 
         const [, command, commandContent] = content.match(this._regex);
         if(this.loader.commands.has(command))
-            return new CommandMessage(this.loader.commands.get(command), message, commandContent.trim());
+            return new CommandMessage({
+                command: this.loader.commands.get(command),
+                message,
+                body: commandContent.trim(),
+                config: this.config
+            });
 
         for(const [c, command] of this.loader.commands)
             if(content.startsWith(c))
-                return new CommandMessage(command, message, content.substring(0, c.length).trim());
+                return new CommandMessage({
+                    command,
+                    message,
+                    body: content.substring(0, c.length).trim(),
+                    config: this.config
+                });
 
         return null;
     }
