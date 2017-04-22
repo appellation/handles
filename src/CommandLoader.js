@@ -4,71 +4,6 @@ const path = require('path');
 const clearRequire = require('clear-require');
 
 /**
- * @typedef {Object} Command - Structure of exported commands.  Can also be a single function.
- * @property {Iterable<Trigger>|Trigger} [triggers] - Defaults to the file name.
- * @property {boolean} [disabled=false] - Whether the command is globally disabled
- * @property {CommandExecutor} func - The command function to execute.
- * @property {CommandValidator} [validator] - Function to call to determine whether the command is valid.
- *
- * @example
- * exports.func = r => r.send('lmao');
- * exports.triggers = /^ay+$/i;
- *
- * @example
- * exports.func = r => {};
- * exports.disabled = true;
- */
-
-/**
- * @typedef {String|RegExp} Trigger - A command trigger.
- */
-
-/**
- * @typedef {Object} Config - Structure of command handler options.
- * @property {Array<String>} [prefixes] - Prefixes to use, if any (automatically includes mentions).
- * @property {Boolean} [respond=false] - Whether to automatically output validation and command failure errors.
- * @property {String} [directory='./commands'] - Where your command files are located, relative to the current working directory.
- * @property {MessageValidator} [validator] - Valid command forms (defaults to prefixed).
- * @property {ValidationProcessor} [ValidationProcessor] - A reference to a validation processor that extends the internal one (uninstantiated).
- */
-
-/**
- * @typedef {Function} MessageValidator - Function to determine if a message contains a command.
- * @param {Message} message
- * @returns {ResolvedContent}
- *
- * @example
- * const handler = new Handles({
- *   validator: (msg) => {
- *     // this will validate any message in a DM and/or starting with `memes` as a command.
- *     const prefix = /^memes/;
- *     if(prefix.test(msg.content) || msg.channel.type === 'dm') return msg.content.replace(prefix, '');
- *   }
- * });
- */
-
-/**
- * @typedef {Function} CommandValidator - Validates whether a command is valid to be executed.
- * @param {ValidationProcessor} validator
- * @param {CommandMessage} command
- * @returns {*} - Evaluated for truthiness when determining validity.
- *
- * @example
- * exports.validator = (val, msg) => {
- *   return val.applyValid(msg.args.length, 'Arguments are required to use this command.');
- * }
- */
-
-/**
- * @typedef {Function} CommandExecutor - Structure of any command execution functions.
- * @param {Response} response
- * @param {Message} message
- * @param {Array<String>} args
- * @param {CommandMessage} command
- * @returns {*} - The result of the command.
- */
-
-/**
  * Manage command loading.
  *
  * @param {Config} config - Configuration options for the command handler.
@@ -80,10 +15,11 @@ class CommandLoader extends EventEmitter   {
     constructor(config = {}) {
         super();
 
-        this.config = Object.assign({
-            prefixes: [],
-            directory: './commands'
-        }, config);
+        /**
+         * Configuration for handles.
+         * @type {Config}
+         */
+        this.config = config;
 
         this.loadCommands();
     }
@@ -126,7 +62,7 @@ class CommandLoader extends EventEmitter   {
                     for (const trigger of mod.triggers)  this.commands.set(trigger, mod);
 
                 } else if (typeof mod === 'function') { // if a single function is exported
-                    this.commands.set(path.basename(file, '.js'), {func: mod});
+                    this.commands.set(path.basename(file, '.js'), Object.assign(mod,{func: mod}));
                 } else if (typeof mod.triggers === 'undefined') {   // if no triggers are provided
                     this.commands.set(path.basename(file, '.js'), mod);
                 } else  {

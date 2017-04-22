@@ -8,7 +8,8 @@ const Handles = require('../src/index');
 const client = new Discord.Client();
 const user = new Discord.Client();
 const handler = new Handles({
-    directory: path.join('test', 'commands')
+    directory: path.join('test', 'commands'),
+    userID: '218844420613734401',
 });
 
 handler.once('commandFailed', (cmd, err) => { throw err });
@@ -33,4 +34,4 @@ user.once('ready', () => {
     chan.sendMessage(`<@${client.user.id}> ping`);
 });
 
-client.login(process.env.BOT_TOKEN).then(() => user.login(process.env.USER_TOKEN));
+client.login(process.env.BOT_TOKEN);

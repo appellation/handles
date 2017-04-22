@@ -1,31 +1,27 @@
-
-const EventEmitter = require('events').EventEmitter;
-const Response = require('./Response');
-const ValidationProcessor = require('./ValidationProcessor');
-
-/**
- * @typedef {String|null} ResolvedContent - Message content without any prefixes, null if invalid.
- */
+const EventEmitter = require('events');
+const Prompter = require('./Prompter');
 
 /**
  * A message to be processed as a command.
  *
- * @param {CommandLoader} loader
- * @param {Message} message
- * @param {String} [body]
+ * @param {Object} data
+ * @param {Command} data.command
+ * @param {Message} data.message
+ * @param {String} data.body
+ * @param {Config} data.config
  * @extends EventEmitter
  * @constructor
  */
 class CommandMessage extends EventEmitter {
 
-    constructor(loader, message, body)    {
+    constructor({ command, message, body, config } = {})    {
         super();
 
         /**
          * The command loader to use for commands.
-         * @type {CommandLoader}
+         * @type {Command}
          */
-        this.loader = loader;
+        this.command = command;
 
         /**
          * The message that triggered this command.
@@ -34,166 +30,35 @@ class CommandMessage extends EventEmitter {
         this.message = message;
 
         /**
-         * The text body of the message being processed as a command.
+         * The body of the command (without prefix or command), as provided in the original message.
          * @type {String}
          */
-        this.body = body || this.message.content;
+        this.body = body;
 
         /**
-         * The un-prefixed content of the message.
-         * @type {ResolvedContent}
+         * The config.
+         * @type {Config}
          */
-        this.resolvedContent = null;
+        this.config = config;
 
         /**
-         * The command.
-         * @type {?Command}
+         * The command arguments as returned by the resolver.
+         * @see Argument#resolver
+         * @type {?Array<String>}
          */
-        this.command = null;
-
-        /**
-         * The body of the message without the command.
-         * @type {?String}
-         */
-        this.commandBody = null;
-
-        /**
-         * The command arguments.  Delimited by space unless quoted.
-         * @type {Array<String>}
-         */
-        this.args = [];
+        this.args = null;
 
         /**
          * The response object for this command.
          * @type {Response}
          */
-        this.response = new Response(this.message);
+        this.response = new (this.config.Response)(this.message);
 
         /**
          * The validator object for this command.
          * @type {ValidationProcessor}
          */
-        this.validator = new (this.loader.config.ValidationProcessor || ValidationProcessor)(this);
-    }
-
-    /**
-     * Handles a command.
-     *
-     * @fires CommandMessage#notACommand
-     * @fires CommandMessage#invalidCommand
-     * @fires CommandMessage#commandStarted
-     * @fires CommandMessage#commandFinished
-     * @fires CommandMessage#commandFailed
-     * @fires CommandMessage#error
-     * @throws {Error} If no command function is provided (this really should not happen, ever).
-     * @return {Promise.<CommandMessage>} - Resolves when the command has finished processing (does not reject).
-     */
-    handle()    {
-        return new Promise((resolve, reject) => {
-            if(this.message.author.bot || !this.resolvePrefix() || !this.resolveCommand()) {
-
-                /**
-                 * Fired if the message is not a command.
-                 *
-                 * @event CommandMessage#notACommand
-                 * @type {CommandMessage}
-                 */
-                this.emit('notACommand', this);
-                return reject();
-            }
-
-            return this.validate().then(validator => {
-
-                if(validator.valid) return resolve();
-
-                /**
-                 * Fired if the command is invalid.
-                 *
-                 * @event CommandMessage#invalidCommand
-                 * @type {ValidationProcessor}
-                 */
-                this.emit('invalidCommand', validator);
-                this._handleError(validator.reason);
-                return reject();
-            });
-        }).then(() => {
-            if(typeof this.command.func !== 'function') throw new Error('No command function provided.');
-
-            /**
-             * Fired when the command starts.
-             *
-             * @event CommandMessage#commandStarted
-             * @type {CommandMessage}
-             */
-            this.emit('commandStarted', this);
-            
-            let result;
-            try {
-                result = this.command.func(this.response, this.message, this.args, this);
-            } catch (e) {
-                return this._commandFailed(e);
-            }
-
-            return Promise.resolve(result).catch(this._commandFailed.bind(this));
-        }).then(result => {
-
-            /**
-             * Fired upon successful completion of the command.
-             *
-             * @event CommandMessage#commandFinished
-             * @type {object}
-             * @property {CommandMessage} command
-             * @property {*} result - The returned result of the CommandExecutor.
-             * @see CommandExecutor
-             */
-            this.emit('commandFinished', {
-                command: this,
-                result
-            });
-
-            return this;
-        }).catch(err => {
-            if(typeof err === 'undefined') return;
-
-            /**
-             * Fired on any error in the command processing stack.  Does not fire with invalid commands.
-             *
-             * @event CommandMessage#error
-             * @type {Error}
-             */
-            this.emit('error', err);
-            this._handleError(err);
-            return this;
-        });
-    }
-    
-    _commandFailed(err) {
-        
-        /**
-         * This is fired if the CommandExecutor rejects or throws an error.  An `error` event will also fire.
-         *
-         * @event CommandMessage#commandFailed
-         * @type {Object}
-         * @property {CommandMessage} command
-         * @property err
-         * @see CommandExecutor
-         * @see CommandMessage#error
-         */
-        this.emit('commandFailed', {
-            command: this,
-            err
-        });
-
-        return Promise.reject(err);
-    }
-
-    /**
-     * Handle any errors.
-     * @param {String} text
-     * @private
-     */
-    _handleError(text)    {
-        if(this.loader.config.respond) this.response.error(text).catch(() => null);
+        this.validator = new (this.config.Validator)(this);
     }
 
     /**
@@ -202,68 +67,63 @@ class CommandMessage extends EventEmitter {
      */
     validate()  {
         if(!this.command) throw new Error('No command to validate');
-        if(typeof this.command.validator !== 'function') return Promise.resolve(this.validator);
-
-        const validate = this.command.validator(this.validator, this);
-
-        return Promise.resolve(validate).then(valid => {
-            this.validator.valid = !!valid;
+        if(typeof this.command.validate !== 'function') return Promise.resolve(this.validator);
+        return Promise.resolve(this.command.validate(this.validator, this)).then(valid => {
+            this.validator.valid = Boolean(valid);
             return this.validator;
         });
     }
 
     /**
-     * Validate the command form and set the prefix-less message content.
-     * @return {ResolvedContent}
-     */
-    resolvePrefix() {
-        const config = this.loader.config;
-        if(config.validator && typeof config.validator === 'function')    {
-            return this.resolvedContent = config.validator(this.message);
-        }   else    {
-
-            const prefixes = config.prefixes.concat([ `<@${this.message.client.user.id}>`, `<@!${this.message.client.user.id}>` ]);
-            for(const pref of prefixes) if(this.body.startsWith(pref)) return this.resolvedContent = this.body.substring(pref.length).trim();
-            return this.resolvedContent = null;
-        }
-    }
-
-    /**
-     * Resolve a command from the resolved content.
-     * @return {Command|undefined}
-     */
-    resolveCommand()  {
-        if(!this.resolvedContent) this.resolvePrefix();
-        if(!this.resolvedContent) return;
-
-        const split = this.resolvedContent.trim().toLowerCase().split(' ');
-        if(typeof split[0] === 'string' && this.loader.commands.has(split[0])) {
-            this.commandBody = this.resolvedContent.replace(/^(\S+\s*)(.*)/, '$2');
-            this.resolveArgs();
-            return this.command = this.loader.commands.get(split[0]);
-        }
-
-        for(const [trigger, cmd] of this.loader.commands)  {
-            const regex = (trigger instanceof RegExp) ? trigger : new RegExp(`^${trigger}(\\s+|$)`, 'i');
-            if(regex.test(this.resolvedContent)) {
-                this.commandBody = this.resolvedContent.replace(regex, '').trim();
-                this.resolveArgs();
-                return this.command = cmd;
-            }
-        }
-    }
-
-    /**
      * Parse the arguments of the command body.
-     * @return {Array}
+     * @return {Array.<String>}
      */
     resolveArgs()   {
-        let regex = /("([^"]+)")|('([^']+)')|\S+/g,
-            matches = [],
-            match;
+        if(!Array.isArray(this.args)) this.args = [];
+        if(typeof this.command.arguments !== 'function') return Promise.resolve();
+        return this._iterateArgs(this.command.arguments(this), this.body);
+    }
 
-        while((match = regex.exec(this.commandBody)) !== null) matches.push(match[4] || match[2] || match[0]);
-        return this.args = matches;
+    _iterateArgs(generator, content, result = null) {
+        const next = generator.next(result);
+        if(next.done) {
+            this.emit('argumentsLoaded', this.args);
+            return;
+        }
+
+        const arg = next.value;
+        const matched = arg.matcher(content);
+
+        if(typeof matched !== 'string') {
+            generator.throw(new Error('Argument matchers must return a string representing an argument segment.'));
+            return;
+        }
+
+        return new Promise((resolve, reject) => {
+            content = content.substring(matched.length).trim();
+            const resolved = arg.resolver(matched, this.message);
+            if(resolved === null) {
+                if(arg.optional) { // if the resolver failed but the argument is optional, resolve with null
+                    resolve(null);
+                } else { // if the resolver failed and the argument is not optional, prompt
+                    const prompter = new Prompter(new (this.config.Response)(this.message, false));
+                    prompter.collectPrompt(arg, matched.length === 0).then(response => {
+                        this.args.push(response);
+                        resolve(response);
+                    }).catch(reason => {
+                        reject({ argument: arg, reason });
+                    });
+                }
+            } else {
+                this.args.push(resolved);
+                resolve(resolved);
+            }
+        }).then(value => {
+            return this._iterateArgs(generator, content, value);
+        }).catch(e => {
+            generator.return(null);
+            return Promise.reject(e);
+        });
     }
 }
 

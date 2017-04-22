@@ -1,8 +1,4 @@
 /**
- * Created by Will on 2/3/2017.
- */
-
-/**
  * Passed as a parameter to command validators.
  * @example
  * // Using a custom validator.
@@ -25,9 +21,8 @@
  *
  * @see Command
  * @see CommandValidator
- * @constructor
  */
-class ValidationProcessor {
+class Validator {
 
     /**
      * @param {CommandMessage} command
@@ -53,6 +48,12 @@ class ValidationProcessor {
         this.reason = null;
 
         /**
+         * Whether to respond to invalid commands with the reason.
+         * @type {Boolean}
+         */
+        this.respond = true;
+
+        /**
          * Whether the command is valid.
          * @type {boolean}
          */
@@ -65,10 +66,10 @@ class ValidationProcessor {
      * @param {?string} reason
      * @return {boolean}
      */
-    applyValid(test, reason) {
+    apply(test, reason) {
         if(!test && reason) this.reason = reason;
-        return !!test;
+        return this.valid = Boolean(test);
     }
 }
 
-module.exports = ValidationProcessor;
+module.exports = Validator;

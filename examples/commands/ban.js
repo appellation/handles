@@ -1,9 +1,11 @@
+const Prompt = require('../src/Prompt');
+
 exports.func = (response, message, command) => {
     return command.message.guild.member(command.message.mentions.users.find(u => u.id !== u.client.id)).ban();
 };
 
 exports.validator = (validator, command) => {
-    const mention = /<@!?([0-9]+)>/;
+    // const mention = /<@!?([0-9]+)>/;
     const toBan = command.message.guild.member(command.message.mentions.users.find(u => u.id !== u.client.id));
     return validator.applyValid(
         command.message.channel.type === 'text',
@@ -26,6 +28,15 @@ exports.validator = (validator, command) => {
         'I cannot ban that user.'
     );
 };
+
+exports.validator2 = function* () {
+    yield new Prompt()
+        .setText('Please provide a valid member.')
+        .setOptional(true)
+        .setResolver(resolver);
+};
+
+function resolver() {}
 
 exports.triggers = [
     'ban',

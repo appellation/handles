@@ -2,8 +2,9 @@ const Discord = require('discord.js');
 const Handles = require('../src/index');
 
 const client = new Discord.Client();
-const handler = new Handles({
-    // config options go here
+client.once('ready', () => {
+    const handler = new Handles(client, {
+        // config options go here
+    });
+    client.on('message', handler.handle);
 });
-
-client.on('message', handler.handle);
