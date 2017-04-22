@@ -3,7 +3,7 @@ const { EventEmitter } = require('events');
 const CommandLoader = require('./CommandLoader');
 const CommandMessage = require('./CommandMessage');
 const CommandResolver = require('./CommandResolver');
-const CommandExecutor = require('./CommandExecutor');
+const commandExecutor = require('./commandExecutor');
 const Response = require('./Response');
 const Validator = require('./Validator');
 
@@ -162,7 +162,7 @@ class Handles extends EventEmitter {
             'commandFailed'
         ]);
 
-        return CommandExecutor(cmd);
+        return commandExecutor(cmd);
     }
 }
 
