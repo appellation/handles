@@ -5,7 +5,6 @@ module.exports = (msg) => {
     msg.validate().then(validator => {
         if(!validator.valid) {
             msg.emit('commandInvalid', { message: msg, validator });
-            return;
         } else {
             msg.resolveArgs().catch(e => {
                 msg.emit('argumentsError', { message: msg, error: e });
