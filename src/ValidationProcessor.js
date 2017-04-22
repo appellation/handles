@@ -67,7 +67,7 @@ class ValidationProcessor {
      */
     applyValid(test, reason) {
         if(!test && reason) this.reason = reason;
-        return !!test;
+        return Boolean(test);
     }
 }
 

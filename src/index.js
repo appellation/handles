@@ -4,6 +4,7 @@ const CommandLoader = require('./CommandLoader');
 const CommandMessage = require('./CommandMessage');
 const CommandResolver = require('./CommandResolver');
 const CommandExecutor = require('./CommandExecutor');
+const Response = require('./Response');
 const ValidationProcessor = require('./ValidationProcessor');
 
 /**
@@ -37,11 +38,13 @@ class Handles extends EventEmitter {
         super();
 
         this.config = Object.assign({}, {
-            prefixes: [],
+            prefixes: new Set(),
             directory: './commands',
+            Response,
+            ValidationProcessor
         }, config);
 
-        if(this.config.userID) this.config.prefixes.push(`<@${this.config.userID}>`, `<@!${this.config.userID}>`);
+        if(this.config.userID) this.config.prefixes.add(`<@${this.config.userID}>`).add(`<@!${this.config.userID}>`);
 
         /**
          * @type {CommandLoader}

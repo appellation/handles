@@ -7,8 +7,8 @@ const clearRequire = require('clear-require');
  * @typedef {Object} Command - Structure of exported commands.  Can also be a single function.
  * @property {Iterable<Trigger>|Trigger} [triggers] - Defaults to the file name.
  * @property {boolean} [disabled=false] - Whether the command is globally disabled
- * @property {CommandExecutor} func - The command function to execute.
- * @property {CommandValidator} [validator] - Function to call to determine whether the command is valid.
+ * @property {CommandExecutor} exec - The command function to execute.
+ * @property {CommandValidator} [validate] - Function to call to determine whether the command is valid.
  *
  * @example
  * exports.func = r => r.send('lmao');
@@ -25,8 +25,7 @@ const clearRequire = require('clear-require');
 
 /**
  * @typedef {Object} Config - Structure of command handler options.
- * @property {Array<String>} [prefixes] - Prefixes to use, if any (automatically includes mentions).
- * @property {Boolean} [respond=false] - Whether to automatically output validation and command failure errors.
+ * @property {Set<String>} [prefixes] - Prefixes to use, if any (automatically includes mentions).
  * @property {String} [directory='./commands'] - Where your command files are located, relative to the current working directory.
  * @property {MessageValidator} [validator] - Valid command forms (defaults to prefixed).
  * @property {ValidationProcessor} [ValidationProcessor] - A reference to a validation processor that extends the internal one (uninstantiated).

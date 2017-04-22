@@ -55,13 +55,27 @@ class CommandMessage extends EventEmitter {
          * The response object for this command.
          * @type {Response}
          */
-        this.response = new Response(this.message);
+        this.response = new (this.config.Response || Response)(this.message);
 
         /**
          * The validator object for this command.
          * @type {ValidationProcessor}
          */
         this.validator = new (this.config.ValidationProcessor || ValidationProcessor)(this);
+    }
+
+    /**
+     * Ensure that the command form is valid.
+     * @return {Promise<ValidationProcessor>} - Rejects with reason, otherwise resolves.
+     */
+    validate()  {
+        if(!this.command) throw new Error('No command to validate');
+        if(typeof this.command.validator !== 'function') return Promise.resolve(this.validator);
+
+        return Promise.resolve(this.command.validate(this.validator, this)).then(valid => {
+            this.validator.valid = Boolean(valid);
+            return this.validator;
+        });
     }
 
     /**
@@ -96,7 +110,7 @@ class CommandMessage extends EventEmitter {
                 if(arg.optional) { // if the resolver failed but the argument is optional, resolve with null
                     resolve(null);
                 } else { // if the resolver failed and the argument is not optional, prompt
-                    const prompter = new Prompter(new Response(this.message, false));
+                    const prompter = new Prompter(new (this.config.Response || Response)(this.message, false));
                     prompter.collectPrompt(arg, matched.length === 0).then(response => {
                         this.args.push(response);
                         resolve(response);
