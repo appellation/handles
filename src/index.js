@@ -81,18 +81,7 @@ const Validator = require('./Validator');
  */
 
 /**
- * @fires CommandMessage#notACommand
- * @fires CommandMessage#invalidCommand
- * @fires CommandMessage#commandStarted
- * @fires CommandMessage#commandFinished
- * @fires CommandMessage#commandFailed
- * @fires CommandMessage#error
- * @fires CommandLoader#commandsLoaded
- *
- * @param {Config} config - Configuration options for this handler.
  * @extends EventEmitter
- * @return {Function} - Command handler.
- *
  * @example
  * const Discord = require('discord.js');
  * const Handles = require('discord-handles');
@@ -102,15 +91,18 @@ const Validator = require('./Validator');
  *
  * client.on('message', handler.handle);
  * client.login('token');
- *
- * @constructor
  */
 class Handles extends EventEmitter {
 
+    /**
+     * @param {Config} config - Configuration options for this handler.
+     * @return {Function} - Command handler.
+     * @fires CommandLoader#commandsLoaded
+     */
     constructor(config) {
         super();
 
-        this.config = Object.assign({}, {
+        this.config = Object.assign({
             prefixes: new Set(),
             directory: './commands',
             Response,
@@ -135,6 +127,13 @@ class Handles extends EventEmitter {
      * @param {Message} msg - The message to handle as a command.
      * @param {String} [body] - An optional, separate command body.
      * @return {Promise.<CommandMessage>}
+     *
+     * @fires CommandMessage#notACommand
+     * @fires CommandMessage#invalidCommand
+     * @fires CommandMessage#commandStarted
+     * @fires CommandMessage#commandFinished
+     * @fires CommandMessage#commandFailed
+     * @fires CommandMessage#error
      *
      * @example
      * const client = new Discord.Client();

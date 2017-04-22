@@ -21,7 +21,6 @@
  *
  * @see Command
  * @see CommandValidator
- * @constructor
  */
 class Validator {
 
