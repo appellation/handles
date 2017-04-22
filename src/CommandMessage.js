@@ -58,7 +58,7 @@ class CommandMessage extends EventEmitter {
          * The validator object for this command.
          * @type {ValidationProcessor}
          */
-        this.validator = new (this.config.ValidationProcessor)(this);
+        this.validator = new (this.config.Validator)(this);
     }
 
     /**
@@ -67,8 +67,7 @@ class CommandMessage extends EventEmitter {
      */
     validate()  {
         if(!this.command) throw new Error('No command to validate');
-        if(typeof this.command.validator !== 'function') return Promise.resolve(this.validator);
-
+        if(typeof this.command.validate !== 'function') return Promise.resolve(this.validator);
         return Promise.resolve(this.command.validate(this.validator, this)).then(valid => {
             this.validator.valid = Boolean(valid);
             return this.validator;

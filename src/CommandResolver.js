@@ -6,7 +6,7 @@ class CommandResolver {
         this.config = this.handles.config;
         this.loader = this.handles.loader;
 
-        if(typeof this.config.validator !== 'function' && (!this.config.prefixes || !this.config.prefixes.length))
+        if(typeof this.config.validator !== 'function' && (!this.config.prefixes || !this.config.prefixes.size))
             throw new Error('Unable to validate commands: no validator or prefixes were provided.');
 
         this._validator = this.config.validator || ((message) => {

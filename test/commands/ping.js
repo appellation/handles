@@ -6,6 +6,10 @@ class Ping {
         command.response.send('pong');
     }
 
+    validate(val) {
+        return val.apply(false, 'lul yu fuked up');
+    }
+
     * arguments() {
         yield new Argument('fuck you', 'fuck me')
             .setResolver(c => c === 'lmao' ? 'lmao' : null);
