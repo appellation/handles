@@ -49,7 +49,7 @@ class Validator {
 
         /**
          * Whether to respond to invalid commands with the reason.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.respond = true;
 

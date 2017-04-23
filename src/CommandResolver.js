@@ -29,7 +29,7 @@ class CommandResolver {
 
         /**
          * The validator function to determine if a command is valid.
-         * @type {Function}
+         * @type {function}
          * @private
          */
         this._validator = this.config.validator || ((message) => {
@@ -47,7 +47,7 @@ class CommandResolver {
 
     /**
      * @param {Message} message - The message that could be a command.
-     * @param {String} [body] - Command text if not the message content.
+     * @param {string} [body] - Command text if not the message content.
      */
     resolve(message, body) {
         const content = this._resolveContent(message, body);
@@ -77,7 +77,7 @@ class CommandResolver {
     /**
      * Resolve the content of the command.
      * @param {Message} message
-     * @param {String} body
+     * @param {string} [body=message.content]
      * @private
      */
     _resolveContent(message, body) {

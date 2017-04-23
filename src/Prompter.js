@@ -18,7 +18,7 @@ class Prompter {
     /**
      * Collect prompts for an argument.
      * @param {Argument} arg - The argument to prompt for.
-     * @param {Boolean} valid - Whether this argument was valid on prior prompt.
+     * @param {boolean} valid - Whether this argument was valid on prior prompt.
      * @returns {Promise} - The result of the resolver.  Reject with `string` reason
      * that the collector failed.
      */
@@ -36,7 +36,7 @@ class Prompter {
 
     /**
      * Wait for a response to some text.
-     * @param {String} text - The text to send prior to waiting.
+     * @param {string} text - The text to send prior to waiting.
      * @returns {Message}
      */
     awaitResponse(text) {

@@ -3,7 +3,7 @@ const Prompter = require('./Prompter');
 
 /**
  * A message to be processed as a command.
- * @extends EventEmitter
+ * @extends {EventEmitter}
  */
 class CommandMessage extends EventEmitter {
 
@@ -11,7 +11,7 @@ class CommandMessage extends EventEmitter {
      * @param {Object} data
      * @param {Command} data.command
      * @param {Message} data.message
-     * @param {String} data.body
+     * @param {string} data.body
      * @param {Config} data.config
      */
     constructor({ command, message, body, config } = {})    {
@@ -31,7 +31,7 @@ class CommandMessage extends EventEmitter {
 
         /**
          * The body of the command (without prefix or command), as provided in the original message.
-         * @type {String}
+         * @type {string}
          */
         this.body = body;
 
@@ -56,14 +56,14 @@ class CommandMessage extends EventEmitter {
 
         /**
          * The validator object for this command.
-         * @type {ValidationProcessor}
+         * @type {Validator}
          */
         this.validator = new (this.config.Validator)(this);
     }
 
     /**
      * Ensure that the command form is valid.
-     * @return {Promise<ValidationProcessor>}
+     * @return {Promise<Validator>}
      */
     validate()  {
         if(!this.command) throw new Error('No command to validate');

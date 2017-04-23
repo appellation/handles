@@ -71,7 +71,7 @@ class CommandLoader extends EventEmitter   {
 
             /**
              * @event CommandLoader#commandsLoaded
-             * @type {object}
+             * @type {Object}
              * @property {Map<Trigger, Command>} commands - Currently loaded commands.
              * @property {Array} failed - Directory listing of commands that failed to load.
              */

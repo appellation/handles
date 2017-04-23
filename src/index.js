@@ -14,6 +14,9 @@ const Validator = require('./Validator');
  * @property {boolean} [disabled=false] - Whether the command is globally disabled
  * @property {CommandExecutor} exec - The command function to execute.
  * @property {CommandValidator} [validate] - Function to call to determine whether the command is valid.
+ * @property {function} [arguments] - A generator function that yields command arguments (must be instances
+ * of `Argument`).
+ * @see {Argument}
  *
  * @example
  * exports.exec = r => r.send('lmao');
@@ -28,7 +31,7 @@ const Validator = require('./Validator');
  *   exec(command) {
  *     return command.response.send('dank memes');
  *   }
- *   * validator(command) {
+ *   * arguments(command) {
  *     yield new Argument('Please provide a thing.', 'The thing you provided was invalid.')
  *        .setResolver(content => content === 'thing' ? { this: 'is what I want to be in the args property' } : null);
  *   }
@@ -38,19 +41,19 @@ const Validator = require('./Validator');
  */
 
 /**
- * @typedef {String|RegExp} Trigger - A command trigger.
+ * @typedef {string|RegExp} Trigger - A command trigger.
  */
 
 /**
- * @typedef {Object} Config - Structure of command handler options.
- * @property {Set<String>} [prefixes] - Prefixes to use, if any (automatically includes mentions).
- * @property {String} [directory='./commands'] - Where your command files are located, relative to the current working directory.
+ * @typedef {object} Config - Structure of command handler options.
+ * @property {Set<string>} [prefixes] - Prefixes to use, if any (automatically includes mentions).
+ * @property {string} [directory='./commands'] - Where your command files are located, relative to the current working directory.
  * @property {MessageValidator} [validator] - Valid command forms (defaults to prefixed).
  * @property {Validator} [Validator] - A reference to a validation processor that extends the internal one (uninstantiated).
  */
 
 /**
- * @typedef {Function} MessageValidator - Function to determine if a message contains a command.
+ * @typedef {function} MessageValidator - Function to determine if a message contains a command.
  * @param {Message} message
  * @returns {ResolvedContent}
  *
@@ -65,7 +68,7 @@ const Validator = require('./Validator');
  */
 
 /**
- * @typedef {Function} CommandValidator - Validates whether a command is valid to be executed.
+ * @typedef {function} CommandValidator - Validates whether a command is valid to be executed.
  * @param {Validator} validator
  * @param {CommandMessage} command
  * @returns {*} - Evaluated for truthiness when determining validity.
@@ -77,7 +80,7 @@ const Validator = require('./Validator');
  */
 
 /**
- * @typedef {Function} CommandExecutor - Structure of any command execution functions.
+ * @typedef {function} CommandExecutor - Structure of any command execution functions.
  * @param {CommandMessage} message
  * @returns {*} - The result of the command.
  */
@@ -98,7 +101,7 @@ class Handles extends EventEmitter {
 
     /**
      * @param {Config} config - Configuration options for this handler.
-     * @return {Function} - Command handler.
+     * @return {function} - Command handler.
      * @fires CommandLoader#commandsLoaded
      */
     constructor(config) {
@@ -127,7 +130,7 @@ class Handles extends EventEmitter {
     /**
      * Handle a message as a command.
      * @param {Message} msg - The message to handle as a command.
-     * @param {String} [body] - An optional, separate command body.
+     * @param {string} [body] - An optional, separate command body.
      * @return {Promise.<CommandMessage>}
      *
      * @fires Handles#commandUnknown

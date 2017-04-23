@@ -7,7 +7,7 @@ class Response {
 
     /**
      * @param {Message} message The message to respond to.
-     * @param {Boolean} edit Whether to edit previous responses.
+     * @param {boolean} edit Whether to edit previous responses.
      */
     constructor(message, edit = true)    {
 
@@ -92,8 +92,8 @@ class Response {
 
     /**
      * Send a message indicating success.
-     * @param {String} text The text to send.
-     * @param {String} [prefix] Content to prefix the message with (mainly intended for mentions).
+     * @param {string} text The text to send.
+     * @param {string} [prefix] Content to prefix the message with (mainly intended for mentions).
      * @return {Promise.<Message>}
      */
     success(text, prefix)   {
@@ -102,7 +102,7 @@ class Response {
 
     /**
      * Send an error message.
-     * @param {String} text The error to send.
+     * @param {string} text The error to send.
      * @return {Promise.<Message>}
      */
     error(text) {

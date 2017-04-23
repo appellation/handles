@@ -1,8 +1,8 @@
 /**
  * This is called every time new potential argument data is received, either in the body of
  * the original command or in subsequent prompts.
- * @typedef {Function} ArgumentResolver
- * @param {String} content - The remaining unknown content of the command.  For instance,
+ * @typedef {function} ArgumentResolver
+ * @param {string} content - The remaining unknown content of the command.  For instance,
  * if a command is `play stuff`, this param will be `stuff`: if this returns anything other
  * than `null`, the next argument resolver will be called with an empty string.
  * @param {CommandMessage} message - The command message for which this argument resolver
@@ -16,13 +16,13 @@
 class Argument {
 
     /**
-     * @param {String} [prompt] - The prompt text with which to initially query the command issuer.
-     * @param {String} [rePrompt] - The prompt text with which to query the user upon prompt failure.
+     * @param {string} [prompt] - The prompt text with which to initially query the command issuer.
+     * @param {string} [rePrompt] - The prompt text with which to query the user upon prompt failure.
      */
     constructor(prompt, rePrompt) {
         /**
          * The initial prompt text of this argument.
-         * @type {String}
+         * @type {string}
          */
         this.prompt = prompt;
 
@@ -30,13 +30,13 @@ class Argument {
          * Text sent for re-prompting to provide correct input when provided input is not resolved
          * (ie. the resolver returns null).
          * @see {ArgumentResolver}
-         * @type {String}
+         * @type {string}
          */
         this.rePrompt = rePrompt;
 
         /**
          * Whether this argument is optional.
-         * @type {Boolean}
+         * @type {boolean}
          */
         this.optional = false;
 
@@ -66,7 +66,7 @@ class Argument {
 
     /**
      * Set the prompt for the argument.
-     * @param {String} [prompt=null] - The prompt.
+     * @param {string} [prompt=null] - The prompt.
      * @returns {Argument}
      */
     setPrompt(prompt = null) {
@@ -76,7 +76,7 @@ class Argument {
 
     /**
      * Set whether the argument is optional.
-     * @param {Boolean} [optional=true] - True if the argument is optional.
+     * @param {boolean} [optional=true] - True if the argument is optional.
      * @returns {Argument}
      */
     setOptional(optional = true) {
@@ -86,7 +86,7 @@ class Argument {
 
     /**
      * Set the argument resolver function for this argument.
-     * @param {Function} [resolver] - The resolver (defaults to returning null).
+     * @param {function} [resolver] - The resolver (defaults to returning null).
      * @returns {Argument}
      */
     setResolver(resolver = () => null) {
