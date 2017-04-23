@@ -74,8 +74,8 @@ const Validator = require('./Validator');
  * @returns {*} - Evaluated for truthiness when determining validity.
  *
  * @example
- * exports.validator = (val, msg) => {
- *   return val.applyValid(msg.args.length, 'Arguments are required to use this command.');
+ * exports.validator = (val, cmd) => {
+ *   return val.apply(cmd.message.author.id === 'my id', 'You gotta be a different person to run this command.');
  * }
  */
 

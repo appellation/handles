@@ -41,6 +41,7 @@ class CommandResolver {
         /**
          * The base regex for parsing command parts.
          * @type {RegExp}
+         * @private
          */
         this._regex = /^([^\s]+)(.*)/;
     }
