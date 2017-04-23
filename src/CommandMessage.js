@@ -43,7 +43,7 @@ class CommandMessage extends EventEmitter {
 
         /**
          * The command arguments as returned by the resolver.
-         * @see Argument#resolver
+         * @see {ArgumentResolver}
          * @type {?Array}
          */
         this.args = null;
@@ -107,7 +107,7 @@ class CommandMessage extends EventEmitter {
 
         return new Promise((resolve, reject) => {
             content = content.substring(matched.length).trim();
-            const resolved = arg.resolver(matched, this.message);
+            const resolved = arg.resolver(matched, this);
             if(resolved === null) {
                 if(arg.optional) { // if the resolver failed but the argument is optional, resolve with null
                     resolve(null);

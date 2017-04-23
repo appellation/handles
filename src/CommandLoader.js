@@ -1,12 +1,12 @@
 const fs = require('fs');
-const EventEmitter = require('events').EventEmitter;
+const EventEmitter = require('events');
 const path = require('path');
 const clearRequire = require('clear-require');
 
 /**
  * Manage command loading.
  * @param {Config} config - Configuration options for the command handler.
- * @extends EventEmitter
+ * @extends {EventEmitter}
  * @constructor
  */
 class CommandLoader extends EventEmitter   {

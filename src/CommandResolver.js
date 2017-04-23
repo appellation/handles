@@ -20,7 +20,7 @@ class CommandResolver {
         this.config = this.handles.config;
 
         /**
-         * @type {Loader}
+         * @type {CommandLoader}
          */
         this.loader = this.handles.loader;
 

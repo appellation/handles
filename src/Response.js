@@ -1,33 +1,45 @@
 const queue = require('queue');
 
+/**
+ * Send responses to a message.
+ */
 class Response {
 
     /**
-     * @constructor
-     * @param {Message} message
+     * @param {Message} message The message to respond to.
+     * @param {Boolean} edit Whether to edit previous responses.
      */
     constructor(message, edit = true)    {
 
         /**
+         * The message to respond to.
          * @type {Message}
          */
         this.message = message;
 
         /**
+         * The channel to send responses in.
          * @type {TextChannel}
          */
         this.channel = message.channel;
 
         /**
-         * @type {boolean} edit Whether to edit previous responses. half a
+         * Whether to edit previous responses.
+         * @type {boolean}
          */
         this.edit = edit;
 
         /**
-         * @type {Message} responseMessage Previously sent responses will be edited.
+         * Previously sent responses will be edited.
+         * @type {Message}
          */
         this.responseMessage = null;
 
+        /**
+         * The queue of responses that are being sent.
+         * @type {Array}
+         * @private
+         */
         this._q = queue({
             autostart: true,
             concurrency: 1
@@ -41,7 +53,7 @@ class Response {
      * @param {*} data The data to send
      * @param {boolean} [force=false] Whether to send a new message regardless
      * of any prior responses.
-     * @returns {Promise<Message>}
+     * @returns {Promise.<Message>}
      */
     send(data, force = false)  {
         return new Promise((resolve, reject) => {
@@ -69,14 +81,19 @@ class Response {
         });
     }
 
+    /**
+     * Send a DM to the message author.
+     * @param {*} data The data to send.
+     * @returns {Promise.<Message>}
+     */
     dm(data) {
-        return this.message.author.sendMessage(data);
+        return this.message.author.send(data);
     }
 
     /**
      * Send a message indicating success.
-     * @param {String} text
-     * @param {String} [prefix] - Content to prefix the message with (mainly intended for mentions).
+     * @param {String} text The text to send.
+     * @param {String} [prefix] Content to prefix the message with (mainly intended for mentions).
      * @return {Promise.<Message>}
      */
     success(text, prefix)   {
@@ -85,7 +102,7 @@ class Response {
 
     /**
      * Send an error message.
-     * @param {String} text
+     * @param {String} text The error to send.
      * @return {Promise.<Message>}
      */
     error(text) {

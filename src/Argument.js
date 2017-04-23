@@ -1,4 +1,16 @@
 /**
+ * This is called every time new potential argument data is received, either in the body of
+ * the original command or in subsequent prompts.
+ * @typedef {Function} ArgumentResolver
+ * @param {String} content - The remaining unknown content of the command.  For instance,
+ * if a command is `play stuff`, this param will be `stuff`: if this returns anything other
+ * than `null`, the next argument resolver will be called with an empty string.
+ * @param {CommandMessage} message - The command message for which this argument resolver
+ * is running.
+ * @returns {*} - If null, the argument is considered unresolved.
+ */
+
+/**
  * Represents a command argument.
  */
 class Argument {
@@ -9,22 +21,28 @@ class Argument {
      */
     constructor(prompt, rePrompt) {
         /**
+         * The initial prompt text of this argument.
          * @type {String}
          */
         this.prompt = prompt;
 
         /**
+         * Text sent for re-prompting to provide correct input when provided input is not resolved
+         * (ie. the resolver returns null).
+         * @see {ArgumentResolver}
          * @type {String}
          */
         this.rePrompt = rePrompt;
 
         /**
+         * Whether this argument is optional.
          * @type {Boolean}
          */
         this.optional = false;
 
         /**
-         * @type {Function}
+         * The argument resolver for this argument.
+         * @type {ArgumentResolver}
          */
         this.resolver = () => null;
 
