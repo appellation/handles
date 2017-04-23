@@ -4,6 +4,7 @@ const CommandLoader = require('./CommandLoader');
 const CommandMessage = require('./CommandMessage');
 const CommandResolver = require('./CommandResolver');
 const commandExecutor = require('./commandExecutor');
+const Prompter = require('./Prompter');
 const Response = require('./Response');
 const Validator = require('./Validator');
 
@@ -73,10 +74,7 @@ const Validator = require('./Validator');
 
 /**
  * @typedef {Function} CommandExecutor - Structure of any command execution functions.
- * @param {Response} response
- * @param {Message} message
- * @param {Array<String>} args
- * @param {CommandMessage} command
+ * @param {CommandMessage} message
  * @returns {*} - The result of the command.
  */
 
@@ -128,12 +126,13 @@ class Handles extends EventEmitter {
      * @param {String} [body] - An optional, separate command body.
      * @return {Promise.<CommandMessage>}
      *
-     * @fires CommandMessage#notACommand
-     * @fires CommandMessage#invalidCommand
+     * @fires Handles#commandUnknown
+     * @fires CommandMessage#argumentsLoaded
+     * @fires CommandMessage#argumentsError
+     * @fires CommandMessage#commandInvalid
      * @fires CommandMessage#commandStarted
      * @fires CommandMessage#commandFinished
      * @fires CommandMessage#commandFailed
-     * @fires CommandMessage#error
      *
      * @example
      * const client = new Discord.Client();
@@ -152,11 +151,20 @@ class Handles extends EventEmitter {
      */
     handle(msg) {
         const cmd = this.resolver.resolve(msg);
-        if(!cmd) return;
+        if(!cmd) {
+            /**
+             * Fired when the command could not be resolved.
+             * @event Handles#commandUnknown
+             * @type {Message}
+             */
+            this.emit('commandUnknown', msg);
+            return;
+        }
 
         remit(cmd, this, [
             'argumentsLoaded',
             'argumentsError',
+            'commandInvalid',
             'commandStarted',
             'commandFinished',
             'commandFailed'
@@ -169,7 +177,11 @@ class Handles extends EventEmitter {
 Object.assign(Handles, {
     CommandLoader,
     CommandMessage,
-    Validator
+    Validator,
+    commandExecutor,
+    CommandResolver,
+    Prompter,
+    Response
 });
 
 module.exports = Handles;
