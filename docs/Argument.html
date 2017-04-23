@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Response - Documentation</title>
+    <title>Argument - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Response</h1>
+    <h1 class="page-title">Argument</h1>
     
 
     
@@ -40,10 +40,10 @@
 <header>
     
         <h2>
-        Response
+        Argument
         </h2>
         
-            <div class="class-description"><p>Send responses to a message.</p></div>
+            <div class="class-description"><p>Represents a command argument.</p></div>
         
     
 </header>
@@ -57,7 +57,7 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="Response"><span class="type-signature"></span>new Response<span class="signature">(message, edit)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Argument"><span class="type-signature"></span>new Argument<span class="signature">(prompt<span class="signature-attributes">opt</span>, rePrompt<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -69,7 +69,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Response.js.html">Response.js</a>, <a href="Response.js.html#line6">line 6</a>
+        <a href="Argument.js.html">Argument.js</a>, <a href="Argument.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -131,9 +131,9 @@
         <th>Type</th>
 
         
-
+        <th>Attributes</th>
         
-        <th>Default</th>
+
         
 
         <th class="last">Description</th>
@@ -145,56 +145,66 @@
 
         <tr>
             
-                <td class="name"><code>message</code></td>
+                <td class="name"><code>prompt</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Message</span>
+<span class="param-type">string</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
 
-            
-                <td class="default">
+                
+
                 
                 </td>
             
 
-            <td class="description last"><p>The message to respond to.</p></td>
+            
+
+            <td class="description last"><p>The prompt text with which to initially query the command issuer.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>edit</code></td>
+                <td class="name"><code>rePrompt</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type">string</span>
 
 
             
             </td>
 
             
-
-            
-                <td class="default">
+                <td class="attributes">
                 
-                    <code>true</code>
+                    &lt;optional><br>
+                
+
+                
+
                 
                 </td>
             
 
-            <td class="description last"><p>Whether to edit previous responses.</p></td>
+            
+
+            <td class="description last"><p>The prompt text with which to query the user upon prompt failure.</p></td>
         </tr>
 
     
@@ -234,7 +244,7 @@
 
         
             
-<h4 class="name" id="channel"><span class="type-signature"></span>channel<span class="type-signature"> :TextChannel</span></h4>
+<h4 class="name" id="optional"><span class="type-signature"></span>optional<span class="type-signature"> :boolean</span></h4>
 
 
 
@@ -245,7 +255,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Response.js.html">Response.js</a>, <a href="Response.js.html#line24">line 24</a>
+        <a href="Argument.js.html">Argument.js</a>, <a href="Argument.js.html#line41">line 41</a>
     </li></ul></dd>
     
 
@@ -285,80 +295,7 @@
 
 
 <div class="description">
-    <p>The channel to send responses in.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">TextChannel</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="edit"><span class="type-signature"></span>edit<span class="type-signature"> :boolean</span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Response.js.html">Response.js</a>, <a href="Response.js.html#line30">line 30</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Whether to edit previous responses.</p>
+    <p>Whether this argument is optional.</p>
 </div>
 
 
@@ -380,7 +317,7 @@
 
         
             
-<h4 class="name" id="message"><span class="type-signature"></span>message<span class="type-signature"> :Message</span></h4>
+<h4 class="name" id="pattern"><span class="type-signature"></span>pattern<span class="type-signature"> :RegExp</span></h4>
 
 
 
@@ -391,7 +328,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Response.js.html">Response.js</a>, <a href="Response.js.html#line18">line 18</a>
+        <a href="Argument.js.html">Argument.js</a>, <a href="Argument.js.html#line52">line 52</a>
     </li></ul></dd>
     
 
@@ -430,17 +367,13 @@
 
 
 
-<div class="description">
-    <p>The message to respond to.</p>
-</div>
-
 
 
     <h5>Type:</h5>
     <ul>
         <li>
             
-<span class="param-type">Message</span>
+<span class="param-type">RegExp</span>
 
 
         </li>
@@ -453,7 +386,7 @@
 
         
             
-<h4 class="name" id="responseMessage"><span class="type-signature"></span>responseMessage<span class="type-signature"> :Message</span></h4>
+<h4 class="name" id="prompt"><span class="type-signature"></span>prompt<span class="type-signature"> :string</span></h4>
 
 
 
@@ -464,7 +397,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Response.js.html">Response.js</a>, <a href="Response.js.html#line36">line 36</a>
+        <a href="Argument.js.html">Argument.js</a>, <a href="Argument.js.html#line27">line 27</a>
     </li></ul></dd>
     
 
@@ -504,7 +437,7 @@
 
 
 <div class="description">
-    <p>Previously sent responses will be edited.</p>
+    <p>The initial prompt text of this argument.</p>
 </div>
 
 
@@ -513,7 +446,88 @@
     <ul>
         <li>
             
-<span class="param-type">Message</span>
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="rePrompt"><span class="type-signature"></span>rePrompt<span class="type-signature"> :string</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Argument.js.html">Argument.js</a>, <a href="Argument.js.html#line35">line 35</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>{<a href="global.html#ArgumentResolver">ArgumentResolver</a>}</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Text sent for re-prompting to provide correct input when provided input is not resolved
+(ie. the resolver returns null).</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
 
 
         </li>
@@ -535,7 +549,7 @@
 
     
 
-    <h4 class="name" id="dm"><span class="type-signature"></span>dm<span class="signature">(data)</span><span class="type-signature"> &rarr; {Promise.&lt;Message>}</span></h4>
+    <h4 class="name" id="resolver"><span class="type-signature"></span>resolver<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
@@ -547,7 +561,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Response.js.html">Response.js</a>, <a href="Response.js.html#line89">line 89</a>
+        <a href="Argument.js.html">Argument.js</a>, <a href="Argument.js.html#line47">line 47</a>
     </li></ul></dd>
     
 
@@ -587,7 +601,7 @@
 
 
 <div class="description">
-    <p>Send a DM to the message author.</p>
+    <p>The argument resolver for this argument.</p>
 </div>
 
 
@@ -600,53 +614,6 @@
 
 
 
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The data to send.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -659,26 +626,6 @@
 
 
 
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Message></span>
-
-
-    </dd>
-</dl>
-
-    
 
 
         
@@ -686,7 +633,7 @@
 
     
 
-    <h4 class="name" id="error"><span class="type-signature"></span>error<span class="signature">(text)</span><span class="type-signature"> &rarr; {Promise.&lt;Message>}</span></h4>
+    <h4 class="name" id="setOptional"><span class="type-signature"></span>setOptional<span class="signature">(optional<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Argument.html">Argument</a>}</span></h4>
 
     
 
@@ -698,7 +645,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Response.js.html">Response.js</a>, <a href="Response.js.html#line108">line 108</a>
+        <a href="Argument.js.html">Argument.js</a>, <a href="Argument.js.html#line82">line 82</a>
     </li></ul></dd>
     
 
@@ -738,160 +685,7 @@
 
 
 <div class="description">
-    <p>Send an error message.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>text</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The error to send.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Message></span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="send"><span class="type-signature"></span>send<span class="signature">(data, force<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Message>}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Response.js.html">Response.js</a>, <a href="Response.js.html#line58">line 58</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Send a message using the Discord.js <code>Message.send</code> method.  If a prior
-response has been sent, it will edit that unless the <code>force</code> parameter
-is set.</p>
+    <p>Set whether the argument is optional.</p>
 </div>
 
 
@@ -933,42 +727,7 @@ is set.</p>
 
         <tr>
             
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last"><p>The data to send</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>force</code></td>
+                <td class="name"><code>optional</code></td>
             
 
             <td class="type">
@@ -995,13 +754,12 @@ is set.</p>
             
                 <td class="default">
                 
-                    <code>false</code>
+                    <code>true</code>
                 
                 </td>
             
 
-            <td class="description last"><p>Whether to send a new message regardless
-of any prior responses.</p></td>
+            <td class="description last"><p>True if the argument is optional.</p></td>
         </tr>
 
     
@@ -1032,7 +790,7 @@ of any prior responses.</p></td>
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Message></span>
+<span class="param-type"><a href="Argument.html">Argument</a></span>
 
 
     </dd>
@@ -1046,7 +804,7 @@ of any prior responses.</p></td>
 
     
 
-    <h4 class="name" id="success"><span class="type-signature"></span>success<span class="signature">(text, prefix<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Message>}</span></h4>
+    <h4 class="name" id="setPrompt"><span class="type-signature"></span>setPrompt<span class="signature">(prompt<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Argument.html">Argument</a>}</span></h4>
 
     
 
@@ -1058,7 +816,7 @@ of any prior responses.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Response.js.html">Response.js</a>, <a href="Response.js.html#line99">line 99</a>
+        <a href="Argument.js.html">Argument.js</a>, <a href="Argument.js.html#line72">line 72</a>
     </li></ul></dd>
     
 
@@ -1098,7 +856,178 @@ of any prior responses.</p></td>
 
 
 <div class="description">
-    <p>Send a message indicating success.</p>
+    <p>Set the prompt for the argument.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>prompt</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    <code>null</code>
+                
+                </td>
+            
+
+            <td class="description last"><p>The prompt.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Argument.html">Argument</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="setResolver"><span class="type-signature"></span>setResolver<span class="signature">(resolver<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Argument.html">Argument</a>}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Argument.js.html">Argument.js</a>, <a href="Argument.js.html#line92">line 92</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Set the argument resolver function for this argument.</p>
 </div>
 
 
@@ -1138,44 +1067,13 @@ of any prior responses.</p></td>
 
         <tr>
             
-                <td class="name"><code>text</code></td>
+                <td class="name"><code>resolver</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>The text to send.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>prefix</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
+<span class="param-type">function</span>
 
 
             
@@ -1195,7 +1093,7 @@ of any prior responses.</p></td>
 
             
 
-            <td class="description last"><p>Content to prefix the message with (mainly intended for mentions).</p></td>
+            <td class="description last"><p>The resolver (defaults to returning null).</p></td>
         </tr>
 
     
@@ -1226,7 +1124,7 @@ of any prior responses.</p></td>
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Message></span>
+<span class="param-type"><a href="Argument.html">Argument</a></span>
 
 
     </dd>

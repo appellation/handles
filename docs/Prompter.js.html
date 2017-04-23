@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>Prompter.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,46 +27,70 @@
 
 <div id="main">
     
+    <h1 class="page-title">Prompter.js</h1>
+    
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * To prompt for arguments.
+ */
+class Prompter {
+    /**
+     * @param {Response} response
+     */
+    constructor(response) {
 
+        /**
+         * The responder to use for prompting.
+         * @type {Response}
+         */
+        this.response = response;
+        this.response.edit = false;
+    }
 
+    /**
+     * Collect prompts for an argument.
+     * @param {Argument} arg - The argument to prompt for.
+     * @param {boolean} valid - Whether this argument was valid on prior prompt.
+     * @returns {Promise} - The result of the resolver.  Reject with `string` reason
+     * that the collector failed.
+     */
+    collectPrompt(arg, valid = true) {
+        const text = valid ? arg.prompt : arg.rePrompt;
+        return this.awaitResponse(text).then(response => {
+            if(response.content === 'cancel') throw 'cancelled';
+            const resolved = arg.resolver(response.content, response);
+            if(resolved === null) return this.collectPrompt(arg, false);
+            return resolved;
+        }).catch(reason => {
+            return this.response.error('Command cancelled.').then(() => reason).catch(() => reason).then(r => Promise.reject(r));
+        });
+    }
 
+    /**
+     * Wait for a response to some text.
+     * @param {string} text - The text to send prior to waiting.
+     * @returns {Message}
+     */
+    awaitResponse(text) {
+        return this.response.send(text).then(() => {
+            return this.response.message.channel.awaitMessages(m => m.author.id === this.response.message.author.id, { time: 30000, max: 1, errors: ['time'] });
+        }).then(responses => {
+            return responses.first();
+        });
+    }
+}
 
-
-
-
-
-
-    
-
-
-    <section class="readme">
-        <article><h1>Handles</h1><p><a href="https://discord.gg/DPuaDvP"><img src="https://discordapp.com/api/guilds/251245211416657931/embed.png" alt="Handles support server"></a>
-<a href="https://travis-ci.org/appellation/handles"><img src="https://travis-ci.org/appellation/handles.svg?branch=master" alt="Build Status"></a></p>
-<p>For those of us who get frustrated with writing command handlers but don't quite want to use a full framework.  Intended for use with <a href="https://github.com/hydrabolt/discord.js">Discord.js</a>.</p>
-<p>Documentation is available at <a href="http://handles.topkek.pw">handles.topkek.pw</a>.</p>
-<h2>Getting started</h2><h3>Installation</h3><pre class="prettyprint source lang-xl"><code>npm install --save discord-handles</code></pre><p>Or, if you want to risk cutting yourself, install the bleeding edge version:</p>
-<pre class="prettyprint source lang-xl"><code>npm install --save appellation/handles#master</code></pre><p>Usually I try to avoid pushing broken code, but sometimes I move a little too fast.</p>
-<h3>The basics</h3><pre class="prettyprint source lang-js"><code>const Discord = require('discord.js');
-const Handles = require('discord-handles');
-
-const client = new Discord.Client();
-const handler = new Handles();
-
-client.on('message', handler.handle);
-client.login('token');</code></pre><p>This will automatically load all commands in the <code>./commands</code> directory and handle incoming messages.  See <a href="http://handles.topkek.pw/global.html#Command"><code>Command</code></a> in the docs for information on how to format the exports of the files you place in <code>./commands</code>.  The loader and handler can be configured according to <a href="http://handles.topkek.pw/global.html#Config"><code>Config</code></a> options passed to the constructor.</p>
-<pre class="prettyprint source lang-js"><code>const handler = new Handles({
-    directory: './some/other/awesome/directory',
-    prefixes: ['dank', 'memes']
-});</code></pre></article>
+module.exports = Prompter;
+</code></pre>
+        </article>
     </section>
-
-
 
 
 

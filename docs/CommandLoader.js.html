@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CommandLoader.html">CommandLoader</a><ul class='methods'><li data-type='method'><a href="CommandLoader.html#loadCommands">loadCommands</a></li></ul></li><li><a href="CommandMessage.html">CommandMessage</a><ul class='methods'><li data-type='method'><a href="CommandMessage.html#handle">handle</a></li><li data-type='method'><a href="CommandMessage.html#resolveArgs">resolveArgs</a></li><li data-type='method'><a href="CommandMessage.html#resolveCommand">resolveCommand</a></li><li data-type='method'><a href="CommandMessage.html#resolvePrefix">resolvePrefix</a></li><li data-type='method'><a href="CommandMessage.html#validate">validate</a></li></ul></li><li><a href="Handles.html">Handles</a><ul class='methods'><li data-type='method'><a href="Handles.html#handle">handle</a></li></ul></li><li><a href="Response.html">Response</a><ul class='methods'><li data-type='method'><a href="Response.html#error">error</a></li><li data-type='method'><a href="Response.html#success">success</a></li></ul></li><li><a href="ValidationProcessor.html">ValidationProcessor</a><ul class='methods'><li data-type='method'><a href="ValidationProcessor.html#applyValid">applyValid</a></li></ul></li></ul><h3>Events</h3><ul><li><a href="CommandLoader.html#event:commandsLoaded">commandsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">commandFinished</a></li><li><a href="CommandMessage.html#event:commandStarted">commandStarted</a></li><li><a href="CommandMessage.html#event:error">error</a></li><li><a href="CommandMessage.html#event:invalidCommand">invalidCommand</a></li><li><a href="CommandMessage.html#event:notACommand">notACommand</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Argument.html">Argument</a><ul class='methods'><li data-type='method'><a href="Argument.html#resolver">resolver</a></li><li data-type='method'><a href="Argument.html#setOptional">setOptional</a></li><li data-type='method'><a href="Argument.html#setPrompt">setPrompt</a></li><li data-type='method'><a href="Argument.html#setResolver">setResolver</a></li></ul></li><li><a href="CommandLoader.html">CommandLoader</a><ul class='methods'><li data-type='method'><a href="CommandLoader.html#loadCommands">loadCommands</a></li></ul></li><li><a href="CommandMessage.html">CommandMessage</a><ul class='methods'><li data-type='method'><a href="CommandMessage.html#resolveArgs">resolveArgs</a></li><li data-type='method'><a href="CommandMessage.html#validate">validate</a></li></ul></li><li><a href="CommandResolver.html">CommandResolver</a><ul class='methods'><li data-type='method'><a href="CommandResolver.html#resolve">resolve</a></li></ul></li><li><a href="Handles.html">Handles</a><ul class='methods'><li data-type='method'><a href="Handles.html#handle">handle</a></li></ul></li><li><a href="Prompter.html">Prompter</a><ul class='methods'><li data-type='method'><a href="Prompter.html#awaitResponse">awaitResponse</a></li><li data-type='method'><a href="Prompter.html#collectPrompt">collectPrompt</a></li></ul></li><li><a href="Response.html">Response</a><ul class='methods'><li data-type='method'><a href="Response.html#dm">dm</a></li><li data-type='method'><a href="Response.html#error">error</a></li><li data-type='method'><a href="Response.html#send">send</a></li><li data-type='method'><a href="Response.html#success">success</a></li></ul></li><li><a href="Validator.html">Validator</a><ul class='methods'><li data-type='method'><a href="Validator.html#apply">apply</a></li></ul></li></ul><h3>Events</h3><ul><li><a href="CommandLoader.html#event:commandsLoaded">commandsLoaded</a></li><li><a href="CommandMessage.html#event:argumentsError">argumentsError</a></li><li><a href="CommandMessage.html#event:argumentsLoaded">argumentsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">commandFinished</a></li><li><a href="CommandMessage.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandMessage.html#event:commandStarted">commandStarted</a></li><li><a href="Handles.html#event:commandUnknown">commandUnknown</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -38,80 +38,14 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>const fs = require('fs');
-const EventEmitter = require('events').EventEmitter;
+const EventEmitter = require('events');
 const path = require('path');
 const clearRequire = require('clear-require');
 
 /**
- * @typedef {Object} Command - Structure of exported commands.  Can also be a single function.
- * @property {Iterable&lt;Trigger>|Trigger} [triggers] - Defaults to the file name.
- * @property {boolean} [disabled=false] - Whether the command is globally disabled
- * @property {CommandExecutor} func - The command function to execute.
- * @property {CommandValidator} [validator] - Function to call to determine whether the command is valid.
- *
- * @example
- * exports.func = r => r.send('lmao');
- * exports.triggers = /^ay+$/i;
- *
- * @example
- * exports.func = r => {};
- * exports.disabled = true;
- */
-
-/**
- * @typedef {String|RegExp} Trigger - A command trigger.
- */
-
-/**
- * @typedef {Object} Config - Structure of command handler options.
- * @property {Array&lt;String>} [prefixes] - Prefixes to use, if any (automatically includes mentions).
- * @property {Boolean} [respond=false] - Whether to automatically output validation and command failure errors.
- * @property {String} [directory='./commands'] - Where your command files are located, relative to the current working directory.
- * @property {MessageValidator} [validator] - Valid command forms (defaults to prefixed).
- * @property {ValidationProcessor} [ValidationProcessor] - A reference to a validation processor that extends the internal one (uninstantiated).
- */
-
-/**
- * @typedef {Function} MessageValidator - Function to determine if a message contains a command.
- * @param {Message} message
- * @returns {ResolvedContent}
- *
- * @example
- * const handler = new Handles({
- *   validator: (msg) => {
- *     // this will validate any message in a DM and/or starting with `memes` as a command.
- *     const prefix = /^memes/;
- *     if(prefix.test(msg.content) || msg.channel.type === 'dm') return msg.content.replace(prefix, '');
- *   }
- * });
- */
-
-/**
- * @typedef {Function} CommandValidator - Validates whether a command is valid to be executed.
- * @param {ValidationProcessor} validator
- * @param {CommandMessage} command
- * @returns {*} - Evaluated for truthiness when determining validity.
- *
- * @example
- * exports.validator = (val, msg) => {
- *   return val.applyValid(msg.args.length, 'Arguments are required to use this command.');
- * }
- */
-
-/**
- * @typedef {Function} CommandExecutor - Structure of any command execution functions.
- * @param {Response} response
- * @param {Message} message
- * @param {Array&lt;String>} args
- * @param {CommandMessage} command
- * @returns {*} - The result of the command.
- */
-
-/**
  * Manage command loading.
- *
  * @param {Config} config - Configuration options for the command handler.
- * @extends EventEmitter
+ * @extends {EventEmitter}
  * @constructor
  */
 class CommandLoader extends EventEmitter   {
@@ -119,10 +53,11 @@ class CommandLoader extends EventEmitter   {
     constructor(config = {}) {
         super();
 
-        this.config = Object.assign({
-            prefixes: [],
-            directory: './commands'
-        }, config);
+        /**
+         * Configuration for handles.
+         * @type {Config}
+         */
+        this.config = config;
 
         this.loadCommands();
     }
@@ -134,6 +69,10 @@ class CommandLoader extends EventEmitter   {
      * @returns {Promise.&lt;Map.&lt;Trigger, Command>>}
      */
     loadCommands() {
+        /**
+         * Currently loaded commands.
+         * @type {Map&lt;Trigger, Command>}
+         */
         this.commands = new Map();
         return this._loadDir(this.config.directory).then(files => {
             const failed = [];
@@ -143,7 +82,7 @@ class CommandLoader extends EventEmitter   {
                  * @type {Command}
                  */
                 let mod;
-                const location = path.join(process.cwd(), file);
+                const location = path.resolve(process.cwd(), file);
 
                 try {
                     clearRequire(location);
@@ -161,7 +100,7 @@ class CommandLoader extends EventEmitter   {
                     for (const trigger of mod.triggers)  this.commands.set(trigger, mod);
 
                 } else if (typeof mod === 'function') { // if a single function is exported
-                    this.commands.set(path.basename(file, '.js'), {func: mod});
+                    this.commands.set(path.basename(file, '.js'), Object.assign(mod,{func: mod}));
                 } else if (typeof mod.triggers === 'undefined') {   // if no triggers are provided
                     this.commands.set(path.basename(file, '.js'), mod);
                 } else  {
@@ -171,7 +110,7 @@ class CommandLoader extends EventEmitter   {
 
             /**
              * @event CommandLoader#commandsLoaded
-             * @type {object}
+             * @type {Object}
              * @property {Map&lt;Trigger, Command>} commands - Currently loaded commands.
              * @property {Array} failed - Directory listing of commands that failed to load.
              */
@@ -216,7 +155,8 @@ class CommandLoader extends EventEmitter   {
     }
 }
 
-module.exports = CommandLoader;</code></pre>
+module.exports = CommandLoader;
+</code></pre>
         </article>
     </section>
 
@@ -228,7 +168,7 @@ module.exports = CommandLoader;</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Mar 07 2017 14:16:02 GMT-0800 (Pacific Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sun Apr 23 2017 16:36:46 GMT-0700 (Pacific Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CommandLoader.html">CommandLoader</a><ul class='methods'><li data-type='method'><a href="CommandLoader.html#loadCommands">loadCommands</a></li></ul></li><li><a href="CommandMessage.html">CommandMessage</a><ul class='methods'><li data-type='method'><a href="CommandMessage.html#handle">handle</a></li><li data-type='method'><a href="CommandMessage.html#resolveArgs">resolveArgs</a></li><li data-type='method'><a href="CommandMessage.html#resolveCommand">resolveCommand</a></li><li data-type='method'><a href="CommandMessage.html#resolvePrefix">resolvePrefix</a></li><li data-type='method'><a href="CommandMessage.html#validate">validate</a></li></ul></li><li><a href="Handles.html">Handles</a><ul class='methods'><li data-type='method'><a href="Handles.html#handle">handle</a></li></ul></li><li><a href="Response.html">Response</a><ul class='methods'><li data-type='method'><a href="Response.html#error">error</a></li><li data-type='method'><a href="Response.html#success">success</a></li></ul></li><li><a href="ValidationProcessor.html">ValidationProcessor</a><ul class='methods'><li data-type='method'><a href="ValidationProcessor.html#applyValid">applyValid</a></li></ul></li></ul><h3>Events</h3><ul><li><a href="CommandLoader.html#event:commandsLoaded">commandsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">commandFinished</a></li><li><a href="CommandMessage.html#event:commandStarted">commandStarted</a></li><li><a href="CommandMessage.html#event:error">error</a></li><li><a href="CommandMessage.html#event:invalidCommand">invalidCommand</a></li><li><a href="CommandMessage.html#event:notACommand">notACommand</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Argument.html">Argument</a><ul class='methods'><li data-type='method'><a href="Argument.html#resolver">resolver</a></li><li data-type='method'><a href="Argument.html#setOptional">setOptional</a></li><li data-type='method'><a href="Argument.html#setPrompt">setPrompt</a></li><li data-type='method'><a href="Argument.html#setResolver">setResolver</a></li></ul></li><li><a href="CommandLoader.html">CommandLoader</a><ul class='methods'><li data-type='method'><a href="CommandLoader.html#loadCommands">loadCommands</a></li></ul></li><li><a href="CommandMessage.html">CommandMessage</a><ul class='methods'><li data-type='method'><a href="CommandMessage.html#resolveArgs">resolveArgs</a></li><li data-type='method'><a href="CommandMessage.html#validate">validate</a></li></ul></li><li><a href="CommandResolver.html">CommandResolver</a><ul class='methods'><li data-type='method'><a href="CommandResolver.html#resolve">resolve</a></li></ul></li><li><a href="Handles.html">Handles</a><ul class='methods'><li data-type='method'><a href="Handles.html#handle">handle</a></li></ul></li><li><a href="Prompter.html">Prompter</a><ul class='methods'><li data-type='method'><a href="Prompter.html#awaitResponse">awaitResponse</a></li><li data-type='method'><a href="Prompter.html#collectPrompt">collectPrompt</a></li></ul></li><li><a href="Response.html">Response</a><ul class='methods'><li data-type='method'><a href="Response.html#dm">dm</a></li><li data-type='method'><a href="Response.html#error">error</a></li><li data-type='method'><a href="Response.html#send">send</a></li><li data-type='method'><a href="Response.html#success">success</a></li></ul></li><li><a href="Validator.html">Validator</a><ul class='methods'><li data-type='method'><a href="Validator.html#apply">apply</a></li></ul></li></ul><h3>Events</h3><ul><li><a href="CommandLoader.html#event:commandsLoaded">commandsLoaded</a></li><li><a href="CommandMessage.html#event:argumentsError">argumentsError</a></li><li><a href="CommandMessage.html#event:argumentsLoaded">argumentsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">commandFinished</a></li><li><a href="CommandMessage.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandMessage.html#event:commandStarted">commandStarted</a></li><li><a href="Handles.html#event:commandUnknown">commandUnknown</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -53,7 +53,7 @@
 
     
 
-    <h4 class="name" id="Handles"><span class="type-signature"></span>new Handles<span class="signature">(config)</span><span class="type-signature"> &rarr; {function}</span></h4>
+    <h4 class="name" id="Handles"><span class="type-signature"></span>new Handles<span class="signature">(config)</span><span class="type-signature"></span></h4>
 
     
 
@@ -65,7 +65,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line32">line 32</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line100">line 100</a>
     </li></ul></dd>
     
 
@@ -114,7 +114,14 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>const Discord = require('discord.js');const Handles = require('discord-handles');const client = new Discord.Client();const handler = new Handles();client.on('message', handler.handle);client.login('token');</code></pre>
+    <pre class="prettyprint"><code>const Discord = require('discord.js');
+const Handles = require('discord-handles');
+
+const client = new Discord.Client();
+const handler = new Handles();
+
+client.on('message', handler.handle);
+client.login('token');</code></pre>
 
 
 
@@ -172,22 +179,6 @@
 
 
 
-<h5>Fires:</h5>
-<ul>
-    <li><a href="CommandMessage.html#event:notACommand">CommandMessage#event:notACommand</a></li>
-
-    <li><a href="CommandMessage.html#event:invalidCommand">CommandMessage#event:invalidCommand</a></li>
-
-    <li><a href="CommandMessage.html#event:commandStarted">CommandMessage#event:commandStarted</a></li>
-
-    <li><a href="CommandMessage.html#event:commandFinished">CommandMessage#event:commandFinished</a></li>
-
-    <li><a href="CommandMessage.html#event:commandFailed">CommandMessage#event:commandFailed</a></li>
-
-    <li><a href="CommandMessage.html#event:error">CommandMessage#event:error</a></li>
-
-    <li><a href="CommandLoader.html#event:commandsLoaded">CommandLoader#event:commandsLoaded</a></li>
-</ul>
 
 
 
@@ -196,31 +187,6 @@
 
 
 
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <ul>
-<li>Command handler.</li>
-</ul>
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">function</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
     
@@ -263,7 +229,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line40">line 40</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line122">line 122</a>
     </li></ul></dd>
     
 
@@ -342,7 +308,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line86">line 86</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line159">line 159</a>
     </li></ul></dd>
     
 
@@ -395,9 +361,18 @@
 
     <h5>Examples</h5>
     
-    <pre class="prettyprint"><code>const client = new Discord.Client();const handler = new Handles();client.on('message', handler.handle);</code></pre>
+    <pre class="prettyprint"><code>const client = new Discord.Client();
+const handler = new Handles();
 
-    <pre class="prettyprint"><code>const client = new Discord.Client();const handler = new Handles();client.on('message', message => {  // do other stuff  handler.handle(message);});</code></pre>
+client.on('message', handler.handle);</code></pre>
+
+    <pre class="prettyprint"><code>const client = new Discord.Client();
+const handler = new Handles();
+
+client.on('message', message => {
+  // do other stuff
+  handler.handle(message);
+});</code></pre>
 
 
 
@@ -466,7 +441,7 @@
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
             
@@ -497,6 +472,23 @@
 
 
 
+
+<h5>Fires:</h5>
+<ul>
+    <li><a href="Handles.html#event:commandUnknown">Handles#event:commandUnknown</a></li>
+
+    <li><a href="CommandMessage.html#event:argumentsLoaded">CommandMessage#event:argumentsLoaded</a></li>
+
+    <li><a href="CommandMessage.html#event:argumentsError">CommandMessage#event:argumentsError</a></li>
+
+    <li><a href="CommandMessage.html#event:commandInvalid">CommandMessage#event:commandInvalid</a></li>
+
+    <li><a href="CommandMessage.html#event:commandStarted">CommandMessage#event:commandStarted</a></li>
+
+    <li><a href="CommandMessage.html#event:commandFinished">CommandMessage#event:commandFinished</a></li>
+
+    <li><a href="CommandMessage.html#event:commandFailed">CommandMessage#event:commandFailed</a></li>
+</ul>
 
 
 
@@ -532,6 +524,104 @@
     
 
     
+        <h3 class="subsection-title">Events</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:commandUnknown">commandUnknown</h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line162">line 162</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Fired when the command could not be resolved.</p>
+</div>
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Message</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
 </article>
 
 </section>
@@ -544,7 +634,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Mar 07 2017 14:16:02 GMT-0800 (Pacific Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sun Apr 23 2017 16:36:46 GMT-0700 (Pacific Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

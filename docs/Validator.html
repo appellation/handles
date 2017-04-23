@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ValidationProcessor - Documentation</title>
+    <title>Validator - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -22,12 +22,12 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CommandLoader.html">CommandLoader</a><ul class='methods'><li data-type='method'><a href="CommandLoader.html#loadCommands">loadCommands</a></li></ul></li><li><a href="CommandMessage.html">CommandMessage</a><ul class='methods'><li data-type='method'><a href="CommandMessage.html#handle">handle</a></li><li data-type='method'><a href="CommandMessage.html#resolveArgs">resolveArgs</a></li><li data-type='method'><a href="CommandMessage.html#resolveCommand">resolveCommand</a></li><li data-type='method'><a href="CommandMessage.html#resolvePrefix">resolvePrefix</a></li><li data-type='method'><a href="CommandMessage.html#validate">validate</a></li></ul></li><li><a href="Handles.html">Handles</a><ul class='methods'><li data-type='method'><a href="Handles.html#handle">handle</a></li></ul></li><li><a href="Response.html">Response</a><ul class='methods'><li data-type='method'><a href="Response.html#error">error</a></li><li data-type='method'><a href="Response.html#success">success</a></li></ul></li><li><a href="ValidationProcessor.html">ValidationProcessor</a><ul class='methods'><li data-type='method'><a href="ValidationProcessor.html#applyValid">applyValid</a></li></ul></li></ul><h3>Events</h3><ul><li><a href="CommandLoader.html#event:commandsLoaded">commandsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">commandFinished</a></li><li><a href="CommandMessage.html#event:commandStarted">commandStarted</a></li><li><a href="CommandMessage.html#event:error">error</a></li><li><a href="CommandMessage.html#event:invalidCommand">invalidCommand</a></li><li><a href="CommandMessage.html#event:notACommand">notACommand</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Argument.html">Argument</a><ul class='methods'><li data-type='method'><a href="Argument.html#resolver">resolver</a></li><li data-type='method'><a href="Argument.html#setOptional">setOptional</a></li><li data-type='method'><a href="Argument.html#setPrompt">setPrompt</a></li><li data-type='method'><a href="Argument.html#setResolver">setResolver</a></li></ul></li><li><a href="CommandLoader.html">CommandLoader</a><ul class='methods'><li data-type='method'><a href="CommandLoader.html#loadCommands">loadCommands</a></li></ul></li><li><a href="CommandMessage.html">CommandMessage</a><ul class='methods'><li data-type='method'><a href="CommandMessage.html#resolveArgs">resolveArgs</a></li><li data-type='method'><a href="CommandMessage.html#validate">validate</a></li></ul></li><li><a href="CommandResolver.html">CommandResolver</a><ul class='methods'><li data-type='method'><a href="CommandResolver.html#resolve">resolve</a></li></ul></li><li><a href="Handles.html">Handles</a><ul class='methods'><li data-type='method'><a href="Handles.html#handle">handle</a></li></ul></li><li><a href="Prompter.html">Prompter</a><ul class='methods'><li data-type='method'><a href="Prompter.html#awaitResponse">awaitResponse</a></li><li data-type='method'><a href="Prompter.html#collectPrompt">collectPrompt</a></li></ul></li><li><a href="Response.html">Response</a><ul class='methods'><li data-type='method'><a href="Response.html#dm">dm</a></li><li data-type='method'><a href="Response.html#error">error</a></li><li data-type='method'><a href="Response.html#send">send</a></li><li data-type='method'><a href="Response.html#success">success</a></li></ul></li><li><a href="Validator.html">Validator</a><ul class='methods'><li data-type='method'><a href="Validator.html#apply">apply</a></li></ul></li></ul><h3>Events</h3><ul><li><a href="CommandLoader.html#event:commandsLoaded">commandsLoaded</a></li><li><a href="CommandMessage.html#event:argumentsError">argumentsError</a></li><li><a href="CommandMessage.html#event:argumentsLoaded">argumentsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">commandFinished</a></li><li><a href="CommandMessage.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandMessage.html#event:commandStarted">commandStarted</a></li><li><a href="Handles.html#event:commandUnknown">commandUnknown</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
     
-    <h1 class="page-title">ValidationProcessor</h1>
+    <h1 class="page-title">Validator</h1>
     
 
     
@@ -40,7 +40,7 @@
 <header>
     
         <h2>
-        ValidationProcessor
+        Validator
         </h2>
         
             <div class="class-description"><p>Passed as a parameter to command validators.</p></div>
@@ -57,7 +57,7 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="ValidationProcessor"><span class="type-signature"></span>new ValidationProcessor<span class="signature">(command)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Validator"><span class="type-signature"></span>new Validator<span class="signature">(command)</span><span class="type-signature"></span></h4>
 
     
 
@@ -69,7 +69,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ValidationProcessor.js.html">ValidationProcessor.js</a>, <a href="ValidationProcessor.js.html#line30">line 30</a>
+        <a href="Validator.js.html">Validator.js</a>, <a href="Validator.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -239,7 +239,7 @@ exports.validator = (processor, command) => {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ValidationProcessor.js.html">ValidationProcessor.js</a>, <a href="ValidationProcessor.js.html#line41">line 41</a>
+        <a href="Validator.js.html">Validator.js</a>, <a href="Validator.js.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -312,7 +312,7 @@ exports.validator = (processor, command) => {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ValidationProcessor.js.html">ValidationProcessor.js</a>, <a href="ValidationProcessor.js.html#line47">line 47</a>
+        <a href="Validator.js.html">Validator.js</a>, <a href="Validator.js.html#line42">line 42</a>
     </li></ul></dd>
     
 
@@ -385,7 +385,7 @@ exports.validator = (processor, command) => {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ValidationProcessor.js.html">ValidationProcessor.js</a>, <a href="ValidationProcessor.js.html#line53">line 53</a>
+        <a href="Validator.js.html">Validator.js</a>, <a href="Validator.js.html#line48">line 48</a>
     </li></ul></dd>
     
 
@@ -447,6 +447,79 @@ exports.validator = (processor, command) => {
 
         
             
+<h4 class="name" id="respond"><span class="type-signature"></span>respond<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Validator.js.html">Validator.js</a>, <a href="Validator.js.html#line54">line 54</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Whether to respond to invalid commands with the reason.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
 <h4 class="name" id="valid"><span class="type-signature"></span>valid<span class="type-signature"> :boolean</span></h4>
 
 
@@ -458,7 +531,7 @@ exports.validator = (processor, command) => {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ValidationProcessor.js.html">ValidationProcessor.js</a>, <a href="ValidationProcessor.js.html#line59">line 59</a>
+        <a href="Validator.js.html">Validator.js</a>, <a href="Validator.js.html#line60">line 60</a>
     </li></ul></dd>
     
 
@@ -529,7 +602,7 @@ exports.validator = (processor, command) => {
 
     
 
-    <h4 class="name" id="applyValid"><span class="type-signature"></span>applyValid<span class="signature">(test, reason<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="apply"><span class="type-signature"></span>apply<span class="signature">(test, reason<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
 
@@ -541,7 +614,7 @@ exports.validator = (processor, command) => {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ValidationProcessor.js.html">ValidationProcessor.js</a>, <a href="ValidationProcessor.js.html#line68">line 68</a>
+        <a href="Validator.js.html">Validator.js</a>, <a href="Validator.js.html#line69">line 69</a>
     </li></ul></dd>
     
 
@@ -739,7 +812,7 @@ exports.validator = (processor, command) => {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Mar 07 2017 14:16:02 GMT-0800 (Pacific Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sun Apr 23 2017 16:36:46 GMT-0700 (Pacific Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

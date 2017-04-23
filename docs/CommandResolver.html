@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>CommandLoader - Documentation</title>
+    <title>CommandResolver - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">CommandLoader</h1>
+    <h1 class="page-title">CommandResolver</h1>
     
 
     
@@ -40,10 +40,10 @@
 <header>
     
         <h2>
-        CommandLoader
+        CommandResolver
         </h2>
         
-            <div class="class-description"><p>Manage command loading.</p></div>
+            <div class="class-description"><p>Class for resolving a command from a message.</p></div>
         
     
 </header>
@@ -57,7 +57,7 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="CommandLoader"><span class="type-signature"></span>new CommandLoader<span class="signature">(config)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="CommandResolver"><span class="type-signature"></span>new CommandResolver<span class="signature">(handles)</span><span class="type-signature"></span></h4>
 
     
 
@@ -69,7 +69,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandLoader.js.html">CommandLoader.js</a>, <a href="CommandLoader.js.html#line12">line 12</a>
+        <a href="CommandResolver.js.html">CommandResolver.js</a>, <a href="CommandResolver.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -143,13 +143,13 @@
 
         <tr>
             
-                <td class="name"><code>config</code></td>
+                <td class="name"><code>handles</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#Config">Config</a></span>
+<span class="param-type"><a href="Handles.html">Handles</a></span>
 
 
             
@@ -159,7 +159,7 @@
 
             
 
-            <td class="description last"><p>Configuration options for the command handler.</p></td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -185,17 +185,6 @@
     </div>
 
     
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li>EventEmitter</li>
-    </ul>
-
-
-    
 
     
 
@@ -210,7 +199,7 @@
 
         
             
-<h4 class="name" id="commands"><span class="type-signature"></span>commands<span class="type-signature"> :Map.&lt;<a href="global.html#Trigger">Trigger</a>, <a href="global.html#Command">Command</a>></span></h4>
+<h4 class="name" id="_regex"><span class="type-signature"></span>_regex<span class="type-signature"> :RegExp</span></h4>
 
 
 
@@ -221,7 +210,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandLoader.js.html">CommandLoader.js</a>, <a href="CommandLoader.js.html#line37">line 37</a>
+        <a href="CommandResolver.js.html">CommandResolver.js</a>, <a href="CommandResolver.js.html#line45">line 45</a>
     </li></ul></dd>
     
 
@@ -261,7 +250,7 @@
 
 
 <div class="description">
-    <p>Currently loaded commands.</p>
+    <p>The base regex for parsing command parts.</p>
 </div>
 
 
@@ -270,7 +259,7 @@
     <ul>
         <li>
             
-<span class="param-type">Map.&lt;<a href="global.html#Trigger">Trigger</a>, <a href="global.html#Command">Command</a>></span>
+<span class="param-type">RegExp</span>
 
 
         </li>
@@ -294,7 +283,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandLoader.js.html">CommandLoader.js</a>, <a href="CommandLoader.js.html#line21">line 21</a>
+        <a href="CommandResolver.js.html">CommandResolver.js</a>, <a href="CommandResolver.js.html#line20">line 20</a>
     </li></ul></dd>
     
 
@@ -333,10 +322,6 @@
 
 
 
-<div class="description">
-    <p>Configuration for handles.</p>
-</div>
-
 
 
     <h5>Type:</h5>
@@ -344,6 +329,144 @@
         <li>
             
 <span class="param-type"><a href="global.html#Config">Config</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="handles"><span class="type-signature"></span>handles<span class="type-signature"> :<a href="Handles.html">Handles</a></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="CommandResolver.js.html">CommandResolver.js</a>, <a href="CommandResolver.js.html#line15">line 15</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="Handles.html">Handles</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="loader"><span class="type-signature"></span>loader<span class="type-signature"> :<a href="CommandLoader.html">CommandLoader</a></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="CommandResolver.js.html">CommandResolver.js</a>, <a href="CommandResolver.js.html#line25">line 25</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="CommandLoader.html">CommandLoader</a></span>
 
 
         </li>
@@ -365,7 +488,7 @@
 
     
 
-    <h4 class="name" id="loadCommands"><span class="type-signature"></span>loadCommands<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Map.&lt;<a href="global.html#Trigger">Trigger</a>, <a href="global.html#Command">Command</a>>>}</span></h4>
+    <h4 class="name" id="resolve"><span class="type-signature"></span>resolve<span class="signature">(message, body<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -377,7 +500,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandLoader.js.html">CommandLoader.js</a>, <a href="CommandLoader.js.html#line32">line 32</a>
+        <a href="CommandResolver.js.html">CommandResolver.js</a>, <a href="CommandResolver.js.html#line52">line 52</a>
     </li></ul></dd>
     
 
@@ -416,9 +539,6 @@
 
 
 
-<div class="description">
-    <p>Load all commands into memory.  Use when reloading commands.</p>
-</div>
 
 
 
@@ -429,111 +549,10 @@
 
 
 
-
-
-
-
-
-<h5>Fires:</h5>
-<ul>
-    <li><a href="CommandLoader.html#event:commandsLoaded">CommandLoader#event:commandsLoaded</a></li>
-</ul>
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;Map.&lt;<a href="global.html#Trigger">Trigger</a>, <a href="global.html#Command">Command</a>>></span>
-
-
-    </dd>
-</dl>
-
+    <h5>Parameters:</h5>
     
 
-
-        
-    
-
-    
-
-    
-        <h3 class="subsection-title">Events</h3>
-
-        
-            
-
-    
-
-    <h4 class="name" id="event:commandsLoaded">commandsLoaded</h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandLoader.js.html">CommandLoader.js</a>, <a href="CommandLoader.js.html#line72">line 72</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -542,6 +561,8 @@
 
         <th>Type</th>
 
+        
+        <th>Attributes</th>
         
 
         
@@ -555,46 +576,64 @@
 
         <tr>
             
-                <td class="name"><code>commands</code></td>
+                <td class="name"><code>message</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Map.&lt;<a href="global.html#Trigger">Trigger</a>, <a href="global.html#Command">Command</a>></span>
+<span class="param-type">Message</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Currently loaded commands.</p></td>
+            <td class="description last"><p>The message that could be a command.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>failed</code></td>
+                <td class="name"><code>body</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array</span>
+<span class="param-type">string</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last"><p>Directory listing of commands that failed to load.</p></td>
+            <td class="description last"><p>Command text if not the message content.</p></td>
         </tr>
 
     
@@ -610,30 +649,6 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -641,6 +656,10 @@
 
 
         
+    
+
+    
+
     
 </article>
 

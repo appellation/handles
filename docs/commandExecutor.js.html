@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Home - Documentation</title>
+    <title>commandExecutor.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,46 +27,76 @@
 
 <div id="main">
     
+    <h1 class="page-title">commandExecutor.js</h1>
+    
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Executes a command given a command message.
+ * @param {CommandMessage} msg - The command message to execute.
+ * @throws {Error} - If the command executor is not found.
+ */
+module.exports = (msg) => {
+    msg.validate().then(validator => {
+        if(!validator.valid) {
+            if(validator.respond) msg.response.error(validator.reason);
 
+            /**
+             * @event CommandMessage#commandInvalid
+             * @type {Object}
+             * @property {CommandMessage} message
+             * @property {Validator} validator
+             */
+            msg.emit('commandInvalid', { message: msg, validator });
+        } else {
+            msg.resolveArgs().catch(e => {
 
+                /**
+                 * @event CommandMessage#argumentsError
+                 * @type {Object}
+                 * @property {CommandMessage} message
+                 * @property {*} error
+                 */
+                msg.emit('argumentsError', { message: msg, error: e });
+            }).then(() => {
 
+                /**
+                 * @event CommandMessage#commandStarted
+                 * @type {CommandMessage}
+                 */
+                msg.emit('commandStarted', msg);
+                if(typeof msg.command.exec !== 'function') throw new Error('Command executor must be a function.');
+                return Promise.resolve(msg.command.exec(msg));
+            }).then(result => {
 
-
-
-
-
-
-    
-
-
-    <section class="readme">
-        <article><h1>Handles</h1><p><a href="https://discord.gg/DPuaDvP"><img src="https://discordapp.com/api/guilds/251245211416657931/embed.png" alt="Handles support server"></a>
-<a href="https://travis-ci.org/appellation/handles"><img src="https://travis-ci.org/appellation/handles.svg?branch=master" alt="Build Status"></a></p>
-<p>For those of us who get frustrated with writing command handlers but don't quite want to use a full framework.  Intended for use with <a href="https://github.com/hydrabolt/discord.js">Discord.js</a>.</p>
-<p>Documentation is available at <a href="http://handles.topkek.pw">handles.topkek.pw</a>.</p>
-<h2>Getting started</h2><h3>Installation</h3><pre class="prettyprint source lang-xl"><code>npm install --save discord-handles</code></pre><p>Or, if you want to risk cutting yourself, install the bleeding edge version:</p>
-<pre class="prettyprint source lang-xl"><code>npm install --save appellation/handles#master</code></pre><p>Usually I try to avoid pushing broken code, but sometimes I move a little too fast.</p>
-<h3>The basics</h3><pre class="prettyprint source lang-js"><code>const Discord = require('discord.js');
-const Handles = require('discord-handles');
-
-const client = new Discord.Client();
-const handler = new Handles();
-
-client.on('message', handler.handle);
-client.login('token');</code></pre><p>This will automatically load all commands in the <code>./commands</code> directory and handle incoming messages.  See <a href="http://handles.topkek.pw/global.html#Command"><code>Command</code></a> in the docs for information on how to format the exports of the files you place in <code>./commands</code>.  The loader and handler can be configured according to <a href="http://handles.topkek.pw/global.html#Config"><code>Config</code></a> options passed to the constructor.</p>
-<pre class="prettyprint source lang-js"><code>const handler = new Handles({
-    directory: './some/other/awesome/directory',
-    prefixes: ['dank', 'memes']
-});</code></pre></article>
+                /**
+                 * @event CommandMessage#commandFinished
+                 * @type {Object}
+                 * @property {CommandMessage} message
+                 * @property {*} result
+                 */
+                msg.emit('commandFinished', { message: msg, result });
+            }, e => {
+                /**
+                 * @event CommandMessage#commandFailed
+                 * @type {Object}
+                 * @property {CommandMessage} message
+                 * @property {*} error
+                 */
+                msg.emit('commandFailed', { message: msg, error: e });
+            });
+        }
+    });
+};
+</code></pre>
+        </article>
     </section>
-
-
 
 
 

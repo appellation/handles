@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>CommandLoader - Documentation</title>
+    <title>Prompter - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">CommandLoader</h1>
+    <h1 class="page-title">Prompter</h1>
     
 
     
@@ -40,10 +40,10 @@
 <header>
     
         <h2>
-        CommandLoader
+        Prompter
         </h2>
         
-            <div class="class-description"><p>Manage command loading.</p></div>
+            <div class="class-description"><p>To prompt for arguments.</p></div>
         
     
 </header>
@@ -57,7 +57,7 @@
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="CommandLoader"><span class="type-signature"></span>new CommandLoader<span class="signature">(config)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Prompter"><span class="type-signature"></span>new Prompter<span class="signature">(response)</span><span class="type-signature"></span></h4>
 
     
 
@@ -69,7 +69,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandLoader.js.html">CommandLoader.js</a>, <a href="CommandLoader.js.html#line12">line 12</a>
+        <a href="Prompter.js.html">Prompter.js</a>, <a href="Prompter.js.html#line4">line 4</a>
     </li></ul></dd>
     
 
@@ -143,13 +143,13 @@
 
         <tr>
             
-                <td class="name"><code>config</code></td>
+                <td class="name"><code>response</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#Config">Config</a></span>
+<span class="param-type"><a href="Response.html">Response</a></span>
 
 
             
@@ -159,7 +159,7 @@
 
             
 
-            <td class="description last"><p>Configuration options for the command handler.</p></td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -185,17 +185,6 @@
     </div>
 
     
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li>EventEmitter</li>
-    </ul>
-
-
-    
 
     
 
@@ -210,7 +199,7 @@
 
         
             
-<h4 class="name" id="commands"><span class="type-signature"></span>commands<span class="type-signature"> :Map.&lt;<a href="global.html#Trigger">Trigger</a>, <a href="global.html#Command">Command</a>></span></h4>
+<h4 class="name" id="response"><span class="type-signature"></span>response<span class="type-signature"> :<a href="Response.html">Response</a></span></h4>
 
 
 
@@ -221,7 +210,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandLoader.js.html">CommandLoader.js</a>, <a href="CommandLoader.js.html#line37">line 37</a>
+        <a href="Prompter.js.html">Prompter.js</a>, <a href="Prompter.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -261,7 +250,7 @@
 
 
 <div class="description">
-    <p>Currently loaded commands.</p>
+    <p>The responder to use for prompting.</p>
 </div>
 
 
@@ -270,80 +259,7 @@
     <ul>
         <li>
             
-<span class="param-type">Map.&lt;<a href="global.html#Trigger">Trigger</a>, <a href="global.html#Command">Command</a>></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="config"><span class="type-signature"></span>config<span class="type-signature"> :<a href="global.html#Config">Config</a></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandLoader.js.html">CommandLoader.js</a>, <a href="CommandLoader.js.html#line21">line 21</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Configuration for handles.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="global.html#Config">Config</a></span>
+<span class="param-type"><a href="Response.html">Response</a></span>
 
 
         </li>
@@ -365,7 +281,7 @@
 
     
 
-    <h4 class="name" id="loadCommands"><span class="type-signature"></span>loadCommands<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Map.&lt;<a href="global.html#Trigger">Trigger</a>, <a href="global.html#Command">Command</a>>>}</span></h4>
+    <h4 class="name" id="awaitResponse"><span class="type-signature"></span>awaitResponse<span class="signature">(text)</span><span class="type-signature"> &rarr; {Message}</span></h4>
 
     
 
@@ -377,7 +293,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandLoader.js.html">CommandLoader.js</a>, <a href="CommandLoader.js.html#line32">line 32</a>
+        <a href="Prompter.js.html">Prompter.js</a>, <a href="Prompter.js.html#line42">line 42</a>
     </li></ul></dd>
     
 
@@ -417,7 +333,7 @@
 
 
 <div class="description">
-    <p>Load all commands into memory.  Use when reloading commands.</p>
+    <p>Wait for a response to some text.</p>
 </div>
 
 
@@ -430,14 +346,58 @@
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The text to send prior to waiting.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
 
-<h5>Fires:</h5>
-<ul>
-    <li><a href="CommandLoader.html#event:commandsLoaded">CommandLoader#event:commandsLoaded</a></li>
-</ul>
+
 
 
 
@@ -458,7 +418,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Map.&lt;<a href="global.html#Trigger">Trigger</a>, <a href="global.html#Command">Command</a>>></span>
+<span class="param-type">Message</span>
 
 
     </dd>
@@ -468,19 +428,11 @@
 
 
         
-    
-
-    
-
-    
-        <h3 class="subsection-title">Events</h3>
-
-        
             
 
     
 
-    <h4 class="name" id="event:commandsLoaded">commandsLoaded</h4>
+    <h4 class="name" id="collectPrompt"><span class="type-signature"></span>collectPrompt<span class="signature">(arg, valid)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
 
     
 
@@ -492,7 +444,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandLoader.js.html">CommandLoader.js</a>, <a href="CommandLoader.js.html#line72">line 72</a>
+        <a href="Prompter.js.html">Prompter.js</a>, <a href="Prompter.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -529,11 +481,26 @@
 
 
 
-    <h5 class="subsection-title">Properties:</h5>
 
+
+<div class="description">
+    <p>Collect prompts for an argument.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
     
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -545,6 +512,8 @@
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -555,13 +524,13 @@
 
         <tr>
             
-                <td class="name"><code>commands</code></td>
+                <td class="name"><code>arg</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Map.&lt;<a href="global.html#Trigger">Trigger</a>, <a href="global.html#Command">Command</a>></span>
+<span class="param-type"><a href="Argument.html">Argument</a></span>
 
 
             
@@ -570,21 +539,25 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last"><p>Currently loaded commands.</p></td>
+            <td class="description last"><p>The argument to prompt for.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>failed</code></td>
+                <td class="name"><code>valid</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array</span>
+<span class="param-type">boolean</span>
 
 
             
@@ -593,8 +566,14 @@
             
 
             
+                <td class="default">
+                
+                    <code>true</code>
+                
+                </td>
+            
 
-            <td class="description last"><p>Directory listing of commands that failed to load.</p></td>
+            <td class="description last"><p>Whether this argument was valid on prior prompt.</p></td>
         </tr>
 
     
@@ -610,37 +589,42 @@
 
 
 
-    <h5>Type:</h5>
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
     <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
+<li>The result of the resolver.  Reject with <code>string</code> reason
+that the collector failed.</li>
+</ul>
+</div>
 
 
 
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
 
 
+    </dd>
+</dl>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
 
         
+    
+
+    
+
     
 </article>
 
