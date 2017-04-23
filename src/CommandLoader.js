@@ -43,7 +43,7 @@ class CommandLoader extends EventEmitter   {
                  * @type {Command}
                  */
                 let mod;
-                const location = path.join(process.cwd(), file);
+                const location = path.resolve(process.cwd(), file);
 
                 try {
                     clearRequire(location);
