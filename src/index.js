@@ -16,17 +16,21 @@ const Validator = require('./Validator');
  * @property {CommandValidator} [validate] - Function to call to determine whether the command is valid.
  *
  * @example
- * exports.func = r => r.send('lmao');
+ * exports.exec = r => r.send('lmao');
  * exports.triggers = /^ay+$/i;
  *
  * @example
- * exports.func = r => {};
+ * exports.exec = r => {};
  * exports.disabled = true;
  *
  * @example
  * class SomeCommand {
  *   exec(command) {
  *     return command.response.send('dank memes');
+ *   }
+ *   * validator(command) {
+ *     yield new Argument('Please provide a thing.', 'The thing you provided was invalid.')
+ *        .setResolver(content => content === 'thing' ? { this: 'is what I want to be in the args property' } : null);
  *   }
  * }
  *
