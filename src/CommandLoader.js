@@ -5,7 +5,6 @@ const clearRequire = require('clear-require');
 
 /**
  * Manage command loading.
- *
  * @param {Config} config - Configuration options for the command handler.
  * @extends EventEmitter
  * @constructor

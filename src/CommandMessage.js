@@ -3,17 +3,17 @@ const Prompter = require('./Prompter');
 
 /**
  * A message to be processed as a command.
- *
- * @param {Object} data
- * @param {Command} data.command
- * @param {Message} data.message
- * @param {String} data.body
- * @param {Config} data.config
  * @extends EventEmitter
- * @constructor
  */
 class CommandMessage extends EventEmitter {
 
+    /**
+     * @param {Object} data
+     * @param {Command} data.command
+     * @param {Message} data.message
+     * @param {String} data.body
+     * @param {Config} data.config
+     */
     constructor({ command, message, body, config } = {})    {
         super();
 
@@ -44,7 +44,7 @@ class CommandMessage extends EventEmitter {
         /**
          * The command arguments as returned by the resolver.
          * @see Argument#resolver
-         * @type {?Array<String>}
+         * @type {?Array}
          */
         this.args = null;
 
@@ -63,7 +63,7 @@ class CommandMessage extends EventEmitter {
 
     /**
      * Ensure that the command form is valid.
-     * @return {Promise<ValidationProcessor>} - Rejects with reason, otherwise resolves.
+     * @return {Promise<ValidationProcessor>}
      */
     validate()  {
         if(!this.command) throw new Error('No command to validate');
@@ -76,7 +76,8 @@ class CommandMessage extends EventEmitter {
 
     /**
      * Parse the arguments of the command body.
-     * @return {Array.<String>}
+     * @fires CommandMessage#argumentsLoaded
+     * @return {Promise}
      */
     resolveArgs()   {
         if(!Array.isArray(this.args)) this.args = [];
@@ -87,6 +88,11 @@ class CommandMessage extends EventEmitter {
     _iterateArgs(generator, content, result = null) {
         const next = generator.next(result);
         if(next.done) {
+            /**
+             * Emitted with the resolved arguments of the message.
+             * @event CommandMessage#argumentsLoaded
+             * @type {Array}
+             */
             this.emit('argumentsLoaded', this.args);
             return;
         }
