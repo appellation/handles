@@ -44,7 +44,7 @@ class Argument {
          * The argument resolver for this argument.
          * @type {ArgumentResolver}
          */
-        this.resolver = () => null;
+        this.resolver = content => content || null;
 
         /**
          * How long to wait for a response to a prompt, in seconds.
@@ -95,7 +95,7 @@ class Argument {
      * @param {function} [resolver] - The resolver (defaults to returning null).
      * @returns {Argument}
      */
-    setResolver(resolver = () => null) {
+    setResolver(resolver = content => content || null) {
         this.resolver = resolver;
         return this;
     }
