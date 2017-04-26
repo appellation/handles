@@ -49,7 +49,7 @@ const Validator = require('./Validator');
  * @property {Set<string>} [prefixes] - Prefixes to use, if any.  Unneeded when providing a `MessageValidator`.
  * @property {string} [userID] - If provided, will add mentions into the prefixes.
  * @property {string} [directory='./commands'] - Where your command files are located, relative to the current working directory.
- * @property {MessageValidator} [validator] - Valid command forms (defaults to prefixed).
+ * @property {MessageValidator} [validator] - Valid command forms.
  * @property {Validator} [Validator] - A custom validator class (should extend the built-in class).
  * @property {Response} [Response] - A custom response class (should extend the built-in class).
  */
