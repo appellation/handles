@@ -24,7 +24,7 @@ class Prompter {
      */
     collectPrompt(arg, valid = true) {
         const text = valid ? arg.prompt : arg.rePrompt;
-        return this.awaitResponse(text, arg.timeout * 1000).then(response => {
+        return this.awaitResponse(text + arg.suffix, arg.timeout * 1000).then(response => {
             if(response.content === 'cancel') throw 'cancelled';
             const resolved = arg.resolver(response.content, response);
             if(resolved === null) return this.collectPrompt(arg, false);

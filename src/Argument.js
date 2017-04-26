@@ -53,6 +53,12 @@ class Argument {
         this.timeout = 30;
 
         /**
+         * Text to append to each prompt.
+         * @type {string}
+         */
+        this.suffix = `\nCommand will be cancelled in **${this.timeout} seconds**.  Type \`cancel\` to cancel immediately.`;
+
+        /**
          * @type {RegExp}
          */
         this.pattern = /^\S+/;
