@@ -16,7 +16,33 @@ module.exports = (msg) => {
              */
             msg.emit('commandInvalid', { message: msg, validator });
         } else {
-            msg.resolveArgs().catch(e => {
+            msg.resolveArgs().then(() => {
+
+                /**
+                 * @event CommandMessage#commandStarted
+                 * @type {CommandMessage}
+                 */
+                msg.emit('commandStarted', msg);
+                if(typeof msg.command.exec !== 'function') throw new Error('Command executor must be a function.');
+                return Promise.resolve(msg.command.exec(msg)).then(result => {
+
+                    /**
+                     * @event CommandMessage#commandFinished
+                     * @type {Object}
+                     * @property {CommandMessage} message
+                     * @property {*} result
+                     */
+                    msg.emit('commandFinished', { message: msg, result });
+                }, e => {
+                    /**
+                     * @event CommandMessage#commandFailed
+                     * @type {Object}
+                     * @property {CommandMessage} message
+                     * @property {*} error
+                     */
+                    msg.emit('commandFailed', { message: msg, error: e });
+                });
+            }, e => {
 
                 /**
                  * @event CommandMessage#argumentsError
@@ -25,32 +51,6 @@ module.exports = (msg) => {
                  * @property {*} error
                  */
                 msg.emit('argumentsError', { message: msg, error: e });
-            }).then(() => {
-
-                /**
-                 * @event CommandMessage#commandStarted
-                 * @type {CommandMessage}
-                 */
-                msg.emit('commandStarted', msg);
-                if(typeof msg.command.exec !== 'function') throw new Error('Command executor must be a function.');
-                return Promise.resolve(msg.command.exec(msg));
-            }).then(result => {
-
-                /**
-                 * @event CommandMessage#commandFinished
-                 * @type {Object}
-                 * @property {CommandMessage} message
-                 * @property {*} result
-                 */
-                msg.emit('commandFinished', { message: msg, result });
-            }, e => {
-                /**
-                 * @event CommandMessage#commandFailed
-                 * @type {Object}
-                 * @property {CommandMessage} message
-                 * @property {*} error
-                 */
-                msg.emit('commandFailed', { message: msg, error: e });
             });
         }
     });
