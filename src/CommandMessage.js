@@ -117,6 +117,7 @@ class CommandMessage extends EventEmitter {
                         this.args.push(response);
                         resolve(response);
                     }).catch(reason => {
+                        this.response.error('Command cancelled.');
                         reject({ argument: arg, reason });
                     });
                 }

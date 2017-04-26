@@ -29,8 +29,6 @@ class Prompter {
             const resolved = arg.resolver(response.content, response);
             if(resolved === null) return this.collectPrompt(arg, false);
             return resolved;
-        }).catch(reason => {
-            return this.response.error('Command cancelled.').then(() => reason).catch(() => reason).then(r => Promise.reject(r));
         });
     }
 
