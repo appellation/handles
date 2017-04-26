@@ -24,7 +24,7 @@ class Prompter {
      */
     collectPrompt(arg, valid = true) {
         const text = valid ? arg.prompt : arg.rePrompt;
-        return this.awaitResponse(text).then(response => {
+        return this.awaitResponse(text, arg.timeout).then(response => {
             if(response.content === 'cancel') throw 'cancelled';
             const resolved = arg.resolver(response.content, response);
             if(resolved === null) return this.collectPrompt(arg, false);
@@ -39,9 +39,9 @@ class Prompter {
      * @param {string} text - The text to send prior to waiting.
      * @returns {Message}
      */
-    awaitResponse(text) {
+    awaitResponse(text, time = 30000) {
         return this.response.send(text).then(() => {
-            return this.response.message.channel.awaitMessages(m => m.author.id === this.response.message.author.id, { time: 30000, max: 1, errors: ['time'] });
+            return this.response.message.channel.awaitMessages(m => m.author.id === this.response.message.author.id, { time, max: 1, errors: ['time'] });
         }).then(responses => {
             return responses.first();
         });

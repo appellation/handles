@@ -47,6 +47,12 @@ class Argument {
         this.resolver = () => null;
 
         /**
+         * How long to wait for a response to a prompt, in seconds.
+         * @type {number}
+         */
+        this.timeout = 30;
+
+        /**
          * @type {RegExp}
          */
         this.pattern = /^\S+/;
@@ -91,6 +97,11 @@ class Argument {
      */
     setResolver(resolver = () => null) {
         this.resolver = resolver;
+        return this;
+    }
+
+    setTimeout(time = 30) {
+        this.timeout = time;
         return this;
     }
 }
