@@ -7,6 +7,7 @@ const commandExecutor = require('./commandExecutor');
 const Prompter = require('./Prompter');
 const Response = require('./Response');
 const Validator = require('./Validator');
+const Argument = require('./Argument');
 
 /**
  * @typedef {Object} Command - Structure of exported commands.  Can also be a single function.
@@ -190,7 +191,8 @@ Object.assign(Handles, {
     commandExecutor,
     CommandResolver,
     Prompter,
-    Response
+    Response,
+    Argument
 });
 
 module.exports = Handles;
