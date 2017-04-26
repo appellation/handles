@@ -1,22 +1,25 @@
 /**
- * Passed as a parameter to command validators.
+ * Passed as a parameter to command validators.  Arguments will not be available in this class,
+ * as this is run before arguments are resolved from the command.  Use for permissions checks and
+ * other pre-command validations.
+ *
  * @example
  * // Using a custom validator.
  * class CustomValidator extends Validator {
- *   ensureArgs() {
- *     return this.apply(this.command.args.length > 0, 'No arguments provided.');
+ *   ensureGuild() {
+ *     return this.apply(this.command.message.channel.type === 'text', 'Command must be run in a guild channel.');
  *   }
  * }
  *
  * // Usage in command
  * exports.validator = processor => {
- *   return processor.ensureArgs();
+ *   return processor.ensureGuild();
  * }
  *
  * @example
  * // Usage without a custom validator
  * exports.validator = (processor, command) => {
- *   return processor.apply(command.args.length > 0, 'No arguments provided.');
+ *   return processor.apply(command.message.channel.type === 'text', 'Command must be run in a guild channel.');
  * }
  *
  * @see Command
