@@ -46,10 +46,12 @@ const Validator = require('./Validator');
 
 /**
  * @typedef {object} Config - Structure of command handler options.
- * @property {Set<string>} [prefixes] - Prefixes to use, if any (automatically includes mentions).
+ * @property {Set<string>} [prefixes] - Prefixes to use, if any.  Unneeded when providing a `MessageValidator`.
+ * @property {string} [userID] - If provided, will add mentions into the prefixes.
  * @property {string} [directory='./commands'] - Where your command files are located, relative to the current working directory.
  * @property {MessageValidator} [validator] - Valid command forms (defaults to prefixed).
- * @property {Validator} [Validator] - A reference to a validation processor that extends the internal one (uninstantiated).
+ * @property {Validator} [Validator] - A custom validator class (should extend the built-in class).
+ * @property {Response} [Response] - A custom response class (should extend the built-in class).
  */
 
 /**

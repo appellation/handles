@@ -2,9 +2,9 @@
  * Passed as a parameter to command validators.
  * @example
  * // Using a custom validator.
- * class CustomValidationProcessor extends ValidationProcessor {
+ * class CustomValidator extends Validator {
  *   ensureArgs() {
- *     return this.applyValid(this.command.args.length > 0, 'No arguments provided.');
+ *     return this.apply(this.command.args.length > 0, 'No arguments provided.');
  *   }
  * }
  *
@@ -16,7 +16,7 @@
  * @example
  * // Usage without a custom validator
  * exports.validator = (processor, command) => {
- *   return processor.applyValid(command.args.length > 0, 'No arguments provided.');
+ *   return processor.apply(command.args.length > 0, 'No arguments provided.');
  * }
  *
  * @see Command
