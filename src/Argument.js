@@ -16,10 +16,17 @@
 class Argument {
 
     /**
-     * @param {string} [prompt] - The prompt text with which to initially query the command issuer.
-     * @param {string} [rePrompt] - The prompt text with which to query the user upon prompt failure.
+     * @param {Object} [data] An object with any of the properties of this class.
      */
-    constructor(prompt, rePrompt) {
+    constructor({
+        prompt = '',
+        rePrompt = '',
+        optional = false,
+        resolver = c => c || null,
+        timeout = 30,
+        suffix = `\nCommand will be cancelled in **${this.timeout} seconds**.  Type \`cancel\` to cancel immediately.`,
+        pattern = /^\S+/
+    }) {
         /**
          * The initial prompt text of this argument.
          * @type {string}
@@ -38,30 +45,33 @@ class Argument {
          * Whether this argument is optional.
          * @type {boolean}
          */
-        this.optional = false;
+        this.optional = optional;
 
         /**
          * The argument resolver for this argument.
          * @type {ArgumentResolver}
          */
-        this.resolver = content => content || null;
+        this.resolver = resolver;
 
         /**
          * How long to wait for a response to a prompt, in seconds.
          * @type {number}
          */
-        this.timeout = 30;
+        this.timeout = timeout;
 
         /**
          * Text to append to each prompt.
          * @type {string}
          */
-        this.suffix = `\nCommand will be cancelled in **${this.timeout} seconds**.  Type \`cancel\` to cancel immediately.`;
+        this.suffix = suffix;
 
         /**
+         * A regex describing the pattern of arguments.  Defaults to single words.  If more advanced matching
+         * is required, set a custom `matcher` instead.
+         * @see Argument#matcher
          * @type {RegExp}
          */
-        this.pattern = /^\S+/;
+        this.pattern = pattern;
     }
 
     get pattern() {
@@ -116,8 +126,23 @@ class Argument {
         return this;
     }
 
+    /**
+     * Set the time to wait for a prompt response (in seconds).
+     * @param {number} [time=30] The time to wait.
+     * @returns {Argument}
+     */
     setTimeout(time = 30) {
         this.timeout = time;
+        return this;
+    }
+
+    /**
+     * Set the suffix for all prompts.
+     * @param {string} [text=''] The text.
+     * @returns {Argument}
+     */
+    setSuffix(text = '') {
+        this.suffx = text;
         return this;
     }
 }
