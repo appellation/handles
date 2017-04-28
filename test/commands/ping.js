@@ -1,21 +1,32 @@
 const Argument = require('../../src/Argument');
 
-class Ping {
-    exec(command) {
-        throw new Error('lol');
-        command.response.send('pong');
+// const HTTPPing = require('node-http-ping')
+
+class PingCommand
+{
+    exec(command)
+    {
+        if (!command.args.length) {
+            return command.response.success(`${Math.round(command.message.client.ping)}ms 💓`)
+        }
+
+        HTTPPing(command.args[0]).then((time) => {
+            return command.response.success(`Website **${command.args[0]}** responded in ${time}ms.`)
+        }).catch(console.error)
     }
 
-    validate(val) {
-        return val.apply(false, 'lul yu fuked up');
-    }
+    * arguments()
+    {
+        yield new Argument('plz provide websit', 'this is no link my fRIEND')
+            .setOptional()
+            .setResolver((content) => {
+                if (!content.match(new RegExp(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi))) {
+                    return null
+                }
 
-    * arguments() {
-        yield new Argument('fuck you', 'fuck me')
-            .setResolver(c => c === 'lmao' ? 'lmao' : null);
-        yield new Argument('top', 'kek')
-            .setResolver(c => c === 'dank' ? 'lmao' : null);
+                return content
+            })
     }
 }
 
-module.exports = new Ping();
+module.exports = new PingCommand

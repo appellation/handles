@@ -109,7 +109,7 @@ class CommandMessage extends EventEmitter {
             content = content.substring(matched.length).trim();
             const resolved = arg.resolver(matched, this);
             if(resolved === null) {
-                if(arg.optional) { // if the resolver failed but the argument is optional, resolve with null
+                if(arg.optional && !matched.length) { // if the resolver failed but the argument is optional, resolve with null
                     resolve(null);
                 } else { // if the resolver failed and the argument is not optional, prompt
                     const prompter = new Prompter(new (this.config.Response)(this.message, false));
