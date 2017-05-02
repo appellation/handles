@@ -160,6 +160,8 @@ class Handles extends EventEmitter {
      * });
      */
     handle(msg) {
+        if(msg.author.bot) return;
+
         const cmd = this.resolver.resolve(msg);
         if(!cmd) {
             /**
