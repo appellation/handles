@@ -5,7 +5,7 @@
  * @param {string} content - The remaining unknown content of the command.  For instance,
  * if a command is `play stuff`, this param will be `stuff`: if this returns anything other
  * than `null`, the next argument resolver will be called with an empty string.
- * @param {CommandMessage} message - The command message for which this argument resolver
+ * @param {Message} message - The message for which this argument resolver
  * is running.
  * @returns {*} - If null, the argument is considered unresolved.
  */
