@@ -24,7 +24,7 @@ class Argument {
         optional = false,
         resolver = c => c || null,
         timeout = 30,
-        suffix = `\nCommand will be cancelled in **${this.timeout} seconds**.  Type \`cancel\` to cancel immediately.`,
+        suffix,
         pattern = /^\S+/
     }) {
         /**
@@ -63,7 +63,7 @@ class Argument {
          * Text to append to each prompt.
          * @type {string}
          */
-        this.suffix = suffix;
+        this.suffix = suffix || `\nCommand will be cancelled in **${this.timeout} seconds**.  Type \`cancel\` to cancel immediately.`;
 
         /**
          * A regex describing the pattern of arguments.  Defaults to single words.  If more advanced matching
