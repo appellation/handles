@@ -33,7 +33,7 @@ const Argument = require('./Argument');
  *     return command.response.send('dank memes');
  *   }
  *   * arguments(command) {
- *     yield new Argument('Please provide a thing.', 'The thing you provided was invalid.')
+ *     yield new Argument('meme') // this arg will be accessible as `command.args.meme`
  *        .setPrompt('Please provide a thing.')
  *        .setRePrompt('The thing you provided was invalid.')
  *        .setResolver(content => content === 'thing' ? { stuff: 'is what I want to be in the args property' } : null);
