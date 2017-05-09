@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Argument.html">Argument</a><ul class='methods'><li data-type='method'><a href="Argument.html#setOptional">setOptional</a></li><li data-type='method'><a href="Argument.html#setPrompt">setPrompt</a></li><li data-type='method'><a href="Argument.html#setRePrompt">setRePrompt</a></li><li data-type='method'><a href="Argument.html#setResolver">setResolver</a></li><li data-type='method'><a href="Argument.html#setSuffix">setSuffix</a></li><li data-type='method'><a href="Argument.html#setTimeout">setTimeout</a></li></ul></li><li><a href="CommandLoader.html">CommandLoader</a><ul class='methods'><li data-type='method'><a href="CommandLoader.html#loadCommands">loadCommands</a></li></ul></li><li><a href="CommandMessage.html">CommandMessage</a><ul class='methods'><li data-type='method'><a href="CommandMessage.html#resolveArgs">resolveArgs</a></li><li data-type='method'><a href="CommandMessage.html#validate">validate</a></li></ul></li><li><a href="CommandResolver.html">CommandResolver</a><ul class='methods'><li data-type='method'><a href="CommandResolver.html#resolve">resolve</a></li></ul></li><li><a href="HandlesClient.html">HandlesClient</a><ul class='methods'><li data-type='method'><a href="HandlesClient.html#handle">handle</a></li></ul></li><li><a href="Prompter.html">Prompter</a><ul class='methods'><li data-type='method'><a href="Prompter.html#awaitResponse">awaitResponse</a></li><li data-type='method'><a href="Prompter.html#collectPrompt">collectPrompt</a></li></ul></li><li><a href="Response.html">Response</a><ul class='methods'><li data-type='method'><a href="Response.html#dm">dm</a></li><li data-type='method'><a href="Response.html#error">error</a></li><li data-type='method'><a href="Response.html#send">send</a></li><li data-type='method'><a href="Response.html#success">success</a></li></ul></li><li><a href="Validator.html">Validator</a><ul class='methods'><li data-type='method'><a href="Validator.html#apply">apply</a></li></ul></li></ul><h3>Events</h3><ul><li><a href="CommandLoader.html#event:commandsLoaded">commandsLoaded</a></li><li><a href="CommandMessage.html#event:argumentsError">argumentsError</a></li><li><a href="CommandMessage.html#event:argumentsLoaded">argumentsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">commandFinished</a></li><li><a href="CommandMessage.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandMessage.html#event:commandStarted">commandStarted</a></li><li><a href="HandlesClient.html#event:commandUnknown">commandUnknown</a></li></ul><h3>Global</h3><ul><li><a href="global.html#matcher">matcher</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Argument.html">Argument</a><ul class='methods'><li data-type='method'><a href="Argument.html#matcher">matcher</a></li><li data-type='method'><a href="Argument.html#setOptional">setOptional</a></li><li data-type='method'><a href="Argument.html#setPrompt">setPrompt</a></li><li data-type='method'><a href="Argument.html#setRePrompt">setRePrompt</a></li><li data-type='method'><a href="Argument.html#setResolver">setResolver</a></li><li data-type='method'><a href="Argument.html#setSuffix">setSuffix</a></li><li data-type='method'><a href="Argument.html#setTimeout">setTimeout</a></li></ul></li><li><a href="CommandLoader.html">CommandLoader</a><ul class='methods'><li data-type='method'><a href="CommandLoader.html#loadCommands">loadCommands</a></li></ul></li><li><a href="CommandMessage.html">CommandMessage</a><ul class='methods'><li data-type='method'><a href="CommandMessage.html#resolveArgs">resolveArgs</a></li><li data-type='method'><a href="CommandMessage.html#validate">validate</a></li></ul></li><li><a href="CommandResolver.html">CommandResolver</a><ul class='methods'><li data-type='method'><a href="CommandResolver.html#resolve">resolve</a></li></ul></li><li><a href="HandlesClient.html">HandlesClient</a><ul class='methods'><li data-type='method'><a href="HandlesClient.html#handle">handle</a></li></ul></li><li><a href="Prompter.html">Prompter</a><ul class='methods'><li data-type='method'><a href="Prompter.html#awaitResponse">awaitResponse</a></li><li data-type='method'><a href="Prompter.html#collectPrompt">collectPrompt</a></li></ul></li><li><a href="Response.html">Response</a><ul class='methods'><li data-type='method'><a href="Response.html#dm">dm</a></li><li data-type='method'><a href="Response.html#error">error</a></li><li data-type='method'><a href="Response.html#send">send</a></li><li data-type='method'><a href="Response.html#success">success</a></li></ul></li><li><a href="Validator.html">Validator</a><ul class='methods'><li data-type='method'><a href="Validator.html#apply">apply</a></li></ul></li></ul><h3>Events</h3><ul><li><a href="CommandLoader.html#event:commandsLoaded">commandsLoaded</a></li><li><a href="CommandMessage.html#event:argumentsError">argumentsError</a></li><li><a href="CommandMessage.html#event:argumentsLoaded">argumentsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">commandFinished</a></li><li><a href="CommandMessage.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandMessage.html#event:commandStarted">commandStarted</a></li><li><a href="HandlesClient.html#event:commandUnknown">commandUnknown</a></li></ul><h3><a href="global.html">Global</a></h3>
 </nav>
 
 <div id="main">
@@ -107,174 +107,6 @@
 
     
 
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    <h4 class="name" id="matcher"><span class="type-signature"></span>matcher<span class="signature">(content)</span><span class="type-signature"> &rarr; {string}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Argument.js.html">Argument.js</a>, <a href="Argument.js.html#line106">line 106</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li><a href="Argument.html#resolver">Argument#resolver</a></li>
-        </ul>
-    </dd>
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>This function takes a string which contains any number of arguments and returns the first of them.
-The return should be a substring of the input, which will then be chopped off the input. The remaining
-input will be fed back into this function for the next argument, etc. until no more arguments remain.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>content</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The content.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>The potential argument string contents (to still be resolved).</p>
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-        
     
 
     
@@ -1730,7 +1562,7 @@ module.exports = new SomeCommand();</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue May 09 2017 10:21:25 GMT-0700 (Pacific Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue May 09 2017 10:32:50 GMT-0700 (Pacific Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

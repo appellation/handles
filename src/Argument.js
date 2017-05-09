@@ -49,7 +49,7 @@ class Argument {
         /**
          * Text sent for re-prompting to provide correct input when provided input is not resolved
          * (ie. the resolver returns null).
-         * @see {ArgumentResolver}
+         * @see ArgumentResolver
          * @type {string}
          */
         this.rePrompt = rePrompt;
@@ -94,19 +94,22 @@ class Argument {
     set pattern(regex) {
         this._pattern = regex;
 
-        /**
-         * This function takes a string which contains any number of arguments and returns the first of them.
-         * The return should be a substring of the input, which will then be chopped off the input. The remaining
-         * input will be fed back into this function for the next argument, etc. until no more arguments remain.
-         * @type {Function}
-         * @param {string} content The content.
-         * @returns {string} The potential argument string contents (to still be resolved).
-         * @see Argument#resolver
-         */
         this.matcher = content => {
             const m = content.match(regex);
             return m === null ? '' : m[0];
         };
+    }
+
+    /**
+     * This function takes a string which contains any number of arguments and returns the first of them.
+     * The return should be a substring of the input, which will then be chopped off the input. The remaining
+     * input will be fed back into this function for the next argument, etc. until no more arguments remain.
+     * @param {string} content The content.
+     * @returns {string} The potential argument string contents (to still be resolved).
+     * @see Argument#resolver
+     */
+    matcher() {
+        return '';
     }
 
     /**
