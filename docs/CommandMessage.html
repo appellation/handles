@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Argument.html">Argument</a><ul class='methods'><li data-type='method'><a href="Argument.html#resolver">resolver</a></li><li data-type='method'><a href="Argument.html#setOptional">setOptional</a></li><li data-type='method'><a href="Argument.html#setPrompt">setPrompt</a></li><li data-type='method'><a href="Argument.html#setResolver">setResolver</a></li></ul></li><li><a href="CommandLoader.html">CommandLoader</a><ul class='methods'><li data-type='method'><a href="CommandLoader.html#loadCommands">loadCommands</a></li></ul></li><li><a href="CommandMessage.html">CommandMessage</a><ul class='methods'><li data-type='method'><a href="CommandMessage.html#resolveArgs">resolveArgs</a></li><li data-type='method'><a href="CommandMessage.html#validate">validate</a></li></ul></li><li><a href="CommandResolver.html">CommandResolver</a><ul class='methods'><li data-type='method'><a href="CommandResolver.html#resolve">resolve</a></li></ul></li><li><a href="Handles.html">Handles</a><ul class='methods'><li data-type='method'><a href="Handles.html#handle">handle</a></li></ul></li><li><a href="Prompter.html">Prompter</a><ul class='methods'><li data-type='method'><a href="Prompter.html#awaitResponse">awaitResponse</a></li><li data-type='method'><a href="Prompter.html#collectPrompt">collectPrompt</a></li></ul></li><li><a href="Response.html">Response</a><ul class='methods'><li data-type='method'><a href="Response.html#dm">dm</a></li><li data-type='method'><a href="Response.html#error">error</a></li><li data-type='method'><a href="Response.html#send">send</a></li><li data-type='method'><a href="Response.html#success">success</a></li></ul></li><li><a href="Validator.html">Validator</a><ul class='methods'><li data-type='method'><a href="Validator.html#apply">apply</a></li></ul></li></ul><h3>Events</h3><ul><li><a href="CommandLoader.html#event:commandsLoaded">commandsLoaded</a></li><li><a href="CommandMessage.html#event:argumentsError">argumentsError</a></li><li><a href="CommandMessage.html#event:argumentsLoaded">argumentsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">commandFinished</a></li><li><a href="CommandMessage.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandMessage.html#event:commandStarted">commandStarted</a></li><li><a href="Handles.html#event:commandUnknown">commandUnknown</a></li></ul><h3>Global</h3><ul><li><a href="global.html#matcher">matcher</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Argument.html">Argument</a><ul class='methods'><li data-type='method'><a href="Argument.html#setOptional">setOptional</a></li><li data-type='method'><a href="Argument.html#setPrompt">setPrompt</a></li><li data-type='method'><a href="Argument.html#setRePrompt">setRePrompt</a></li><li data-type='method'><a href="Argument.html#setResolver">setResolver</a></li><li data-type='method'><a href="Argument.html#setSuffix">setSuffix</a></li><li data-type='method'><a href="Argument.html#setTimeout">setTimeout</a></li></ul></li><li><a href="CommandLoader.html">CommandLoader</a><ul class='methods'><li data-type='method'><a href="CommandLoader.html#loadCommands">loadCommands</a></li></ul></li><li><a href="CommandMessage.html">CommandMessage</a><ul class='methods'><li data-type='method'><a href="CommandMessage.html#resolveArgs">resolveArgs</a></li><li data-type='method'><a href="CommandMessage.html#validate">validate</a></li></ul></li><li><a href="CommandResolver.html">CommandResolver</a><ul class='methods'><li data-type='method'><a href="CommandResolver.html#resolve">resolve</a></li></ul></li><li><a href="HandlesClient.html">HandlesClient</a><ul class='methods'><li data-type='method'><a href="HandlesClient.html#handle">handle</a></li></ul></li><li><a href="Prompter.html">Prompter</a><ul class='methods'><li data-type='method'><a href="Prompter.html#awaitResponse">awaitResponse</a></li><li data-type='method'><a href="Prompter.html#collectPrompt">collectPrompt</a></li></ul></li><li><a href="Response.html">Response</a><ul class='methods'><li data-type='method'><a href="Response.html#dm">dm</a></li><li data-type='method'><a href="Response.html#error">error</a></li><li data-type='method'><a href="Response.html#send">send</a></li><li data-type='method'><a href="Response.html#success">success</a></li></ul></li><li><a href="Validator.html">Validator</a><ul class='methods'><li data-type='method'><a href="Validator.html#apply">apply</a></li></ul></li></ul><h3>Events</h3><ul><li><a href="CommandLoader.html#event:commandsLoaded">commandsLoaded</a></li><li><a href="CommandMessage.html#event:argumentsError">argumentsError</a></li><li><a href="CommandMessage.html#event:argumentsLoaded">argumentsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">commandFinished</a></li><li><a href="CommandMessage.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandMessage.html#event:commandStarted">commandStarted</a></li><li><a href="HandlesClient.html#event:commandUnknown">commandUnknown</a></li></ul><h3>Global</h3><ul><li><a href="global.html#matcher">matcher</a></li></ul>
 </nav>
 
 <div id="main">
@@ -328,7 +328,7 @@
 
         
             
-<h4 class="name" id="args"><span class="type-signature">(nullable) </span>args<span class="type-signature"> :Array</span></h4>
+<h4 class="name" id="args"><span class="type-signature">(nullable) </span>args<span class="type-signature"> :Object</span></h4>
 
 
 
@@ -339,7 +339,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line49">line 49</a>
+        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line55">line 55</a>
     </li></ul></dd>
     
 
@@ -395,7 +395,7 @@
     <ul>
         <li>
             
-<span class="param-type">Array</span>
+<span class="param-type">Object</span>
 
 
         </li>
@@ -419,7 +419,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line36">line 36</a>
+        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line42">line 42</a>
     </li></ul></dd>
     
 
@@ -481,7 +481,7 @@
 
         
             
-<h4 class="name" id="command"><span class="type-signature"></span>command<span class="type-signature"> :<a href="global.html#Command">Command</a></span></h4>
+<h4 class="name" id="client"><span class="type-signature"></span>client<span class="type-signature"> :<a href="HandlesClient.html">HandlesClient</a></span></h4>
 
 
 
@@ -493,6 +493,79 @@
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line24">line 24</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>The handles client.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="HandlesClient.html">HandlesClient</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="command"><span class="type-signature"></span>command<span class="type-signature"> :<a href="global.html#Command">Command</a></span></h4>
+
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line30">line 30</a>
     </li></ul></dd>
     
 
@@ -565,7 +638,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line42">line 42</a>
+        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line48">line 48</a>
     </li></ul></dd>
     
 
@@ -638,7 +711,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line30">line 30</a>
+        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -711,7 +784,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line55">line 55</a>
+        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line61">line 61</a>
     </li></ul></dd>
     
 
@@ -784,7 +857,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line61">line 61</a>
+        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -867,7 +940,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line82">line 82</a>
+        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line88">line 88</a>
     </li></ul></dd>
     
 
@@ -974,7 +1047,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line68">line 68</a>
+        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line74">line 74</a>
     </li></ul></dd>
     
 
@@ -1073,265 +1146,6 @@
     
 
     <h4 class="name" id="event:argumentsError">argumentsError</h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commandExecutor.js.html">commandExecutor.js</a>, <a href="commandExecutor.js.html#line21">line 21</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>message</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="CommandMessage.html">CommandMessage</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>error</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="event:argumentsLoaded">argumentsLoaded</h4>
-
-    
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line91">line 91</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Emitted with the resolved arguments of the message.</p>
-</div>
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Array</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="event:commandFailed">commandFailed</h4>
 
     
 
@@ -1496,6 +1310,265 @@
 
     
 
+    <h4 class="name" id="event:argumentsLoaded">argumentsLoaded</h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="CommandMessage.js.html">CommandMessage.js</a>, <a href="CommandMessage.js.html#line97">line 97</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Emitted with the resolved arguments of the message.</p>
+</div>
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:commandFailed">commandFailed</h4>
+
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="commandExecutor.js.html">commandExecutor.js</a>, <a href="commandExecutor.js.html#line37">line 37</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="CommandMessage.html">CommandMessage</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>error</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="event:commandFinished">commandFinished</h4>
 
     
@@ -1508,7 +1581,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commandExecutor.js.html">commandExecutor.js</a>, <a href="commandExecutor.js.html#line39">line 39</a>
+        <a href="commandExecutor.js.html">commandExecutor.js</a>, <a href="commandExecutor.js.html#line29">line 29</a>
     </li></ul></dd>
     
 
@@ -1838,7 +1911,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="commandExecutor.js.html">commandExecutor.js</a>, <a href="commandExecutor.js.html#line30">line 30</a>
+        <a href="commandExecutor.js.html">commandExecutor.js</a>, <a href="commandExecutor.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -1925,7 +1998,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Apr 25 2017 21:21:35 GMT-0700 (Pacific Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue May 09 2017 10:21:25 GMT-0700 (Pacific Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

@@ -22,7 +22,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Argument.html">Argument</a><ul class='methods'><li data-type='method'><a href="Argument.html#resolver">resolver</a></li><li data-type='method'><a href="Argument.html#setOptional">setOptional</a></li><li data-type='method'><a href="Argument.html#setPrompt">setPrompt</a></li><li data-type='method'><a href="Argument.html#setResolver">setResolver</a></li></ul></li><li><a href="CommandLoader.html">CommandLoader</a><ul class='methods'><li data-type='method'><a href="CommandLoader.html#loadCommands">loadCommands</a></li></ul></li><li><a href="CommandMessage.html">CommandMessage</a><ul class='methods'><li data-type='method'><a href="CommandMessage.html#resolveArgs">resolveArgs</a></li><li data-type='method'><a href="CommandMessage.html#validate">validate</a></li></ul></li><li><a href="CommandResolver.html">CommandResolver</a><ul class='methods'><li data-type='method'><a href="CommandResolver.html#resolve">resolve</a></li></ul></li><li><a href="Handles.html">Handles</a><ul class='methods'><li data-type='method'><a href="Handles.html#handle">handle</a></li></ul></li><li><a href="Prompter.html">Prompter</a><ul class='methods'><li data-type='method'><a href="Prompter.html#awaitResponse">awaitResponse</a></li><li data-type='method'><a href="Prompter.html#collectPrompt">collectPrompt</a></li></ul></li><li><a href="Response.html">Response</a><ul class='methods'><li data-type='method'><a href="Response.html#dm">dm</a></li><li data-type='method'><a href="Response.html#error">error</a></li><li data-type='method'><a href="Response.html#send">send</a></li><li data-type='method'><a href="Response.html#success">success</a></li></ul></li><li><a href="Validator.html">Validator</a><ul class='methods'><li data-type='method'><a href="Validator.html#apply">apply</a></li></ul></li></ul><h3>Events</h3><ul><li><a href="CommandLoader.html#event:commandsLoaded">commandsLoaded</a></li><li><a href="CommandMessage.html#event:argumentsError">argumentsError</a></li><li><a href="CommandMessage.html#event:argumentsLoaded">argumentsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">commandFinished</a></li><li><a href="CommandMessage.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandMessage.html#event:commandStarted">commandStarted</a></li><li><a href="Handles.html#event:commandUnknown">commandUnknown</a></li></ul><h3>Global</h3><ul><li><a href="global.html#matcher">matcher</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Argument.html">Argument</a><ul class='methods'><li data-type='method'><a href="Argument.html#setOptional">setOptional</a></li><li data-type='method'><a href="Argument.html#setPrompt">setPrompt</a></li><li data-type='method'><a href="Argument.html#setRePrompt">setRePrompt</a></li><li data-type='method'><a href="Argument.html#setResolver">setResolver</a></li><li data-type='method'><a href="Argument.html#setSuffix">setSuffix</a></li><li data-type='method'><a href="Argument.html#setTimeout">setTimeout</a></li></ul></li><li><a href="CommandLoader.html">CommandLoader</a><ul class='methods'><li data-type='method'><a href="CommandLoader.html#loadCommands">loadCommands</a></li></ul></li><li><a href="CommandMessage.html">CommandMessage</a><ul class='methods'><li data-type='method'><a href="CommandMessage.html#resolveArgs">resolveArgs</a></li><li data-type='method'><a href="CommandMessage.html#validate">validate</a></li></ul></li><li><a href="CommandResolver.html">CommandResolver</a><ul class='methods'><li data-type='method'><a href="CommandResolver.html#resolve">resolve</a></li></ul></li><li><a href="HandlesClient.html">HandlesClient</a><ul class='methods'><li data-type='method'><a href="HandlesClient.html#handle">handle</a></li></ul></li><li><a href="Prompter.html">Prompter</a><ul class='methods'><li data-type='method'><a href="Prompter.html#awaitResponse">awaitResponse</a></li><li data-type='method'><a href="Prompter.html#collectPrompt">collectPrompt</a></li></ul></li><li><a href="Response.html">Response</a><ul class='methods'><li data-type='method'><a href="Response.html#dm">dm</a></li><li data-type='method'><a href="Response.html#error">error</a></li><li data-type='method'><a href="Response.html#send">send</a></li><li data-type='method'><a href="Response.html#success">success</a></li></ul></li><li><a href="Validator.html">Validator</a><ul class='methods'><li data-type='method'><a href="Validator.html#apply">apply</a></li></ul></li></ul><h3>Events</h3><ul><li><a href="CommandLoader.html#event:commandsLoaded">commandsLoaded</a></li><li><a href="CommandMessage.html#event:argumentsError">argumentsError</a></li><li><a href="CommandMessage.html#event:argumentsLoaded">argumentsLoaded</a></li><li><a href="CommandMessage.html#event:commandFailed">commandFailed</a></li><li><a href="CommandMessage.html#event:commandFinished">commandFinished</a></li><li><a href="CommandMessage.html#event:commandInvalid">commandInvalid</a></li><li><a href="CommandMessage.html#event:commandStarted">commandStarted</a></li><li><a href="HandlesClient.html#event:commandUnknown">commandUnknown</a></li></ul><h3>Global</h3><ul><li><a href="global.html#matcher">matcher</a></li></ul>
 </nav>
 
 <div id="main">
@@ -44,7 +44,7 @@
  * @param {string} content - The remaining unknown content of the command.  For instance,
  * if a command is `play stuff`, this param will be `stuff`: if this returns anything other
  * than `null`, the next argument resolver will be called with an empty string.
- * @param {CommandMessage} message - The command message for which this argument resolver
+ * @param {Message} message - The message for which this argument resolver
  * is running.
  * @returns {*} - If null, the argument is considered unresolved.
  */
@@ -55,10 +55,30 @@
 class Argument {
 
     /**
-     * @param {string} [prompt] - The prompt text with which to initially query the command issuer.
-     * @param {string} [rePrompt] - The prompt text with which to query the user upon prompt failure.
+     * @param {string} key The key that this arg will be set to.
+     * @param {Object} [data] An object with any of the properties of this class.
      */
-    constructor(prompt, rePrompt) {
+    constructor(key, {
+        prompt = '',
+        rePrompt = '',
+        optional = false,
+        resolver = c => c || null,
+        timeout = 30,
+        suffix = null,
+        pattern = /^\S+/
+    } = {}) {
+        /**
+         * The key that this arg will be set to.
+         * @type {string}
+         * @example
+         * // in args definition
+         * new Argument('thing');
+         *
+         * // in command execution
+         * const thingData = command.args.thing;
+         */
+        this.key = key;
+
         /**
          * The initial prompt text of this argument.
          * @type {string}
@@ -77,24 +97,33 @@ class Argument {
          * Whether this argument is optional.
          * @type {boolean}
          */
-        this.optional = false;
+        this.optional = optional;
 
         /**
          * The argument resolver for this argument.
          * @type {ArgumentResolver}
          */
-        this.resolver = content => content || null;
+        this.resolver = resolver;
 
         /**
          * How long to wait for a response to a prompt, in seconds.
          * @type {number}
          */
-        this.timeout = 30;
+        this.timeout = timeout;
 
         /**
+         * Text to append to each prompt.  Defaults to global setting or built-in text.
+         * @type {?string}
+         */
+        this.suffix = suffix;
+
+        /**
+         * A regex describing the pattern of arguments.  Defaults to single words.  If more advanced matching
+         * is required, set a custom `matcher` instead.
+         * @see Argument#matcher
          * @type {RegExp}
          */
-        this.pattern = /^\S+/;
+        this.pattern = pattern;
     }
 
     get pattern() {
@@ -121,11 +150,21 @@ class Argument {
 
     /**
      * Set the prompt for the argument.
-     * @param {string} [prompt=null] - The prompt.
+     * @param {string} [prompt=null] The prompt.
      * @returns {Argument}
      */
     setPrompt(prompt = null) {
         this.prompt = prompt;
+        return this;
+    }
+
+    /**
+     * Set the re-prompt for the argument.
+     * @param {string} [rePrompt=null] The re-prompt text.
+     * @returns {Argument}
+     */
+    setRePrompt(rePrompt = null) {
+        this.rePrompt = rePrompt;
         return this;
     }
 
@@ -149,8 +188,23 @@ class Argument {
         return this;
     }
 
+    /**
+     * Set the time to wait for a prompt response (in seconds).
+     * @param {number} [time=30] The time to wait.
+     * @returns {Argument}
+     */
     setTimeout(time = 30) {
         this.timeout = time;
+        return this;
+    }
+
+    /**
+     * Set the suffix for all prompts.
+     * @param {string} [text=''] The text.
+     * @returns {Argument}
+     */
+    setSuffix(text = '') {
+        this.suffx = text;
         return this;
     }
 }
@@ -168,7 +222,7 @@ module.exports = Argument;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Apr 25 2017 21:21:35 GMT-0700 (Pacific Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue May 09 2017 10:21:25 GMT-0700 (Pacific Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

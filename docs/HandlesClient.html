@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>CommandLoader - Documentation</title>
+    <title>HandlesClient - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -27,7 +27,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">CommandLoader</h1>
+    <h1 class="page-title">HandlesClient</h1>
     
 
     
@@ -40,10 +40,8 @@
 <header>
     
         <h2>
-        CommandLoader
+        HandlesClient
         </h2>
-        
-            <div class="class-description"><p>Manage command loading.</p></div>
         
     
 </header>
@@ -54,10 +52,8 @@
         
 
     
-    <h2>Constructor</h2>
-    
 
-    <h4 class="name" id="CommandLoader"><span class="type-signature"></span>new CommandLoader<span class="signature">(config)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="HandlesClient"><span class="type-signature"></span>new HandlesClient<span class="signature">(config)</span><span class="type-signature"></span></h4>
 
     
 
@@ -69,7 +65,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandLoader.js.html">CommandLoader.js</a>, <a href="CommandLoader.js.html#line12">line 12</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line106">line 106</a>
     </li></ul></dd>
     
 
@@ -116,6 +112,18 @@
 
 
 
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const discord = require('discord.js');
+const handles = require('discord-handles');
+
+const client = new discord.Client();
+const handler = new handles.Client();
+
+client.on('message', handler.handle);
+client.login('token');</code></pre>
+
+
 
 
     <h5>Parameters:</h5>
@@ -159,7 +167,7 @@
 
             
 
-            <td class="description last"><p>Configuration options for the command handler.</p></td>
+            <td class="description last"><p>Configuration options for this handler.</p></td>
         </tr>
 
     
@@ -210,7 +218,7 @@
 
         
             
-<h4 class="name" id="commands"><span class="type-signature"></span>commands<span class="type-signature"> :Map.&lt;<a href="global.html#Trigger">Trigger</a>, <a href="global.html#Command">Command</a>></span></h4>
+<h4 class="name" id="loader"><span class="type-signature"></span>loader<span class="type-signature"> :<a href="CommandLoader.html">CommandLoader</a></span></h4>
 
 
 
@@ -221,7 +229,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandLoader.js.html">CommandLoader.js</a>, <a href="CommandLoader.js.html#line37">line 37</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line128">line 128</a>
     </li></ul></dd>
     
 
@@ -260,90 +268,13 @@
 
 
 
-<div class="description">
-    <p>Currently loaded commands.</p>
-</div>
-
 
 
     <h5>Type:</h5>
     <ul>
         <li>
             
-<span class="param-type">Map.&lt;<a href="global.html#Trigger">Trigger</a>, <a href="global.html#Command">Command</a>></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="config"><span class="type-signature"></span>config<span class="type-signature"> :<a href="global.html#Config">Config</a></span></h4>
-
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandLoader.js.html">CommandLoader.js</a>, <a href="CommandLoader.js.html#line21">line 21</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Configuration for handles.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="global.html#Config">Config</a></span>
+<span class="param-type"><a href="CommandLoader.html">CommandLoader</a></span>
 
 
         </li>
@@ -365,7 +296,7 @@
 
     
 
-    <h4 class="name" id="loadCommands"><span class="type-signature"></span>loadCommands<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Map.&lt;<a href="global.html#Trigger">Trigger</a>, <a href="global.html#Command">Command</a>>>}</span></h4>
+    <h4 class="name" id="handle"><span class="type-signature"></span>handle<span class="signature">(msg, body<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;<a href="CommandMessage.html">CommandMessage</a>>}</span></h4>
 
     
 
@@ -377,7 +308,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandLoader.js.html">CommandLoader.js</a>, <a href="CommandLoader.js.html#line32">line 32</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line165">line 165</a>
     </li></ul></dd>
     
 
@@ -417,7 +348,7 @@
 
 
 <div class="description">
-    <p>Load all commands into memory.  Use when reloading commands.</p>
+    <p>Handle a message as a command.</p>
 </div>
 
 
@@ -428,6 +359,114 @@
 
 
 
+    <h5>Examples</h5>
+    
+    <pre class="prettyprint"><code>const client = new discord.Client();
+const handler = new handles.Client();
+
+client.on('message', handler.handle);</code></pre>
+
+    <pre class="prettyprint"><code>const client = new discord.Client();
+const handler = new handles.Client();
+
+client.on('message', message => {
+  // do other stuff
+  handler.handle(message);
+});</code></pre>
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Message</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The message to handle as a command.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>body</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An optional, separate command body.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -436,7 +475,19 @@
 
 <h5>Fires:</h5>
 <ul>
-    <li><a href="CommandLoader.html#event:commandsLoaded">CommandLoader#event:commandsLoaded</a></li>
+    <li><a href="HandlesClient.html#event:commandUnknown">HandlesClient#event:commandUnknown</a></li>
+
+    <li><a href="CommandMessage.html#event:argumentsLoaded">CommandMessage#event:argumentsLoaded</a></li>
+
+    <li><a href="CommandMessage.html#event:argumentsError">CommandMessage#event:argumentsError</a></li>
+
+    <li><a href="CommandMessage.html#event:commandInvalid">CommandMessage#event:commandInvalid</a></li>
+
+    <li><a href="CommandMessage.html#event:commandStarted">CommandMessage#event:commandStarted</a></li>
+
+    <li><a href="CommandMessage.html#event:commandFinished">CommandMessage#event:commandFinished</a></li>
+
+    <li><a href="CommandMessage.html#event:commandFailed">CommandMessage#event:commandFailed</a></li>
 </ul>
 
 
@@ -458,7 +509,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Map.&lt;<a href="global.html#Trigger">Trigger</a>, <a href="global.html#Command">Command</a>>></span>
+<span class="param-type">Promise.&lt;<a href="CommandMessage.html">CommandMessage</a>></span>
 
 
     </dd>
@@ -480,7 +531,7 @@
 
     
 
-    <h4 class="name" id="event:commandsLoaded">commandsLoaded</h4>
+    <h4 class="name" id="event:commandUnknown">commandUnknown</h4>
 
     
 
@@ -492,7 +543,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="CommandLoader.js.html">CommandLoader.js</a>, <a href="CommandLoader.js.html#line72">line 72</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line170">line 170</a>
     </li></ul></dd>
     
 
@@ -529,82 +580,11 @@
 
 
 
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>commands</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Map.&lt;<a href="global.html#Trigger">Trigger</a>, <a href="global.html#Command">Command</a>></span>
 
 
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Currently loaded commands.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>failed</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Directory listing of commands that failed to load.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
+<div class="description">
+    <p>Fired when the command could not be resolved.</p>
+</div>
 
 
 
@@ -614,7 +594,7 @@
     <ul>
         <li>
             
-<span class="param-type">Object</span>
+<span class="param-type">Message</span>
 
 
         </li>
