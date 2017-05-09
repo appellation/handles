@@ -17,7 +17,9 @@ class PingCommand
 
     * arguments()
     {
-        yield new Argument('plz provide websit', 'this is no link my fRIEND')
+        yield new Argument()
+            .setPrompt('plz provide websit')
+            .setRePrompt('this is no link my fRIEND')
             .setOptional()
             .setResolver((content) => {
                 if (!content.match(new RegExp(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi))) {

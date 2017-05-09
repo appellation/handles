@@ -2,12 +2,12 @@ process.on('unhandledRejection', err => { throw err });
 
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
-const Discord = require('discord.js');
-const Handles = require('../src/index');
+const discord = require('discord.js');
+const handles = require('../src/index');
 
-const client = new Discord.Client();
-const user = new Discord.Client();
-const handler = new Handles({
+const client = new discord.Client();
+const user = new discord.Client();
+const handler = new handles.Client({
     directory: path.join('test', 'commands'),
     userID: '218844420613734401',
 });
