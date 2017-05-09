@@ -14,8 +14,14 @@ class CommandMessage extends EventEmitter {
      * @param {string} data.body
      * @param {Config} data.config
      */
-    constructor({ command, message, body, config } = {})    {
+    constructor(client, { command, message, body } = {})    {
         super();
+
+        /**
+         * The handles client.
+         * @type {HandlesClient}
+         */
+        this.client = client;
 
         /**
          * The command loader to use for commands.
@@ -39,7 +45,7 @@ class CommandMessage extends EventEmitter {
          * The config.
          * @type {Config}
          */
-        this.config = config;
+        this.config = client.config;
 
         /**
          * The command arguments as returned by the resolver.
@@ -112,7 +118,7 @@ class CommandMessage extends EventEmitter {
                 if(arg.optional && !matched.length) { // if the resolver failed but the argument is optional, resolve with null
                     resolve(null);
                 } else { // if the resolver failed and the argument is not optional, prompt
-                    const prompter = new Prompter(new (this.config.Response)(this.message, false));
+                    const prompter = new Prompter(this.client, new (this.config.Response)(this.message, false));
                     prompter.collectPrompt(arg, matched.length === 0).then(response => {
                         resolve(response);
                     }).catch(reason => {

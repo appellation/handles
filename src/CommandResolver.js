@@ -6,23 +6,23 @@ const CommandMessage = require('./CommandMessage');
 class CommandResolver {
 
     /**
-     * @param {Handles}
+     * @param {HandlesClient}
      */
     constructor(handles) {
         /**
-         * @type {Handles}
+         * @type {HandlesClient}
          */
-        this.handles = handles;
+        this.client = handles;
 
         /**
          * @type {Config}
          */
-        this.config = this.handles.config;
+        this.config = this.client.config;
 
         /**
          * @type {CommandLoader}
          */
-        this.loader = this.handles.loader;
+        this.loader = this.client.loader;
 
         if(typeof this.config.validator !== 'function' && (!this.config.prefixes || !this.config.prefixes.size))
             throw new Error('Unable to validate commands: no validator or prefixes were provided.');
@@ -56,7 +56,7 @@ class CommandResolver {
 
         const [, command, commandContent] = content.match(this._regex);
         if(this.loader.commands.has(command))
-            return new CommandMessage({
+            return new CommandMessage(this.client, {
                 command: this.loader.commands.get(command),
                 message,
                 body: commandContent.trim(),
@@ -65,7 +65,7 @@ class CommandResolver {
 
         for(const [c, command] of this.loader.commands)
             if(content.startsWith(c))
-                return new CommandMessage({
+                return new CommandMessage(this.client, {
                     command,
                     message,
                     body: content.substring(0, c.length).trim(),

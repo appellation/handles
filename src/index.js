@@ -34,7 +34,9 @@ const Argument = require('./Argument');
  *   }
  *   * arguments(command) {
  *     yield new Argument('Please provide a thing.', 'The thing you provided was invalid.')
- *        .setResolver(content => content === 'thing' ? { this: 'is what I want to be in the args property' } : null);
+ *        .setPrompt('Please provide a thing.')
+ *        .setRePrompt('The thing you provided was invalid.')
+ *        .setResolver(content => content === 'thing' ? { stuff: 'is what I want to be in the args property' } : null);
  *   }
  * }
  *
@@ -48,6 +50,7 @@ const Argument = require('./Argument');
 /**
  * @typedef {object} Config - Structure of command handler options.
  * @property {Set<string>} [prefixes] - Prefixes to use, if any.  Unneeded when providing a `MessageValidator`.
+ * @property {string} [argsSuffix] - A global suffix to use for argument prompting. Can be overwritten individually.
  * @property {string} [userID] - If provided, will add mentions into the prefixes.
  * @property {string} [directory='./commands'] - Where your command files are located, relative to the current working directory.
  * @property {MessageValidator} [validator] - Valid command forms.
@@ -61,7 +64,7 @@ const Argument = require('./Argument');
  * @returns {ResolvedContent}
  *
  * @example
- * const handler = new Handles({
+ * const handler = new handles.Client({
  *   validator: (msg) => {
  *     // this will validate any message in a DM and/or starting with `memes` as a command.
  *     const prefix = /^memes/;
@@ -91,16 +94,16 @@ const Argument = require('./Argument');
 /**
  * @extends EventEmitter
  * @example
- * const Discord = require('discord.js');
- * const Handles = require('discord-handles');
+ * const discord = require('discord.js');
+ * const handles = require('discord-handles');
  *
- * const client = new Discord.Client();
- * const handler = new Handles();
+ * const client = new discord.Client();
+ * const handler = new handles.Client();
  *
  * client.on('message', handler.handle);
  * client.login('token');
  */
-class Handles extends EventEmitter {
+class HandlesClient extends EventEmitter {
 
     /**
      * @param {Config} config - Configuration options for this handler.
@@ -136,7 +139,7 @@ class Handles extends EventEmitter {
      * @param {string} [body] - An optional, separate command body.
      * @return {Promise.<CommandMessage>}
      *
-     * @fires Handles#commandUnknown
+     * @fires HandlesClient#commandUnknown
      * @fires CommandMessage#argumentsLoaded
      * @fires CommandMessage#argumentsError
      * @fires CommandMessage#commandInvalid
@@ -145,14 +148,14 @@ class Handles extends EventEmitter {
      * @fires CommandMessage#commandFailed
      *
      * @example
-     * const client = new Discord.Client();
-     * const handler = new Handles();
+     * const client = new discord.Client();
+     * const handler = new handles.Client();
      *
      * client.on('message', handler.handle);
      *
      * @example
-     * const client = new Discord.Client();
-     * const handler = new Handles();
+     * const client = new discord.Client();
+     * const handler = new handles.Client();
      *
      * client.on('message', message => {
      *   // do other stuff
@@ -166,7 +169,7 @@ class Handles extends EventEmitter {
         if(!cmd) {
             /**
              * Fired when the command could not be resolved.
-             * @event Handles#commandUnknown
+             * @event HandlesClient#commandUnknown
              * @type {Message}
              */
             this.emit('commandUnknown', msg);
@@ -186,7 +189,7 @@ class Handles extends EventEmitter {
     }
 }
 
-Object.assign(Handles, {
+module.exports = {
     CommandLoader,
     CommandMessage,
     Validator,
@@ -194,7 +197,6 @@ Object.assign(Handles, {
     CommandResolver,
     Prompter,
     Response,
-    Argument
-});
-
-module.exports = Handles;
+    Argument,
+    Client: HandlesClient
+};

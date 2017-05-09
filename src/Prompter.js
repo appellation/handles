@@ -3,9 +3,15 @@
  */
 class Prompter {
     /**
+     * @param {HandlesClient} client
      * @param {Response} response
      */
-    constructor(response) {
+    constructor(client, response) {
+        /**
+         * The handles client.
+         * @type {HandlesClient}
+         */
+        this.client = client;
 
         /**
          * The responder to use for prompting.
@@ -24,7 +30,8 @@ class Prompter {
      */
     collectPrompt(arg, valid = true) {
         const text = valid ? arg.prompt : arg.rePrompt;
-        return this.awaitResponse(text + arg.suffix, arg.timeout * 1000).then(response => {
+        const defaultSuffix = this.client.config.argsSuffix || `\nCommand will be cancelled in **${arg.timeout} seconds**.  Type \`cancel\` to cancel immediately.`;
+        return this.awaitResponse(text + (arg.suffix || defaultSuffix), arg.timeout * 1000).then(response => {
             if(response.content === 'cancel') throw 'cancelled';
             const resolved = arg.resolver(response.content, response);
             if(resolved === null) return this.collectPrompt(arg, false);

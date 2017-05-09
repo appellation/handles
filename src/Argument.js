@@ -25,7 +25,7 @@ class Argument {
         optional = false,
         resolver = c => c || null,
         timeout = 30,
-        suffix,
+        suffix = null,
         pattern = /^\S+/
     } = {}) {
         /**
@@ -73,10 +73,10 @@ class Argument {
         this.timeout = timeout;
 
         /**
-         * Text to append to each prompt.
-         * @type {string}
+         * Text to append to each prompt.  Defaults to global setting or built-in text.
+         * @type {?string}
          */
-        this.suffix = suffix || `\nCommand will be cancelled in **${this.timeout} seconds**.  Type \`cancel\` to cancel immediately.`;
+        this.suffix = suffix;
 
         /**
          * A regex describing the pattern of arguments.  Defaults to single words.  If more advanced matching
@@ -111,11 +111,21 @@ class Argument {
 
     /**
      * Set the prompt for the argument.
-     * @param {string} [prompt=null] - The prompt.
+     * @param {string} [prompt=null] The prompt.
      * @returns {Argument}
      */
     setPrompt(prompt = null) {
         this.prompt = prompt;
+        return this;
+    }
+
+    /**
+     * Set the re-prompt for the argument.
+     * @param {string} [rePrompt=null] The re-prompt text.
+     * @returns {Argument}
+     */
+    setRePrompt(rePrompt = null) {
+        this.rePrompt = rePrompt;
         return this;
     }
 
