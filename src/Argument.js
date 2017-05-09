@@ -16,9 +16,10 @@
 class Argument {
 
     /**
+     * @param {string} key The key that this arg will be set to.
      * @param {Object} [data] An object with any of the properties of this class.
      */
-    constructor({
+    constructor(key, {
         prompt = '',
         rePrompt = '',
         optional = false,
@@ -26,7 +27,19 @@ class Argument {
         timeout = 30,
         suffix,
         pattern = /^\S+/
-    }) {
+    } = {}) {
+        /**
+         * The key that this arg will be set to.
+         * @type {string}
+         * @example
+         * // in args definition
+         * new Argument('thing');
+         *
+         * // in command execution
+         * const thingData = command.args.thing;
+         */
+        this.key = key;
+
         /**
          * The initial prompt text of this argument.
          * @type {string}

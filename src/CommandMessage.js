@@ -44,7 +44,7 @@ class CommandMessage extends EventEmitter {
         /**
          * The command arguments as returned by the resolver.
          * @see {ArgumentResolver}
-         * @type {?Array}
+         * @type {?Object}
          */
         this.args = null;
 
@@ -80,7 +80,7 @@ class CommandMessage extends EventEmitter {
      * @return {Promise}
      */
     resolveArgs()   {
-        if(!Array.isArray(this.args)) this.args = [];
+        if(!Array.isArray(this.args)) this.args = {};
         if(typeof this.command.arguments !== 'function') return Promise.resolve();
         return this._iterateArgs(this.command.arguments(this), this.body);
     }
@@ -114,7 +114,6 @@ class CommandMessage extends EventEmitter {
                 } else { // if the resolver failed and the argument is not optional, prompt
                     const prompter = new Prompter(new (this.config.Response)(this.message, false));
                     prompter.collectPrompt(arg, matched.length === 0).then(response => {
-                        this.args.push(response);
                         resolve(response);
                     }).catch(reason => {
                         this.response.error('Command cancelled.');
@@ -122,10 +121,10 @@ class CommandMessage extends EventEmitter {
                     });
                 }
             } else {
-                this.args.push(resolved);
                 resolve(resolved);
             }
         }).then(value => {
+            this.args[arg.key] = value;
             return this._iterateArgs(generator, content, value);
         }).catch(e => {
             generator.return(null);
