@@ -1,6 +1,6 @@
 /**
- * Executes a command given a command message.
- * @param {CommandMessage} msg - The command message to execute.
+ * Executes a command given a command command.
+ * @param {CommandMessage} msg - The command command to execute.
  * @throws {Error} - If the command executor is not found.
  */
 module.exports = (msg) => {
@@ -11,10 +11,10 @@ module.exports = (msg) => {
             /**
              * @event CommandMessage#commandInvalid
              * @type {Object}
-             * @property {CommandMessage} message
+             * @property {CommandMessage} command
              * @property {Validator} validator
              */
-            msg.emit('commandInvalid', { message: msg, validator });
+            msg.emit('commandInvalid', { command: msg, validator });
         } else {
             msg.resolveArgs().then(() => {
 
@@ -29,28 +29,28 @@ module.exports = (msg) => {
                     /**
                      * @event CommandMessage#commandFinished
                      * @type {Object}
-                     * @property {CommandMessage} message
+                     * @property {CommandMessage} command
                      * @property {*} result
                      */
-                    msg.emit('commandFinished', { message: msg, result });
+                    msg.emit('commandFinished', { command: msg, result });
                 }, e => {
                     /**
                      * @event CommandMessage#commandFailed
                      * @type {Object}
-                     * @property {CommandMessage} message
+                     * @property {CommandMessage} command
                      * @property {*} error
                      */
-                    msg.emit('commandFailed', { message: msg, error: e });
+                    msg.emit('commandFailed', { command: msg, error: e });
                 });
             }, e => {
 
                 /**
                  * @event CommandMessage#argumentsError
                  * @type {Object}
-                 * @property {CommandMessage} message
+                 * @property {CommandMessage} command
                  * @property {*} error
                  */
-                msg.emit('argumentsError', { message: msg, error: e });
+                msg.emit('argumentsError', { command: msg, error: e });
             });
         }
     });
