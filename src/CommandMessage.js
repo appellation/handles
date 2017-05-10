@@ -1,5 +1,6 @@
 const EventEmitter = require('events');
 const Prompter = require('./Prompter');
+const Argument = require('./Argument');
 
 /**
  * A message to be processed as a command.
@@ -88,7 +89,7 @@ class CommandMessage extends EventEmitter {
     resolveArgs()   {
         if(!Array.isArray(this.args)) this.args = {};
         if(typeof this.command.arguments !== 'function') return Promise.resolve();
-        return this._iterateArgs(this.command.arguments(this), this.body);
+        return this._iterateArgs(this.command.arguments(Argument, this), this.body);
     }
 
     _iterateArgs(generator, content, result = null) {
