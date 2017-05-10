@@ -113,6 +113,16 @@ class Argument {
     }
 
     /**
+     * Set the pattern for matching args strings.
+     * @param {RegExp} pattern The pattern to apply to potential args strings.
+     * @returns {Argument}
+     */
+    setPattern(pattern) {
+        this.pattern = pattern;
+        return this;
+    }
+
+    /**
      * Set the prompt for the argument.
      * @param {string} [prompt=null] The prompt.
      * @returns {Argument}
