@@ -113,6 +113,14 @@ class Argument {
     }
 
     /**
+     * Make this argument take up the rest of the words in the command.
+     * @returns {Argument}
+     */
+    setInfinite() {
+        return this.setPattern(/.*/);
+    }
+
+    /**
      * Set the pattern for matching args strings.
      * @param {RegExp} pattern The pattern to apply to potential args strings.
      * @returns {Argument}
