@@ -1,1 +1,1 @@
-exports.func = response => response.success('pong');
+exports.exec = command => command.response.success('pong');

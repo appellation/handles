@@ -1,42 +1,44 @@
-const Prompt = require('../src/Prompt');
-
-exports.func = (response, message, command) => {
-    return command.message.guild.member(command.message.mentions.users.find(u => u.id !== u.client.id)).ban();
+exports.exec = (command) => {
+    return command.args.member.ban();
 };
 
 exports.validator = (validator, command) => {
     // const mention = /<@!?([0-9]+)>/;
-    const toBan = command.message.guild.member(command.message.mentions.users.find(u => u.id !== u.client.id));
-    return validator.applyValid(
+    return validator.apply(
         command.message.channel.type === 'text',
         'This command cannot be run outside of a guild.'
     ) &&
-    validator.applyValid(
+    validator.apply(
         command.message.member.hasPermission('BAN_MEMBERS'),
         'You do not have permission to run this command.'
     ) &&
-    validator.applyValid(
-        command.message.mentions.users.some(u => u.id !== u.client.user.id),
-        'You must mention a user.'
-    ) &&
-    validator.applyValid(
-        toBan,
-        'That member does\'t seem to exist. 👀'
-    ) &&
-    validator.applyValid(
-        toBan.bannable,
-        'I cannot ban that user.'
+    validator.apply(
+        command.message.guild.me.permissions.has('BAN_MEMBERS'),
+        'I cannot ban members in this guild.'
     );
 };
 
-exports.validator2 = function* () {
-    yield new Prompt()
-        .setText('Please provide a valid member.')
-        .setOptional(true)
-        .setResolver(resolver);
-};
+exports.arguments = function* (Argument) {
+    const member = new Argument('member')
+        .setPrompt('Who would you like to ban?')
+        .setRePrompt('Please provide a valid member.')
+        .setResolver((c, msg) => {
+            if (!msg.mentions.users.size) return null;
 
-function resolver() {}
+            let toBan = msg.mentions.users.filter(u => u.id !== u.client.user.id);
+            if (toBan.size > 1) {
+                member.rePrompt = `Found multiple users: \`${toBan.map(u => `${u.username}#${u.discriminator}`).join(', ')}\``;
+                return null;
+            }
+            if (toBan.size < 1) return null;
+
+            toBan = toBan.first();
+            if (!toBan.bannable) return null;
+            return msg.guild.member(toBan) || null;
+        });
+
+    yield member;
+};
 
 exports.triggers = [
     'ban',
