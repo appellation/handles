@@ -26,11 +26,11 @@ Usually I try to avoid pushing broken code, but sometimes I move a little too fa
 ### The basics
 
 ```js
-const Discord = require('discord.js');
-const Handles = require('discord-handles');
+const discord = require('discord.js');
+const handles = require('discord-handles');
 
-const client = new Discord.Client();
-const handler = new Handles();
+const client = new discord.Client();
+const handler = new handles.Client();
 
 client.on('message', handler.handle);
 client.login('token');
@@ -39,7 +39,7 @@ client.login('token');
 This will automatically load all commands in the `./commands` directory and handle incoming messages.  See [`Command`](http://handles.topkek.pw/global.html#Command) in the docs for information on how to format the exports of the files you place in `./commands`.  The loader and handler can be configured according to [`Config`](http://handles.topkek.pw/global.html#Config) options passed to the constructor.
 
 ```js
-const handler = new Handles({
+const handler = new handles.Client({
     directory: './some/other/awesome/directory',
     prefixes: ['dank', 'memes']
 });
