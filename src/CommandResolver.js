@@ -63,14 +63,19 @@ class CommandResolver {
                 config: this.config
             });
 
-        for(const [c, command] of this.loader.commands)
-            if(content.startsWith(c))
+        for(const [trigger, command] of this.loader.commands) {
+            let body;
+            if(trigger instanceof RegExp && trigger.test(content)) body = content.match(trigger)[0].trim();
+            else if(content.startsWith(trigger)) body = content.substring(0, trigger.length).trim();
+
+            if(body)
                 return new CommandMessage(this.client, {
                     command,
                     message,
-                    body: content.substring(0, c.length).trim(),
+                    body: content.substring(0, trigger.length).trim(),
                     config: this.config
                 });
+        }
 
         return null;
     }
