@@ -65,8 +65,11 @@ class CommandResolver {
 
         for(const [trigger, command] of this.loader.commands) {
             let body;
-            if(trigger instanceof RegExp && trigger.test(content)) body = content.match(trigger)[0].trim();
-            else if(content.startsWith(trigger)) body = content.substring(0, trigger.length).trim();
+            if(trigger instanceof RegExp) {
+                if(trigger.test(content)) body = content.match(trigger)[0].trim();
+            } else if(content.startsWith(trigger)) {
+                body = content.substring(0, trigger.length).trim();
+            }
 
             if(body)
                 return new CommandMessage(this.client, {
