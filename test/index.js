@@ -9,7 +9,7 @@ const client = new discord.Client();
 const user = new discord.Client();
 const handler = new handles.Client({
     directory: path.join('test', 'commands'),
-    userID: '218844420613734401',
+    prefixes: new Set(['x!'])
 });
 
 handler.once('commandFailed', (cmd, err) => { throw err });

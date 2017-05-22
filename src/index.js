@@ -10,7 +10,7 @@ const Validator = require('./Validator');
 const Argument = require('./Argument');
 
 /**
- * @typedef {Object} Command - Structure of exported commands.  Can also be a single function.
+ * @typedef {Function} Command - Structure of exported commands.  Can also be a single function.
  * @property {Iterable<Trigger>|Trigger} [triggers] - Defaults to the file name.
  * @property {boolean} [disabled=false] - Whether the command is globally disabled
  * @property {CommandExecutor} exec - The command function to execute.
@@ -18,14 +18,6 @@ const Argument = require('./Argument');
  * @property {function} [arguments] - A generator function that yields command arguments (must be instances
  * of `Argument`).
  * @see {Argument}
- *
- * @example
- * exports.exec = r => r.send('lmao');
- * exports.triggers = /^ay+$/i;
- *
- * @example
- * exports.exec = r => {};
- * exports.disabled = true;
  *
  * @example
  * class SomeCommand {
@@ -40,7 +32,7 @@ const Argument = require('./Argument');
  *   }
  * }
  *
- * module.exports = new SomeCommand();
+ * module.exports = SomeCommand;
  */
 
 /**
@@ -54,6 +46,7 @@ const Argument = require('./Argument');
  * @property {string} [userID] - If provided, will add mentions into the prefixes.
  * @property {string} [directory='./commands'] - Where your command files are located, relative to the current working directory.
  * @property {MessageValidator} [validator] - Valid command forms.
+ * @property {Object} [commandParams] - Extra parameters to pass to the command constructor.
  * @property {Validator} [Validator] - A custom validator class (should extend the built-in class).
  * @property {Response} [Response] - A custom response class (should extend the built-in class).
  */
