@@ -2,7 +2,7 @@
 
 [![Handles support server](https://discordapp.com/api/guilds/251245211416657931/embed.png)](https://discord.gg/DPuaDvP)
 [![Build Status](https://travis-ci.org/appellation/handles.svg?branch=master)](https://travis-ci.org/appellation/handles)
-[!Downloads](https://img.shields.io/npm/dt/discord-handles.svg)
+![Downloads](https://img.shields.io/npm/dt/discord-handles.svg)
 
 For those of us who get frustrated with writing command handlers but don't quite want to use a full framework.  Intended for use with [Discord.js](https://github.com/hydrabolt/discord.js).
 
