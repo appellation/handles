@@ -67,8 +67,10 @@ class CommandResolver {
             let body;
             if(trigger instanceof RegExp) {
                 if(trigger.test(content)) body = content.match(trigger)[0].trim();
-            } else if(content.toLowerCase().startsWith(trigger)) {
-                body = content.substring(0, trigger.length).trim();
+            } else if(typeof trigger === 'string') {
+                if((/[A-Z]/.test(trigger) ? content : content.toLowerCase()).startsWith(trigger)) {
+                    body = content.substring(0, trigger.length).trim();
+                }
             }
 
             if(body)
