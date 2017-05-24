@@ -1,3 +1,6 @@
+const ArgumentError = require('./errors/ArgumentError');
+const CommandError = require('./errors/CommandError');
+
 /**
  * Executes a command given a command command.
  * @param {CommandMessage} msg - The command command to execute.
@@ -40,7 +43,8 @@ module.exports = (msg) => {
                      * @property {CommandMessage} command
                      * @property {*} error
                      */
-                    msg.emit('commandFailed', { command: msg, error: e });
+                    msg.emit('commandFailed', new CommandError(msg, e));
+                    throw e;
                 });
             }, e => {
 
@@ -50,7 +54,8 @@ module.exports = (msg) => {
                  * @property {CommandMessage} command
                  * @property {*} error
                  */
-                msg.emit('argumentsError', { command: msg, error: e });
+                if (e instanceof ArgumentError) msg.emit('argumentsError', { command: msg, error: e });
+                else throw e;
             });
         }
     });

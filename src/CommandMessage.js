@@ -1,6 +1,7 @@
 const EventEmitter = require('events');
 const Prompter = require('./Prompter');
 const Argument = require('./Argument');
+const ArgumentError = require('./errors/ArgumentError');
 
 /**
  * A message to be processed as a command.
@@ -124,7 +125,7 @@ class CommandMessage extends EventEmitter {
                         resolve(response);
                     }).catch(reason => {
                         this.response.error('Command cancelled.');
-                        reject({ argument: arg, reason });
+                        reject(new ArgumentError(arg, reason));
                     });
                 }
             } else {
