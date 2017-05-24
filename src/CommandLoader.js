@@ -60,10 +60,7 @@ class CommandLoader extends EventEmitter   {
 
                 // if triggers are iterable
                 if (mod.triggers && typeof mod.triggers[Symbol.iterator] === 'function' && typeof mod.triggers !== 'string' && !(mod.triggers instanceof RegExp)) {
-                    for (const trigger of mod.triggers)  this.commands.set(trigger, mod);
-
-                } else if (typeof mod === 'function') { // if a single function is exported
-                    this.commands.set(path.basename(file, '.js'), Object.assign(mod,{func: mod}));
+                    for (const trigger of mod.triggers) this.commands.set(trigger, mod);
                 } else if (typeof mod.triggers === 'undefined') {   // if no triggers are provided
                     this.commands.set(path.basename(file, '.js'), mod);
                 } else  {

@@ -51,30 +51,37 @@ class Response {
      * response has been sent, it will edit that unless the `force` parameter
      * is set.
      * @param {*} data The data to send
+     * @param {boolean} [catchall=true] Whether to catch all rejections when sending.  The promise
+     * will always resolve when this option is enabled; if there is an error, the resolution will
+     * be undefined.
      * @param {boolean} [force=false] Whether to send a new message regardless
      * of any prior responses.
      * @returns {Promise.<Message>}
      */
-    send(data, force = false)  {
+    send(data, catchall = true, force = false)  {
         return new Promise((resolve, reject) => {
             this._q.push(cb => {
+                function success(m) {
+                    cb(null, m);
+                    resolve(m);
+                }
+
+                function error(e) {
+                    if(catchall) return success();
+                    cb(e);
+                    reject(e);
+                }
+
+
                 if(this.responseMessage && this.edit && !force) {
                     const edited = this.responseMessage.edit(data);
-                    edited.then((m) => {
-                        cb(null, m);
-                        resolve(m);
-                    }).catch((e) => {
-                        cb(e);
-                        reject(e);
-                    });
+                    edited.then(success, error);
                 } else {
                     this.channel.send(data).then(m => {
                         this.responseMessage = m;
-                        cb(null, m);
-                        resolve(m);
-                    }).catch(e => {
-                        cb(e);
-                        reject(e);
+                        success(m);
+                    }, () => {
+                        this.message.author.send(data).then(success, error);
                     });
                 }
             });
