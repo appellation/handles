@@ -156,7 +156,7 @@ class HandlesClient extends EventEmitter {
      * });
      */
     handle(msg) {
-        if(msg.author.bot) return;
+        if(msg.webhookID || msg.system || msg.author.bot) return;
 
         const cmd = this.resolver.resolve(msg);
         if(!cmd) {
