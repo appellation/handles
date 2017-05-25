@@ -23,7 +23,7 @@ class CommandMessage extends EventEmitter {
          * The handles client.
          * @type {HandlesClient}
          */
-        this.client = client;
+        this.handles = client;
 
         /**
          * The command loader to use for commands.
@@ -67,6 +67,33 @@ class CommandMessage extends EventEmitter {
          * @type {Validator}
          */
         this.validator = new (this.config.Validator)(this);
+    }
+
+    /**
+     * The Discord.js client.
+     * @type {Client}
+     * @readonly
+     */
+    get client() {
+        return this.message.client;
+    }
+
+    /**
+     * The guild this command is in.
+     * @type {?Guild}
+     * @readonly
+     */
+    get guild() {
+        return this.message.guild;
+    }
+
+    /**
+     * The channel this command is in.
+     * @type {TextChannel}
+     * @readonly
+     */
+    get channel() {
+        return this.message.channel;
     }
 
     /**
