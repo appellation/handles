@@ -49,8 +49,10 @@ class Response {
     /**
      * Send a message using the Discord.js `Message.send` method.  If a prior
      * response has been sent, it will edit that unless the `force` parameter
-     * is set.
+     * is set.  Automatically attempts to fallback to DM responses.  You can
+     * send responses without waiting for prior responses to succeed.
      * @param {*} data The data to send
+     * @param {MessageOptions} [options={}] Message options.
      * @param {boolean} [catchall=true] Whether to catch all rejections when sending.  The promise
      * will always resolve when this option is enabled; if there is an error, the resolution will
      * be undefined.
@@ -58,7 +60,7 @@ class Response {
      * of any prior responses.
      * @returns {Promise.<Message>}
      */
-    send(data, catchall = true, force = false)  {
+    send(data, options = {}, catchall = true, force = false)  {
         return new Promise((resolve, reject) => {
             this._q.push(cb => {
                 function success(m) {
@@ -81,7 +83,7 @@ class Response {
                         this.responseMessage = m;
                         success(m);
                     }, () => {
-                        this.message.author.send(data).then(success, error);
+                        if (this.channel.type === 'text') this.message.author.send(data).then(success, error);
                     });
                 }
             });
@@ -89,12 +91,14 @@ class Response {
     }
 
     /**
-     * Send a DM to the message author.
-     * @param {*} data The data to send.
+     * Set this response to be in a DM and optionally send data.
+     * @param {...*} args Arguments in Response#send.
+     * @see Response#send
      * @returns {Promise.<Message>}
      */
-    dm(data) {
-        return this.message.author.send(data);
+    dm(...args) {
+        this.channel = this.message.author;
+        return this.send(...args);
     }
 
     /**
@@ -103,8 +107,8 @@ class Response {
      * @param {string} [prefix] Content to prefix the message with (mainly intended for mentions).
      * @return {Promise.<Message>}
      */
-    success(text, prefix)   {
-        return this.send(`${prefix ? `${prefix} | ` : ''}\`✅\` | ${text}`);
+    success(text, prefix, ...args)   {
+        return this.send(`${prefix ? `${prefix} | ` : ''}\`✅\` | ${text}`, ...args);
     }
 
     /**
@@ -112,8 +116,8 @@ class Response {
      * @param {string} text The error to send.
      * @return {Promise.<Message>}
      */
-    error(text) {
-        return this.send(`\`❌\` | ${text}`);
+    error(text, ...args) {
+        return this.send(`\`❌\` | ${text}`, ...args);
     }
 }
 
