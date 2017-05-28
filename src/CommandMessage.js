@@ -129,15 +129,16 @@ class CommandMessage extends EventEmitter {
              * @type {Array}
              */
             this.emit('argumentsLoaded', this.args);
-            return;
+            return Promise.resolve(this.args);
         }
 
         const arg = next.value;
         const matched = arg.matcher(content);
 
         if(typeof matched !== 'string') {
-            generator.throw(new Error('Argument matchers must return a string representing an argument segment.'));
-            return;
+            const err = new ArgumentError('Argument matchers must return a string representing an argument segment.');
+            generator.throw(err);
+            return Promise.reject(err);
         }
 
         return new Promise((resolve, reject) => {
