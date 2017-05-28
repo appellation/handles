@@ -76,14 +76,13 @@ class Response {
 
 
                 if(this.responseMessage && this.edit && !force) {
-                    const edited = this.responseMessage.edit(data);
-                    edited.then(success, error);
+                    this.responseMessage.edit(data).then(success, error);
                 } else {
-                    this.channel.send(data).then(m => {
+                    this.channel.send(data, options).then(m => {
                         this.responseMessage = m;
                         success(m);
                     }, () => {
-                        if (this.channel.type === 'text') this.message.author.send(data).then(success, error);
+                        if (this.channel.type === 'text') this.message.author.send(data, options).then(success, error);
                     });
                 }
             });
