@@ -98,98 +98,98 @@ const Argument = require('./Argument');
  */
 class HandlesClient extends EventEmitter {
 
+  /**
+   * @param {Config} config - Configuration options for this handler.
+   * @return {function} - Command handler.
+   * @fires CommandLoader#commandsLoaded
+   */
+  constructor(config) {
+    super();
+
+    this.config = Object.assign({
+      prefixes: new Set(),
+      directory: './commands',
+      Response,
+      Validator
+    }, config);
+
+    if (this.config.userID) this.config.prefixes.add(`<@${this.config.userID}>`).add(`<@!${this.config.userID}>`);
+
     /**
-     * @param {Config} config - Configuration options for this handler.
-     * @return {function} - Command handler.
-     * @fires CommandLoader#commandsLoaded
-     */
-    constructor(config) {
-        super();
-
-        this.config = Object.assign({
-            prefixes: new Set(),
-            directory: './commands',
-            Response,
-            Validator
-        }, config);
-
-        if(this.config.userID) this.config.prefixes.add(`<@${this.config.userID}>`).add(`<@!${this.config.userID}>`);
-
-        /**
          * @type {CommandLoader}
          */
-        this.loader = new CommandLoader(this.config);
-        remit(this.loader, this, [ 'commandsLoaded' ]);
+    this.loader = new CommandLoader(this.config);
+    remit(this.loader, this, [ 'commandsLoaded' ]);
 
-        this.resolver = new CommandResolver(this);
+    this.resolver = new CommandResolver(this);
 
-        this.handle = this.handle.bind(this);
-    }
+    this.handle = this.handle.bind(this);
+  }
 
-    /**
-     * Handle a message as a command.
-     * @param {Message} msg - The message to handle as a command.
-     * @param {string} [body] - An optional, separate command body.
-     * @return {Promise.<CommandMessage>}
-     *
-     * @fires HandlesClient#commandUnknown
-     * @fires CommandMessage#argumentsLoaded
-     * @fires CommandMessage#argumentsError
-     * @fires CommandMessage#commandInvalid
-     * @fires CommandMessage#commandStarted
-     * @fires CommandMessage#commandFinished
-     * @fires CommandMessage#commandFailed
-     *
-     * @example
-     * const client = new discord.Client();
-     * const handler = new handles.Client();
-     *
-     * client.on('message', handler.handle);
-     *
-     * @example
-     * const client = new discord.Client();
-     * const handler = new handles.Client();
-     *
-     * client.on('message', message => {
-     *   // do other stuff
-     *   handler.handle(message);
-     * });
-     */
-    handle(msg) {
-        if(msg.webhookID || msg.system || msg.author.bot) return;
+  /**
+   * Handle a message as a command.
+   * @param {Message} msg - The message to handle as a command.
+   * @param {string} [body] - An optional, separate command body.
+   * @return {Promise.<CommandMessage>}
+   *
+   * @fires HandlesClient#commandUnknown
+   * @fires CommandMessage#argumentsLoaded
+   * @fires CommandMessage#argumentsError
+   * @fires CommandMessage#commandInvalid
+   * @fires CommandMessage#commandStarted
+   * @fires CommandMessage#commandFinished
+   * @fires CommandMessage#commandFailed
+   *
+   * @example
+   * const client = new discord.Client();
+   * const handler = new handles.Client();
+   *
+   * client.on('message', handler.handle);
+   *
+   * @example
+   * const client = new discord.Client();
+   * const handler = new handles.Client();
+   *
+   * client.on('message', message => {
+   *   // do other stuff
+   *   handler.handle(message);
+   * });
+   */
+  handle(msg) {
+    if (msg.webhookID || msg.system || msg.author.bot) return;
 
-        const cmd = this.resolver.resolve(msg);
-        if(!cmd) {
-            /**
+    const cmd = this.resolver.resolve(msg);
+    if (!cmd) {
+      /**
              * Fired when the command could not be resolved.
              * @event HandlesClient#commandUnknown
              * @type {Message}
              */
-            this.emit('commandUnknown', msg);
-            return;
-        }
-
-        remit(cmd, this, [
-            'argumentsLoaded',
-            'argumentsError',
-            'commandInvalid',
-            'commandStarted',
-            'commandFinished',
-            'commandFailed'
-        ]);
-
-        return commandExecutor(cmd);
+      this.emit('commandUnknown', msg);
+      return;
     }
+
+    remit(cmd, this, [
+      'argumentsLoaded',
+      'argumentsError',
+      'commandInvalid',
+      'commandStarted',
+      'commandFinished',
+      'commandFailed'
+    ]);
+
+    return commandExecutor(cmd);
+  }
 }
 
 module.exports = {
-    CommandLoader,
-    CommandMessage,
-    Validator,
-    commandExecutor,
-    CommandResolver,
-    Prompter,
-    Response,
-    Argument,
-    Client: HandlesClient
+  CommandLoader,
+  CommandMessage,
+  Validator,
+  commandExecutor,
+  CommandResolver,
+  Prompter,
+  Response,
+  Argument,
+  Client: HandlesClient
 };
