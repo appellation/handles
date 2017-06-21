@@ -62,7 +62,7 @@ class CommandHandler {
         command: this.loader.commands.get(command),
         message,
         body: commandContent.trim(),
-        config: this.config
+        trigger: command
       });
 
     for (const [trigger, command] of this.loader.commands) {
@@ -80,7 +80,7 @@ class CommandHandler {
           command,
           message,
           body: content.substring(0, trigger.length).trim(),
-          config: this.config
+          trigger
         });
       }
     }

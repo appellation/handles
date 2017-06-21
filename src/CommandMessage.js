@@ -12,10 +12,11 @@ class CommandMessage extends EventEmitter {
   /**
    * @param {Object} data
    * @param {Command} data.command
+   * @param {Trigger} data.trigger
    * @param {Message} data.message
    * @param {string} data.body
    */
-  constructor(client, { command, message, body } = {}) {
+  constructor(client, { command, trigger, message, body } = {}) {
     super();
 
     /**
@@ -29,6 +30,12 @@ class CommandMessage extends EventEmitter {
      * @type {Command}
      */
     this.command = command;
+
+    /**
+     * The trigger that triggered this command.
+     * @type {Trigger}
+     */
+    this.trigger = trigger;
 
     /**
      * The message that triggered this command.
