@@ -188,7 +188,6 @@ module.exports = {
   CommandLoader,
   CommandMessage,
   Validator,
-  commandExecutor,
   CommandHandler,
   Prompter,
   Response,
