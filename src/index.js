@@ -3,7 +3,6 @@ const { EventEmitter } = require('events');
 const CommandLoader = require('./CommandLoader');
 const CommandMessage = require('./CommandMessage');
 const CommandHandler = require('./CommandHandler');
-const commandExecutor = require('./commandExecutor');
 const Prompter = require('./Prompter');
 const Response = require('./Response');
 const Validator = require('./Validator');
