@@ -1,9 +1,11 @@
 const CommandMessage = require('./CommandMessage');
+const CommandError = require('./errors/CommandError');
+const ArgumentError = require('./errors/ArgumentError');
 
 /**
  * Class for resolving a command from a message.
  */
-class CommandResolver {
+class CommandHandler {
 
   /**
    * @param {HandlesClient}
@@ -100,6 +102,66 @@ class CommandResolver {
     for (const pref of this.config.prefixes) if (content.startsWith(pref)) return content.substring(pref.length).trim();
     return null;
   }
+
+  /**
+   * Execute a command message.
+   * @param {CommandMessage} msg
+   */
+  static exec(msg) {
+    if (typeof msg.command.exec !== 'function') throw new Error('Command executor must be a function.');
+
+    msg.validate().then(validator => {
+      if (!validator.valid) {
+        if (validator.respond) msg.response.error(validator.reason);
+
+        /**
+         * @event CommandMessage#commandInvalid
+         * @type {Object}
+         * @property {CommandMessage} command
+         * @property {Validator} validator
+         */
+        msg.emit('commandInvalid', { command: msg, validator });
+      } else {
+        msg.resolveArgs().then(() => {
+
+          /**
+           * @event CommandMessage#commandStarted
+           * @type {CommandMessage}
+           */
+          msg.emit('commandStarted', msg);
+          return Promise.resolve(msg.command.exec(msg)).then(result => {
+
+            /**
+             * @event CommandMessage#commandFinished
+             * @type {Object}
+             * @property {CommandMessage} command
+             * @property {*} result
+             */
+            msg.emit('commandFinished', { command: msg, result });
+          }, e => {
+            /**
+             * @event CommandMessage#commandFailed
+             * @type {Object}
+             * @property {CommandMessage} command
+             * @property {*} error
+             */
+            msg.emit('commandFailed', new CommandError(msg, e));
+            throw e;
+          });
+        }, e => {
+
+          /**
+           * @event CommandMessage#argumentsError
+           * @type {Object}
+           * @property {CommandMessage} command
+           * @property {*} error
+           */
+          if (e instanceof ArgumentError) msg.emit('argumentsError', { command: msg, error: e });
+          else throw e;
+        });
+      }
+    });
+  }
 }
 
-module.exports = CommandResolver;
+module.exports = CommandHandler;

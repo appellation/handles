@@ -14,7 +14,6 @@ class CommandMessage extends EventEmitter {
    * @param {Command} data.command
    * @param {Message} data.message
    * @param {string} data.body
-   * @param {Config} data.config
    */
   constructor(client, { command, message, body } = {}) {
     super();

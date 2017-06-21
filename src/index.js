@@ -2,7 +2,7 @@ const remit = require('re-emitter');
 const { EventEmitter } = require('events');
 const CommandLoader = require('./CommandLoader');
 const CommandMessage = require('./CommandMessage');
-const CommandResolver = require('./CommandResolver');
+const CommandHandler = require('./CommandHandler');
 const commandExecutor = require('./commandExecutor');
 const Prompter = require('./Prompter');
 const Response = require('./Response');
@@ -116,12 +116,15 @@ class HandlesClient extends EventEmitter {
     if (this.config.userID) this.config.prefixes.add(`<@${this.config.userID}>`).add(`<@!${this.config.userID}>`);
 
     /**
-         * @type {CommandLoader}
-         */
+     * @type {CommandLoader}
+     */
     this.loader = new CommandLoader(this.config);
     remit(this.loader, this, [ 'commandsLoaded' ]);
 
-    this.resolver = new CommandResolver(this);
+    /**
+     * @type {CommandHandler}
+     */
+    this.handler = new CommandHandler(this);
 
     this.handle = this.handle.bind(this);
   }
@@ -156,9 +159,9 @@ class HandlesClient extends EventEmitter {
    * });
    */
   handle(msg) {
-    if (msg.webhookID || msg.system || msg.author.bot) return;
+    if (msg.webhookID || msg.system || msg.author.bot || (!msg.client.user.bot && msg.author.id !== msg.client.user.id)) return;
 
-    const cmd = this.resolver.resolve(msg);
+    const cmd = this.handler.resolve(msg);
     if (!cmd) {
       /**
              * Fired when the command could not be resolved.
@@ -178,7 +181,7 @@ class HandlesClient extends EventEmitter {
       'commandFailed'
     ]);
 
-    return commandExecutor(cmd);
+    return CommandHandler.exec(cmd);
   }
 }
 
@@ -187,7 +190,7 @@ module.exports = {
   CommandMessage,
   Validator,
   commandExecutor,
-  CommandResolver,
+  CommandHandler,
   Prompter,
   Response,
   Argument,
