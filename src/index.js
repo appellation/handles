@@ -13,17 +13,16 @@ const Argument = require('./Argument');
  * @property {Iterable<Trigger>|Trigger} [triggers] - Defaults to the file name.
  * @property {boolean} [disabled=false] - Whether the command is globally disabled
  * @property {CommandExecutor} exec - The command function to execute.
- * @property {CommandValidator} [validate] - Function to call to determine whether the command is valid.
- * @property {function} [arguments] - A generator function that yields command arguments (must be instances
- * of `Argument`).
- * @see {Argument}
+ * @property {function} [middleware] - A generator function that yields middleware.  Middleware
+ * is an object with a property `run` which is a function accepting the `CommandMessage` as its
+ * only parameter.
  *
  * @example
  * class SomeCommand {
  *   exec(command) {
  *     return command.response.send('dank memes');
  *   }
- *   * arguments(command) {
+ *   * middleware(command) {
  *     yield new Argument('meme') // this arg will be accessible as `command.args.meme`
  *        .setPrompt('Please provide a thing.')
  *        .setRePrompt('The thing you provided was invalid.')
@@ -46,7 +45,6 @@ const Argument = require('./Argument');
  * @property {string} [directory='./commands'] - Where your command files are located, relative to the current working directory.
  * @property {MessageValidator} [validator] - Valid command forms.
  * @property {Object} [commandParams] - Extra parameters to pass to the command constructor.
- * @property {Validator} [Validator] - A custom validator class (should extend the built-in class).
  * @property {Response} [Response] - A custom response class (should extend the built-in class).
  */
 
@@ -63,18 +61,6 @@ const Argument = require('./Argument');
  *     if(prefix.test(msg.content) || msg.channel.type === 'dm') return msg.content.replace(prefix, '');
  *   }
  * });
- */
-
-/**
- * @typedef {function} CommandValidator - Validates whether a command is valid to be executed.
- * @param {Validator} validator
- * @param {CommandMessage} command
- * @returns {*} - Evaluated for truthiness when determining validity.
- *
- * @example
- * exports.validator = (val, cmd) => {
- *   return val.apply(cmd.message.author.id === 'my id', 'You gotta be a different person to run this command.');
- * }
  */
 
 /**
@@ -135,12 +121,12 @@ class HandlesClient extends EventEmitter {
    * @return {Promise.<CommandMessage>}
    *
    * @fires HandlesClient#commandUnknown
-   * @fires CommandMessage#argumentsLoaded
-   * @fires CommandMessage#argumentsError
-   * @fires CommandMessage#commandInvalid
+   * @fires CommandMessage#middlewareStarted
+   * @fires CommandMessage#middlewareFinished
    * @fires CommandMessage#commandStarted
    * @fires CommandMessage#commandFinished
    * @fires CommandMessage#commandFailed
+   * @fires CommandMessage#commandError
    *
    * @example
    * const client = new discord.Client();
@@ -163,10 +149,10 @@ class HandlesClient extends EventEmitter {
     const cmd = this.handler.resolve(msg);
     if (!cmd) {
       /**
-             * Fired when the command could not be resolved.
-             * @event HandlesClient#commandUnknown
-             * @type {Message}
-             */
+       * Fired when the command could not be resolved.
+       * @event HandlesClient#commandUnknown
+       * @type {Message}
+       */
       this.emit('commandUnknown', msg);
       return;
     }

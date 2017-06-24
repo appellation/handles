@@ -37,6 +37,7 @@ class CommandHandler {
       for (const p of this.config.prefixes)
         if (message.content.startswith(p))
           return message.content.substring(p.length).trim();
+      return null;
     });
 
     /**
@@ -49,10 +50,9 @@ class CommandHandler {
 
   /**
    * @param {Message} message - The message that could be a command.
-   * @param {string} [body] - Command text if not the message content.
    */
-  resolve(message, body) {
-    const content = this._resolveContent(message, body);
+  resolve(message) {
+    const content = this._validator(message);
     if (typeof content !== 'string' || !content) return null;
 
     const [, command, commandContent] = content.match(this._regex);
@@ -84,21 +84,6 @@ class CommandHandler {
       }
     }
 
-    return null;
-  }
-
-  /**
-   * Resolve the content of the command.
-   * @param {Message} message
-   * @param {string} [body=message.content]
-   * @private
-   */
-  _resolveContent(message, body) {
-    const content = body || message.content;
-    if (this.config.validator && typeof this.config.validator === 'function')
-      return this.config.validator(message);
-
-    for (const pref of this.config.prefixes) if (content.startsWith(pref)) return content.substring(pref.length).trim();
     return null;
   }
 
