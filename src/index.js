@@ -118,7 +118,7 @@ class HandlesClient extends EventEmitter {
    * Handle a message as a command.
    * @param {Message} msg - The message to handle as a command.
    * @param {string} [body] - An optional, separate command body.
-   * @return {Promise.<CommandMessage>}
+   * @return {Promise}
    *
    * @fires HandlesClient#commandUnknown
    * @fires CommandMessage#middlewareStarted
