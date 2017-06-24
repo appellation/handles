@@ -105,6 +105,7 @@ class CommandHandler {
   /**
    * Execute a command message.
    * @param {CommandMessage} msg
+   * @returns {Promise}
    */
   static exec(msg) {
     if (typeof msg.command.exec !== 'function') throw new Error('Command executor must be a function.');
@@ -112,11 +113,23 @@ class CommandHandler {
     return new Promise((resolve, reject) => {
       if (typeof msg.command.middleware === 'function') {
 
-        msg.emit('middlewareStarted', { command: msg });
+        /**
+         * Fired when middleware is started.
+         * @event CommandMessage#middlewareStarted
+         * @type {CommandMessage}
+         */
+        msg.emit('middlewareStarted', msg);
+
         (function iterate(generator) {
           const next = generator.next();
           if (next.done) {
-            msg.emit('middlewareFinished', { command: msg });
+
+            /**
+             * Fired when middleware is done.
+             * @event CommandMessage#middlewareFinished
+             * @type {CommandMessage}
+             */
+            msg.emit('middlewareFinished', msg);
             resolve();
           } else {
             Promise.resolve(next.value.run(msg))
@@ -129,12 +142,37 @@ class CommandHandler {
         resolve();
       }
     }).then(() => {
-      msg.emit('commandStarted', { command: msg });
+
+      /**
+       * @event CommandMessage#commandStarted
+       * @type {CommandMessage}
+       */
+      msg.emit('commandStarted', msg);
       return Promise.resolve(msg.command.exec(msg));
     }).then(result => {
+
+      /**
+       * @event CommandMessage#commandFinished
+       * @type {Object}
+       * @property {CommandMessage} command
+       * @property {*} result The returned result of the command, resolved as a promise.
+       */
       msg.emit('commandFinished', { command: msg, result });
     }).catch(e => {
+      /**
+       * @event CommandMessage#commandFailed
+       * @type {Object}
+       * @property {CommandMessage} command
+       * @property {BaseError} error
+       */
       if (e instanceof BaseError) msg.emit('commandFailed', { command: msg, error: e });
+
+      /**
+       * @event CommandMessage#commandError
+       * @type {Object}
+       * @property {CommandMessage} command
+       * @property {Error|*} error
+       */
       else msg.emit('commandError', { command: msg, error: e });
     });
   }
