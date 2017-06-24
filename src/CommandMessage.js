@@ -5,7 +5,7 @@ const ArgumentError = require('./errors/ArgumentError');
 
 /**
  * A message to be processed as a command.
- * @extends {EventEmitter}
+ * @extends EventEmitter
  */
 class CommandMessage extends EventEmitter {
 
@@ -56,8 +56,8 @@ class CommandMessage extends EventEmitter {
     this.config = client.config;
 
     /**
-     * The command arguments as returned by the resolver.
-     * @see {ArgumentResolver}
+     * The command arguments as set by arguments in executor.
+     * @see ArgumentResolver
      * @type {?Object}
      */
     this.args = null;
@@ -67,12 +67,6 @@ class CommandMessage extends EventEmitter {
      * @type {Response}
      */
     this.response = new (this.config.Response)(this.message);
-
-    /**
-     * The validator object for this command.
-     * @type {Validator}
-     */
-    this.validator = new (this.config.Validator)(this);
   }
 
   /**
@@ -100,78 +94,6 @@ class CommandMessage extends EventEmitter {
    */
   get channel() {
     return this.message.channel;
-  }
-
-  /**
-   * Ensure that the command form is valid.
-   * @return {Promise<Validator>}
-   */
-  validate() {
-    if (!this.command) throw new Error('No command to validate');
-    if (typeof this.command.validate !== 'function') return Promise.resolve(this.validator);
-    return Promise.resolve(this.command.validate(this.validator, this)).then(valid => {
-      this.validator.valid = Boolean(valid);
-      return this.validator;
-    });
-  }
-
-  /**
-   * Parse the arguments of the command body.
-   * @fires CommandMessage#argumentsLoaded
-   * @return {Promise}
-   */
-  resolveArgs() {
-    if (!Array.isArray(this.args)) this.args = {};
-    if (typeof this.command.arguments !== 'function') return Promise.resolve();
-    return this._iterateArgs(this.command.arguments(Argument, this), this.body);
-  }
-
-  _iterateArgs(generator, content, result = null) {
-    const next = generator.next(result);
-    if (next.done) {
-      /**
-       * Emitted with the resolved arguments of the message.
-       * @event CommandMessage#argumentsLoaded
-       * @type {Array}
-       */
-      this.emit('argumentsLoaded', this.args);
-      return Promise.resolve(this.args);
-    }
-
-    const arg = next.value;
-    const matched = arg.matcher(content);
-
-    if (typeof matched !== 'string') {
-      const err = new ArgumentError('Argument matchers must return a string representing an argument segment.');
-      generator.throw(err);
-      return Promise.reject(err);
-    }
-
-    return new Promise((resolve, reject) => {
-      content = content.substring(matched.length).trim();
-      const resolved = arg.resolver(matched, this.message);
-      if (resolved === null) {
-        if (arg.optional && !matched.length) { // if the resolver failed but the argument is optional, resolve with null
-          resolve(null);
-        } else { // if the resolver failed and the argument is not optional, prompt
-          const prompter = new Prompter(this.handles, new (this.config.Response)(this.message, false));
-          prompter.collectPrompt(arg, matched.length === 0).then(response => {
-            resolve(response);
-          }).catch(reason => {
-            this.response.error('Command cancelled.');
-            reject(new ArgumentError(arg, reason));
-          });
-        }
-      } else {
-        resolve(resolved);
-      }
-    }).then(value => {
-      this.args[arg.key] = value;
-      return this._iterateArgs(generator, content, value);
-    }).catch(e => {
-      generator.return(null);
-      return Promise.reject(e);
-    });
   }
 }
 

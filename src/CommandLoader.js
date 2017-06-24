@@ -54,8 +54,6 @@ class CommandLoader extends EventEmitter {
           continue;
         }
 
-        if (typeof mod === 'function') mod = new mod(this.config.commandParams);
-
         if (mod.disabled === true) continue;
 
         // if triggers are iterable

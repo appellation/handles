@@ -24,12 +24,12 @@ class Prompter {
   /**
    * Collect prompts for an argument.
    * @param {Argument} arg - The argument to prompt for.
-   * @param {boolean} valid - Whether this argument was valid on prior prompt.
+   * @param {boolean} [first=true] - Whether this is the first prompt.
    * @returns {Promise} - The result of the resolver.  Reject with `string` reason
    * that the collector failed.
    */
-  collectPrompt(arg, valid = true) {
-    const text = valid ? arg.prompt : arg.rePrompt;
+  collectPrompt(arg, first = true) {
+    const text = first ? arg.prompt : arg.rePrompt;
     const defaultSuffix = this.client.config.argsSuffix || `\nCommand will be cancelled in **${arg.timeout} seconds**.  Type \`cancel\` to cancel immediately.`;
     return this.awaitResponse(text + (arg.suffix || defaultSuffix), arg.timeout * 1000).then(response => {
       if (response.content === 'cancel') throw 'cancelled';

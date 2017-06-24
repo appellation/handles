@@ -1,3 +1,5 @@
+const Prompter = require('./Prompter');
+
 /**
  * This is called every time new potential argument data is received, either in the body of
  * the original command or in subsequent prompts.
@@ -5,8 +7,9 @@
  * @param {string} content - The remaining unknown content of the command.  For instance,
  * if a command is `play stuff`, this param will be `stuff`: if this returns anything other
  * than `null`, the next argument resolver will be called with an empty string.
- * @param {Message} message - The message for which this argument resolver
+ * @param {CommandMessage} message - The command message for which this argument resolver
  * is running.
+ * @param {Argument} arg - This argument.
  * @returns {*} - If null, the argument is considered unresolved.
  */
 
@@ -28,6 +31,7 @@ class Argument {
     suffix = null,
     pattern = /^\S+/
   } = {}) {
+
     /**
      * The key that this arg will be set to.
      * @type {string}
@@ -80,7 +84,8 @@ class Argument {
 
     /**
      * A regex describing the pattern of arguments.  Defaults to single words.  If more advanced matching
-     * is required, set a custom `matcher` instead.
+     * is required, set a custom `matcher` instead.  Can pull arguments from anywhere in the unresolved
+     * content, so make sure to specify `^` if you want to pull from the front.
      * @see Argument#matcher
      * @type {RegExp}
      */
@@ -94,22 +99,19 @@ class Argument {
   set pattern(regex) {
     this._pattern = regex;
 
+    /**
+     * This function takes a string which contains any number of arguments and returns the first of them.
+     * The return should be a substring of the input, which will then be chopped off the input. The remaining
+     * input will be fed back into this function for the next argument, etc. until no more arguments remain.
+     * @type {Function}
+     * @param {string} content The content.
+     * @returns {string} The potential argument string contents (to still be resolved).
+     * @see Argument#pattern
+     */
     this.matcher = content => {
       const m = content.match(regex);
       return m === null ? '' : m[0];
     };
-  }
-
-  /**
-   * This function takes a string which contains any number of arguments and returns the first of them.
-   * The return should be a substring of the input, which will then be chopped off the input. The remaining
-   * input will be fed back into this function for the next argument, etc. until no more arguments remain.
-   * @param {string} content The content.
-   * @returns {string} The potential argument string contents (to still be resolved).
-   * @see Argument#resolver
-   */
-  matcher() {
-    return '';
   }
 
   /**
@@ -188,6 +190,35 @@ class Argument {
   setSuffix(text = '') {
     this.suffx = text;
     return this;
+  }
+
+  run(command) {
+    const matched = this.matcher(command.body);
+    if (typeof matched !== 'string') return Promise.reject(new Error('Argument matchers must return a substring of the command body.'));
+    command.body = command.body.replace(matched, '').trim();
+
+    return Promise.resolve(this.resolver(matched, command, this))
+      .then(resolved => {
+        if (resolved === null) {
+          if (this.optional && !matched.length) {
+            return null;
+          } else {
+            const prompter = new Prompter(command.handles, new (command.config.Response)(command.message, false));
+            return prompter.collectPrompt(this, matched.length === 0)
+              .catch(reason => {
+                command.response.error('Command cancelled.');
+                return Promise.reject({ argument: this, reason });
+              });
+          }
+        } else {
+          return resolved;
+        }
+      })
+      .then(value => {
+        if (!command.args) command.args = {};
+        command.args[this.key] = value;
+        return value;
+      });
   }
 }
 

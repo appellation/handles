@@ -1,3 +1,5 @@
+const ValidationError = require('./errors/ValidationError');
+
 /**
  * Passed as a parameter to command validators.  Arguments will not be available in this class,
  * as this is run before arguments are resolved from the command.  Use for permissions checks and
@@ -26,24 +28,7 @@
  * @see CommandValidator
  */
 class Validator {
-
-  /**
-   * @param {CommandMessage} command
-   */
-  constructor(command) {
-
-    /**
-     * The command message.
-     * @type {CommandMessage}
-     */
-    this.command = command;
-
-    /**
-     * The message to validate.
-     * @type {Message}
-     */
-    this.message = command.message;
-
+  constructor() {
     /**
      * The reason this command is invalid.
      * @type {?string}
@@ -72,6 +57,14 @@ class Validator {
   apply(test, reason) {
     if (!test && reason) this.reason = reason;
     return this.valid = Boolean(test);
+  }
+
+  run(command) {
+    if (!this.valid) {
+      if (this.respond) command.response.error(this.reason);
+      return Promise.reject(new ValidationError(this.reason));
+    }
+    return Promise.resolve();
   }
 }
 
