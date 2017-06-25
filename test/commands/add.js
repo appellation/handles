@@ -2,6 +2,13 @@ const Handles = require('../../src/index');
 
 class Command {
   * middleware() {
+    const val1 = new Handles.Validator()
+      .apply(false, 'kek');
+    const val2 = new Handles.Validator()
+      .apply(true, 'lol');
+
+    yield val2;
+
     yield new Handles.Argument('first')
       .setPrompt('Please provide the first digit.')
       .setRePrompt('xd1')

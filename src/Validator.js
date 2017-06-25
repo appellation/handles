@@ -52,28 +52,15 @@ class Validator {
    * Test a new boolean for validity.
    * @example
    * const validator = new Validator();
-   * validator.apply(aCondition, 'borke') || validator.apply(otherCondition, 'different borke');
+   * validator.apply(aCondition, 'borke').valid || validator.apply(otherCondition, 'different borke').valid;
    * yield validator;
    * @param {boolean|*} test - If falsy, applies `reason` to the now invalid command.
    * @param {?string} reason
-   * @return {boolean}
+   * @return {Validator}
    */
   apply(test, reason) {
     if (!test && reason) this.reason = reason;
-    return this.valid = Boolean(test);
-  }
-
-  /**
-   * Works exactly like `apply`, except cannot be chained with other validation conditions. Useful
-   * when you have only one validation condition and you want to return this instance.
-   * @example
-   * yield new Validator().check(someCondition, 'uh oh it dun borke');
-   * @param {...*} args The arguments for `apply`.
-   * @see Validator#apply
-   * @return {Validator}
-   */
-  check(...args) {
-    this.apply(...args);
+    this.valid = Boolean(test);
     return this;
   }
 
