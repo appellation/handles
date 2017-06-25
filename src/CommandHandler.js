@@ -35,7 +35,7 @@ class CommandHandler {
      */
     this._validator = this.config.validator || ((message) => {
       for (const p of this.config.prefixes)
-        if (message.content.startswith(p))
+        if (message.content.startsWith(p))
           return message.content.substring(p.length).trim();
       return null;
     });
