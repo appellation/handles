@@ -117,9 +117,13 @@ class CommandHandler {
             msg.emit('middlewareFinished', msg);
             resolve();
           } else {
-            Promise.resolve(next.value.run(msg))
-              .then(() => iterate(generator))
-              .catch(reject);
+            try {
+              Promise.resolve(next.value.run(msg))
+                .then(() => iterate(generator))
+                .catch(reject);
+            } catch (e) {
+              reject(e);
+            }
           }
         })(msg.command.middleware(msg));
 
