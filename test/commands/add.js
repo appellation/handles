@@ -1,13 +1,13 @@
 const Handles = require('../../src/index');
 
 class Command {
-  * middleware() {
-    const val1 = new Handles.Validator()
+  * middleware(cmd) {
+    const val1 = new Handles.Validator(cmd)
       .apply(false, 'kek');
-    const val2 = new Handles.Validator()
+    const val2 = new Handles.Validator(cmd)
       .apply(true, 'lol');
 
-    yield val2;
+    yield val1;
 
     yield new Handles.Argument('first')
       .setPrompt('Please provide the first digit.')

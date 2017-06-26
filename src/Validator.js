@@ -1,6 +1,18 @@
 const ValidationError = require('./errors/ValidationError');
 
 /**
+ * @typedef {Function|boolean} ValidationFunction - Passed to {@link Validator#apply} and executed when the
+ * validator is run.
+ * @param {CommandMessage} - The command that is being validated.
+ * @param {Validator} - The validator that is running.
+ * @throws {ValidationError|Error} - Error to get collected in {@link CommandMessage#commandFailed}
+ * @example
+ * validator.apply(cmd => cmd.message.author.id === 'some id', 'uh oh');
+ * @example
+ * validator.apply(cmd.message.author.id === 'some id', 'uh oh');
+ */
+
+/**
  * Passed as a parameter to command validators.  Arguments will not be available in this class,
  * as this is run before arguments are resolved from the command.  Use for permissions checks and
  * other pre-command validations.
@@ -46,30 +58,43 @@ class Validator {
      * @type {boolean}
      */
     this.valid = true;
+
+    /**
+     * Tests to execute on run.
+     * @type {Map<ValidatorFunction, reason: string>}
+     * @private
+     */
+    this._exec = new Map();
   }
 
   /**
    * Test a new boolean for validity.
    * @example
    * const validator = new Validator();
-   * validator.apply(aCondition, 'borke').valid || validator.apply(otherCondition, 'different borke').valid;
+   * validator.apply(aCondition, 'borke') || validator.apply(otherCondition, 'different borke');
    * yield validator;
-   * @param {boolean|*} test - If falsy, applies `reason` to the now invalid command.
+   * @param {boolean|Function} test - If falsy, applies `reason` to the now invalid command.
    * @param {?string} reason
    * @return {Validator}
    */
   apply(test, reason) {
-    if (!test && reason) this.reason = reason;
-    this.valid = Boolean(test);
+    this._exec.set(typeof test === 'function' ? test : () => test, reason);
     return this;
   }
 
   run(command) {
-    if (!this.valid) {
-      if (this.respond) command.response.error(this.reason);
-      return Promise.reject(new ValidationError(this.reason));
+    for (const [test, reason] of this._exec) {
+      try {
+        if (!test(command, this)) {
+          this.reason = reason;
+          this.valid = false;
+          throw new ValidationError(this);
+        }
+      } catch (e) {
+        if (this.respond) command.response.error(e);
+        throw e;
+      }
     }
-    return Promise.resolve();
   }
 }
 
