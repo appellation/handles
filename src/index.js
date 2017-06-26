@@ -157,12 +157,12 @@ class HandlesClient extends EventEmitter {
     }
 
     remit(cmd, this, [
-      'argumentsLoaded',
-      'argumentsError',
-      'commandInvalid',
+      'middlewareStarted',
+      'middlewareFinished',
       'commandStarted',
       'commandFinished',
-      'commandFailed'
+      'commandFailed',
+      'commandError'
     ]);
 
     return CommandHandler.exec(cmd);

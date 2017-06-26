@@ -105,27 +105,23 @@ class CommandHandler {
          */
         msg.emit('middlewareStarted', msg);
 
-        try {
-          (function iterate(generator) {
-            const next = generator.next();
-            if (next.done) {
+        (function iterate(generator) {
+          const next = generator.next();
+          if (next.done) {
 
-              /**
-               * Fired when middleware is done.
-               * @event CommandMessage#middlewareFinished
-               * @type {CommandMessage}
-               */
-              msg.emit('middlewareFinished', msg);
-              resolve();
-            } else {
-              Promise.resolve(next.value.run(msg))
-                .then(() => iterate(generator))
-                .catch(reject);
-            }
-          })(msg.command.middleware(msg));
-        } catch (e) {
-          reject(e);
-        }
+            /**
+             * Fired when middleware is done.
+             * @event CommandMessage#middlewareFinished
+             * @type {CommandMessage}
+             */
+            msg.emit('middlewareFinished', msg);
+            resolve();
+          } else {
+            Promise.resolve(next.value.run(msg))
+              .then(() => iterate(generator))
+              .catch(reject);
+          }
+        })(msg.command.middleware(msg));
       } else {
         resolve();
       }
