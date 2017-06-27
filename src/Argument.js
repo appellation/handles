@@ -1,4 +1,5 @@
 const Prompter = require('./Prompter');
+const ArgumentError = require('./errors/ArgumentError');
 
 /**
  * This is called every time new potential argument data is received, either in the body of
@@ -207,7 +208,7 @@ class Argument {
             return prompter.collectPrompt(this, matched.length === 0)
               .catch(reason => {
                 command.response.error('Command cancelled.');
-                return Promise.reject({ argument: this, reason });
+                return Promise.reject(new ArgumentError(this, reason));
               });
           }
         } else {
