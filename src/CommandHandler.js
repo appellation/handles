@@ -105,8 +105,8 @@ class CommandHandler {
          */
         msg.emit('middlewareStarted', msg);
 
-        (function iterate(generator) {
-          const next = generator.next();
+        (function iterate(generator, value) {
+          const next = generator.next(value);
           if (next.done) {
 
             /**
@@ -118,7 +118,7 @@ class CommandHandler {
             resolve();
           } else {
             Promise.resolve(next.value.run(msg))
-              .then(() => iterate(generator))
+              .then(val => iterate(generator, val))
               .catch(reject);
           }
         })(msg.command.middleware(msg));
