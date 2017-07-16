@@ -56,29 +56,32 @@ class CommandHandler {
     if (typeof content !== 'string' || !content) return null;
 
     const [, command, commandContent] = content.match(this._regex);
-    if (this.loader.commands.has(command))
+    const cmd = this.loader.commands.get(command);
+    if (cmd) {
       return new CommandMessage(this.client, {
-        command: this.loader.commands.get(command),
+        command: cmd,
         message,
         body: commandContent.trim(),
         trigger: command
       });
+    }
 
     for (const [trigger, command] of this.loader.commands) {
-      let body;
+      let body = null;
       if (trigger instanceof RegExp) {
         if (trigger.test(content)) body = content.match(trigger)[0].trim();
       } else if (typeof trigger === 'string') {
-        if ((/[A-Z]/.test(trigger) ? content : content.toLowerCase()).startsWith(trigger)) {
-          body = content.substring(0, trigger.length).trim();
+        // if the trigger is lowercase, make the command case-insensitive
+        if ((trigger.toLowerCase() === trigger ? content.toLowerCase() : content).startsWith(trigger)) {
+          body = content.substring(trigger.length).trim();
         }
       }
 
-      if (body) {
+      if (body !== null) {
         return new CommandMessage(this.client, {
           command,
           message,
-          body: content.substring(0, trigger.length).trim(),
+          body,
           trigger
         });
       }
