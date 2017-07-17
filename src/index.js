@@ -119,10 +119,12 @@ class HandlesClient extends EventEmitter {
     });
 
     this.on('middlewareFinished', cmd => {
+      if (!this.ignore.includes(cmd.session)) return;
       this.ignore.splice(this.ignore.indexOf(cmd.session), 1);
     });
 
     this.on('middlewareFailed', ({ command: cmd }) => {
+      if (!this.ignore.includes(cmd.session)) return;
       this.ignore.splice(this.ignore.indexOf(cmd.session), 1);
     });
 
