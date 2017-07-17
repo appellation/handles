@@ -2,6 +2,7 @@ import { EventEmitter } from 'events';
 import CommandHandler from './CommandHandler';
 import CommandLoader from './CommandLoader';
 import CommandMessage from './CommandMessage';
+import Response from './Response';
 import Validator from './Validator';
 
 import { IConfig } from './interfaces/IConfig';
