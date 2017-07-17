@@ -1,7 +1,12 @@
-const fs = require('fs');
-const EventEmitter = require('events');
-const path = require('path');
-const clearRequire = require('clear-require');
+import HandlesClient from './Client';
+
+import { Config } from './types/Config';
+import { Command, Trigger, CommandExecutor } from './types/Command';
+
+import fs = require('fs');
+import EventEmitter = require('events');
+import path = require('path');
+import clearRequire = require('clear-require');
 
 /**
  * Manage command loading.
@@ -9,9 +14,12 @@ const clearRequire = require('clear-require');
  * @extends {EventEmitter}
  * @constructor
  */
-class CommandLoader extends EventEmitter {
+export default class CommandLoader extends EventEmitter {
 
-  constructor(client) {
+  public client: HandlesClient;
+  public commands: Map<Trigger, Command>;
+
+  constructor(client: HandlesClient) {
     super();
 
     /**
@@ -23,7 +31,7 @@ class CommandLoader extends EventEmitter {
     this.loadCommands();
   }
 
-  get config() {
+  get config(): Config {
     return this.client.config;
   }
 
@@ -33,7 +41,7 @@ class CommandLoader extends EventEmitter {
    * @fires CommandLoader#commandsLoaded
    * @returns {Promise.<Map.<Trigger, Command>>}
    */
-  loadCommands() {
+  loadCommands(): Promise<Map<Trigger, Command>> {
     /**
      * Currently loaded commands.
      * @type {Map<Trigger, Command>}
@@ -46,7 +54,7 @@ class CommandLoader extends EventEmitter {
         /**
          * @type {Command}
          */
-        let mod;
+        let mod: Command;
         const location = path.resolve(process.cwd(), file);
 
         try {
@@ -61,7 +69,7 @@ class CommandLoader extends EventEmitter {
         if (mod.disabled === true) continue;
 
         // if triggers are iterable
-        if (mod.triggers && typeof mod.triggers[Symbol.iterator] === 'function' && typeof mod.triggers !== 'string' && !(mod.triggers instanceof RegExp)) {
+        if (Array.isArray(mod.triggers)) {
           for (const trigger of mod.triggers) this.commands.set(trigger, mod);
         } else if (typeof mod.triggers === 'undefined') { // if no triggers are provided
           this.commands.set(path.basename(file, '.js'), mod);
@@ -77,16 +85,17 @@ class CommandLoader extends EventEmitter {
        * @property {Array} failed - Directory listing of commands that failed to load.
        */
       this.client.emit('commandsLoaded', { commands: this.commands, failed });
+      return this.commands;
     });
   }
 
-  _loadDir(dir) {
+  _loadDir(dir: string): Promise<string[]> {
     return new Promise((resolve, reject) => {
       fs.readdir(dir, (err, files) => {
         if (err) return reject(err);
 
-        const loading = [];
-        const list = [];
+        const loading: Promise<void | {}>[] = [];
+        const list: string[] = [];
 
         for (const f of files) {
           const currentPath = path.join(dir, f);
@@ -116,5 +125,3 @@ class CommandLoader extends EventEmitter {
     });
   }
 }
-
-module.exports = CommandLoader;

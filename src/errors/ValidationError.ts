@@ -1,7 +1,10 @@
-const BaseError = require('./BaseError');
+import BaseError from './BaseError';
+import Validator from '../Validator';
 
 class ValidationError extends BaseError {
-  constructor(validator) {
+  public validator: Validator;
+
+  constructor(validator: Validator) {
     super(validator.reason);
     this.validator = validator;
   }

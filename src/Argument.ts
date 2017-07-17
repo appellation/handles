@@ -1,5 +1,21 @@
-const Prompter = require('./Prompter');
-const ArgumentError = require('./errors/ArgumentError');
+import CommandMessage from './CommandMessage';
+import Prompter from './Prompter';
+import ArgumentError from './errors/ArgumentError';
+
+import { Message } from 'discord.js';
+
+export type Resolver = (content: string, message: Message, arg: Argument) => any | null;
+export type Options = {
+  key: string,
+  prompt: string,
+  rePrompt: string,
+  optional: boolean,
+  resolver: Resolver,
+  timeout: number,
+  pattern: RegExp,
+  suffix?: string
+};
+export type Matcher = (content: string) => string | null;
 
 /**
  * This is called every time new potential argument data is received, either in the body of
@@ -17,21 +33,32 @@ const ArgumentError = require('./errors/ArgumentError');
 /**
  * Represents a command argument.
  */
-class Argument {
+export default class Argument implements Options {
+
+  public key: string;
+  public prompt: string;
+  public rePrompt: string;
+  public optional: boolean = false;
+  public resolver: Resolver;
+  public timeout: number;
+  public suffix?: string;
+  public matcher: Matcher;
+
+  private _pattern: RegExp;
 
   /**
    * @param {string} key The key that this arg will be set to.
    * @param {Object} [data] An object with any of the properties of this class.
    */
-  constructor(key, {
+  constructor(key: string, {
     prompt = '',
     rePrompt = '',
     optional = false,
-    resolver = c => c || null,
+    resolver = (content: string) => content || null,
     timeout = 30,
     suffix = null,
     pattern = /^\S+/
-  } = {}) {
+  }: Options) {
 
     /**
      * The key that this arg will be set to.
@@ -128,7 +155,7 @@ class Argument {
    * @param {RegExp} pattern The pattern to apply to potential args strings.
    * @returns {Argument}
    */
-  setPattern(pattern) {
+  setPattern(pattern: RegExp) {
     this.pattern = pattern;
     return this;
   }
@@ -138,7 +165,7 @@ class Argument {
    * @param {string} [prompt=null] The prompt.
    * @returns {Argument}
    */
-  setPrompt(prompt = null) {
+  setPrompt(prompt: string = null) {
     this.prompt = prompt;
     return this;
   }
@@ -148,7 +175,7 @@ class Argument {
    * @param {string} [rePrompt=null] The re-prompt text.
    * @returns {Argument}
    */
-  setRePrompt(rePrompt = null) {
+  setRePrompt(rePrompt: string = null) {
     this.rePrompt = rePrompt;
     return this;
   }
@@ -158,7 +185,7 @@ class Argument {
    * @param {boolean} [optional=true] - True if the argument is optional.
    * @returns {Argument}
    */
-  setOptional(optional = true) {
+  setOptional(optional: boolean = true) {
     this.optional = optional;
     return this;
   }
@@ -168,7 +195,7 @@ class Argument {
    * @param {function} [resolver] - The resolver (defaults to returning null).
    * @returns {Argument}
    */
-  setResolver(resolver = content => content || null) {
+  setResolver(resolver: Resolver = content => content || null) {
     this.resolver = resolver;
     return this;
   }
@@ -178,7 +205,7 @@ class Argument {
    * @param {number} [time=30] The time to wait.
    * @returns {Argument}
    */
-  setTimeout(time = 30) {
+  setTimeout(time: number = 30) {
     this.timeout = time;
     return this;
   }
@@ -188,26 +215,27 @@ class Argument {
    * @param {string} [text=''] The text.
    * @returns {Argument}
    */
-  setSuffix(text = '') {
-    this.suffx = text;
+  setSuffix(text: string = '') {
+    this.suffix = text;
     return this;
   }
 
-  run(command) {
+  run(command: CommandMessage) {
     const matched = this.matcher(command.body);
     if (typeof matched !== 'string') return Promise.reject(new Error('Argument matchers must return a substring of the command body.'));
     command.body = command.body.replace(matched, '').trim();
 
-    return Promise.resolve(this.resolver(matched, command, this))
+    return Promise.resolve(this.resolver(matched, command.message, this))
       .then(resolved => {
         if (resolved === null) {
           if (this.optional && !matched.length) {
             return null;
           } else {
-            const prompter = new Prompter(command.handles, new (command.config.Response)(command.message, false));
+            const Response = command.config.Response;
+            const prompter = new Prompter(command.handles, new Response(command.message, false));
             return prompter.collectPrompt(this, matched.length === 0)
-              .catch(reason => {
-                command.response.error('Command cancelled.');
+              .catch((reason: string) => {
+                command.response.send('Command cancelled.');
                 return Promise.reject(new ArgumentError(this, reason));
               });
           }
@@ -222,5 +250,3 @@ class Argument {
       });
   }
 }
-
-module.exports = Argument;

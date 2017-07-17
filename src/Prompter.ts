@@ -1,12 +1,21 @@
+import HandlesClient from './Client';
+import Response from './Response';
+import Argument from './Argument';
+
+import { Message } from 'discord.js';
+
 /**
  * To prompt for arguments.
  */
-class Prompter {
+export default class Prompter {
+  public client: HandlesClient;
+  public response: Response;
+
   /**
      * @param {HandlesClient} client
      * @param {Response} response
      */
-  constructor(client, response) {
+  constructor(client: HandlesClient, response: Response) {
     /**
      * The handles client.
      * @type {HandlesClient}
@@ -28,12 +37,12 @@ class Prompter {
    * @returns {Promise} - The result of the resolver.  Reject with `string` reason
    * that the collector failed.
    */
-  collectPrompt(arg, first = true) {
+  collectPrompt(arg: Argument, first = true): Promise<any> {
     const text = first ? arg.prompt : arg.rePrompt;
     const defaultSuffix = this.client.config.argsSuffix || `\nCommand will be cancelled in **${arg.timeout} seconds**.  Type \`cancel\` to cancel immediately.`;
     return this.awaitResponse(text + (arg.suffix || defaultSuffix), arg.timeout * 1000).then(response => {
       if (response.content === 'cancel') throw 'cancelled';
-      const resolved = arg.resolver(response.content, response);
+      const resolved = arg.resolver(response.content, response, arg);
       if (resolved === null) return this.collectPrompt(arg, false);
       return resolved;
     });
@@ -44,7 +53,7 @@ class Prompter {
    * @param {string} text - The text to send prior to waiting.
    * @returns {Message}
    */
-  awaitResponse(text, time = 30000) {
+  awaitResponse(text: string, time = 30000): Promise<Message> {
     return this.response.send(text).then(() => {
       return this.response.message.channel.awaitMessages(m => m.author.id === this.response.message.author.id, { time, max: 1, errors: ['time'] });
     }).then(responses => {
@@ -52,5 +61,3 @@ class Prompter {
     });
   }
 }
-
-module.exports = Prompter;

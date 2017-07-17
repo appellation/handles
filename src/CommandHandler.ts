@@ -1,29 +1,33 @@
-const CommandMessage = require('./CommandMessage');
-const BaseError = require('./errors/BaseError');
+import HandlesClient from './Client';
+import CommandLoader from './CommandLoader';
+import CommandMessage from './CommandMessage';
+import BaseError from './errors/BaseError';
+
+import { MessageValidator } from './types/MessageValidator';
+import { Config } from './types/Config';
+
+import { Message } from 'discord.js';
 
 /**
  * Class for resolving a command from a message.
  */
-class CommandHandler {
+export default class CommandHandler {
+
+  public client: HandlesClient;
+  public readonly config: Config = this.client.config;
+  public readonly loader: CommandLoader = this.client.loader;
+
+  private _validator: MessageValidator;
+  private _regex: RegExp;
 
   /**
    * @param {HandlesClient}
    */
-  constructor(handles) {
+  constructor(handles: HandlesClient) {
     /**
      * @type {HandlesClient}
      */
     this.client = handles;
-
-    /**
-     * @type {Config}
-     */
-    this.config = this.client.config;
-
-    /**
-     * @type {CommandLoader}
-     */
-    this.loader = this.client.loader;
 
     if (typeof this.config.validator !== 'function' && (!this.config.prefixes || !this.config.prefixes.size))
       throw new Error('Unable to validate commands: no validator or prefixes were provided.');
@@ -51,7 +55,7 @@ class CommandHandler {
   /**
    * @param {Message} message - The message that could be a command.
    */
-  resolve(message) {
+  resolve(message: Message) {
     const content = this._validator(message);
     if (typeof content !== 'string' || !content) return null;
 
@@ -95,7 +99,7 @@ class CommandHandler {
    * @param {CommandMessage} msg
    * @returns {Promise}
    */
-  exec(msg) {
+  exec(msg: CommandMessage) {
     if (typeof msg.command.exec !== 'function') throw new Error('Command executor must be a function.');
 
     return new Promise((resolve, reject) => {
@@ -108,7 +112,7 @@ class CommandHandler {
          */
         this.client.emit('middlewareStarted', msg);
 
-        const iterate = ((generator, value) => {
+        const iterate = ((generator: { next: Function, done: boolean }, value?: any): void => {
           const next = generator.next(value);
           if (next.done) {
 
@@ -121,7 +125,9 @@ class CommandHandler {
             resolve();
           } else {
             Promise.resolve(next.value.run(msg))
-              .then(val => iterate(generator, val))
+              .then(val => {
+                iterate(generator, val)
+              })
               .catch(err => {
 
                 /**
@@ -135,7 +141,9 @@ class CommandHandler {
                 reject(err);
               });
           }
-        })(msg.command.middleware(msg));
+        });
+
+        iterate(msg.command.middleware(msg));
       } else {
         resolve();
       }
@@ -179,5 +187,3 @@ class CommandHandler {
     });
   }
 }
-
-module.exports = CommandHandler;

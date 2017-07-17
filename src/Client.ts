@@ -1,11 +1,15 @@
-const { EventEmitter } = require('events');
-const CommandLoader = require('./CommandLoader');
-const CommandMessage = require('./CommandMessage');
-const CommandHandler = require('./CommandHandler');
-const Prompter = require('./Prompter');
-const Response = require('./Response');
-const Validator = require('./Validator');
-const Argument = require('./Argument');
+import { EventEmitter } from 'events';
+import CommandLoader from './CommandLoader';
+import CommandMessage from './CommandMessage';
+import CommandHandler from './CommandHandler';
+import Prompter from './Prompter';
+import Response from './Response';
+import Validator from './Validator';
+import Argument from './Argument';
+
+import { Config } from './types/Config';
+
+import { Message } from 'discord.js';
 
 /**
  * @typedef {Function} Command - Structure of exported commands.
@@ -79,14 +83,19 @@ const Argument = require('./Argument');
  * client.on('message', handler.handle);
  * client.login('token');
  */
-class HandlesClient extends EventEmitter {
+export default class HandlesClient extends EventEmitter {
+
+  public config: Config;
+  public readonly loader: CommandLoader = new CommandLoader(this);
+  public readonly handler: CommandHandler = new CommandHandler(this);
+  public readonly ignore: string[] = [];
 
   /**
    * @param {Config} config - Configuration options for this handler.
    * @return {function} - Command handler.
    * @fires HandlesClient#commandsLoaded
    */
-  constructor(config) {
+  constructor(config: Config) {
     super();
 
     this.config = Object.assign({
@@ -98,32 +107,16 @@ class HandlesClient extends EventEmitter {
 
     if (this.config.userID) this.config.prefixes.add(`<@${this.config.userID}>`).add(`<@!${this.config.userID}>`);
 
-    /**
-     * @type {CommandLoader}
-     */
-    this.loader = new CommandLoader(this);
-
-    /**
-     * @type {CommandHandler}
-     */
-    this.handler = new CommandHandler(this);
-
-    /**
-     * A set of user:channel pairs to ignore.
-     * @type {Array}
-     */
-    this.ignore = [];
-
-    this.on('middlewareStarted', cmd => {
+    this.on('middlewareStarted', (cmd: CommandMessage) => {
       this.ignore.push(cmd.session);
     });
 
-    this.on('middlewareFinished', cmd => {
+    this.on('middlewareFinished', (cmd: CommandMessage) => {
       if (!this.ignore.includes(cmd.session)) return;
       this.ignore.splice(this.ignore.indexOf(cmd.session), 1);
     });
 
-    this.on('middlewareFailed', ({ command: cmd }) => {
+    this.on('middlewareFailed', ({ command: cmd }: { command: CommandMessage }) => {
       if (!this.ignore.includes(cmd.session)) return;
       this.ignore.splice(this.ignore.indexOf(cmd.session), 1);
     });
@@ -160,7 +153,7 @@ class HandlesClient extends EventEmitter {
    *   handler.handle(message);
    * });
    */
-  handle(msg) {
+  handle(msg: Message) {
     if (
       msg.webhookID ||
       msg.system ||
@@ -184,14 +177,3 @@ class HandlesClient extends EventEmitter {
     return this.handler.exec(cmd);
   }
 }
-
-module.exports = {
-  CommandLoader,
-  CommandMessage,
-  Validator,
-  CommandHandler,
-  Prompter,
-  Response,
-  Argument,
-  Client: HandlesClient
-};

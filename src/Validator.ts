@@ -1,4 +1,7 @@
-const ValidationError = require('./errors/ValidationError');
+import ValidationError from './errors/ValidationError';
+import CommandMessage from './CommandMessage';
+
+export type ValidationFunction = (m: CommandMessage, v: Validator) => boolean | boolean;
 
 /**
  * @typedef {Function|boolean} ValidationFunction - Passed to {@link Validator#apply} and executed when the
@@ -39,33 +42,11 @@ const ValidationError = require('./errors/ValidationError');
  * @see Command
  * @see CommandValidator
  */
-class Validator {
-  constructor() {
-    /**
-     * The reason this command is invalid.
-     * @type {?string}
-     */
-    this.reason = null;
-
-    /**
-     * Whether to respond to invalid commands with the reason.
-     * @type {boolean}
-     */
-    this.respond = true;
-
-    /**
-     * Whether the command is valid.
-     * @type {boolean}
-     */
-    this.valid = true;
-
-    /**
-     * Tests to execute on run.
-     * @type {Map<ValidatorFunction, reason: string>}
-     * @private
-     */
-    this._exec = new Map();
-  }
+export default class Validator {
+  public reason?: string = null;
+  public respond: boolean = true;
+  public valid = true;
+  private _exec: Map<Function, string> = new Map();
 
   /**
    * Test a new boolean for validity.
@@ -73,16 +54,16 @@ class Validator {
    * const validator = new Validator();
    * validator.apply(aCondition, 'borke') || validator.apply(otherCondition, 'different borke');
    * yield validator;
-   * @param {boolean|Function} test - If falsy, applies `reason` to the now invalid command.
+   * @param {function|boolean} test - If falsy, applies `reason` to the now invalid command.
    * @param {?string} reason
    * @return {Validator}
    */
-  apply(test, reason) {
+  apply(test: ValidationFunction, reason: string) {
     this._exec.set(typeof test === 'function' ? test : () => test, reason);
     return this;
   }
 
-  run(command) {
+  run(command: CommandMessage) {
     for (const [test, reason] of this._exec) {
       try {
         if (!test(command, this)) {
@@ -97,5 +78,3 @@ class Validator {
     }
   }
 }
-
-module.exports = Validator;

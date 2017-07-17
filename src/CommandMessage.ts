@@ -1,13 +1,38 @@
-const EventEmitter = require('events');
+import { EventEmitter } from 'events';
+import HandlesClient from './Client';
+import Response from './Response';
+
+import { Command, Trigger } from './types/Command';
+import { Config } from './types/Config';
+import { TextBasedChannel } from './types/modules/TextBasedChannel';
+
+import { Message, Client, Guild } from 'discord.js';
+
 const Prompter = require('./Prompter');
 const Argument = require('./Argument');
 const ArgumentError = require('./errors/ArgumentError');
+
+export type CommandMessageOptions = {
+  command: Command,
+  trigger: Trigger,
+  message: Message,
+  body: string
+}
 
 /**
  * A message to be processed as a command.
  * @extends EventEmitter
  */
-class CommandMessage extends EventEmitter {
+export default class CommandMessage extends EventEmitter {
+
+  public handles: HandlesClient;
+  public command: Command;
+  public trigger: Trigger;
+  public message: Message;
+  public body: string;
+  public config: Config;
+  public args?: any;
+  public response: Response;
 
   /**
    * @param {Object} data
@@ -16,7 +41,7 @@ class CommandMessage extends EventEmitter {
    * @param {Message} data.message
    * @param {string} data.body
    */
-  constructor(client, { command, trigger, message, body } = {}) {
+  constructor(client: HandlesClient, { command, trigger, message, body }: CommandMessageOptions) {
     super();
 
     /**
@@ -74,7 +99,7 @@ class CommandMessage extends EventEmitter {
    * @type {Client}
    * @readonly
    */
-  get client() {
+  get client(): Client {
     return this.message.client;
   }
 
@@ -83,7 +108,7 @@ class CommandMessage extends EventEmitter {
    * @type {?Guild}
    * @readonly
    */
-  get guild() {
+  get guild(): Guild {
     return this.message.guild;
   }
 
@@ -92,7 +117,7 @@ class CommandMessage extends EventEmitter {
    * @type {TextChannel}
    * @readonly
    */
-  get channel() {
+  get channel(): TextBasedChannel {
     return this.message.channel;
   }
 
@@ -105,5 +130,3 @@ class CommandMessage extends EventEmitter {
     return `${this.message.author.id}:${this.message.channel.id}`;
   }
 }
-
-module.exports = CommandMessage;

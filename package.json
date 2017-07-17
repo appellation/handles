@@ -31,10 +31,12 @@
     "discord.js": "^11.1.0"
   },
   "devDependencies": {
-    "discord.js": "^11.0.0",
+    "@types/node": "^8.0.13",
+    "discord.js": "^11.1.0",
     "docdash": "^0.4.0",
     "dotenv": "^4.0.0",
-    "eslint": "^3.13.0",
-    "jsdoc": "^3.4.3"
+    "eslint": "^3.19.0",
+    "jsdoc": "^3.4.3",
+    "typescript": "^2.4.1"
   }
 }
