@@ -5,22 +5,26 @@ const clearRequire = require('clear-require');
 
 /**
  * Manage command loading.
- * @param {Config} config - Configuration options for the command handler.
+ * @param {HandlesClient} client - Handles client.
  * @extends {EventEmitter}
  * @constructor
  */
 class CommandLoader extends EventEmitter {
 
-  constructor(config = {}) {
+  constructor(client) {
     super();
 
     /**
-     * Configuration for handles.
-     * @type {Config}
+     * Handles client.
+     * @type {HandlesClient}
      */
-    this.config = config;
+    this.client = client;
 
     this.loadCommands();
+  }
+
+  get config() {
+    return this.client.config;
   }
 
   /**
@@ -67,12 +71,12 @@ class CommandLoader extends EventEmitter {
       }
 
       /**
-       * @event CommandLoader#commandsLoaded
+       * @event HandlesClient#commandsLoaded
        * @type {Object}
        * @property {Map<Trigger, Command>} commands - Currently loaded commands.
        * @property {Array} failed - Directory listing of commands that failed to load.
        */
-      this.emit('commandsLoaded', { commands: this.commands, failed });
+      this.client.emit('commandsLoaded', { commands: this.commands, failed });
     });
   }
 

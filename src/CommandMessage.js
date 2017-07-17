@@ -95,6 +95,15 @@ class CommandMessage extends EventEmitter {
   get channel() {
     return this.message.channel;
   }
+
+  /**
+   * Format: "authorID:channelID"
+   * @type {string}
+   * @readonly
+   */
+  get session() {
+    return `${this.message.author.id}:${this.message.channel.id}`;
+  }
 }
 
 module.exports = CommandMessage;

@@ -1,4 +1,3 @@
-const remit = require('re-emitter');
 const { EventEmitter } = require('events');
 const CommandLoader = require('./CommandLoader');
 const CommandMessage = require('./CommandMessage');
@@ -85,7 +84,7 @@ class HandlesClient extends EventEmitter {
   /**
    * @param {Config} config - Configuration options for this handler.
    * @return {function} - Command handler.
-   * @fires CommandLoader#commandsLoaded
+   * @fires HandlesClient#commandsLoaded
    */
   constructor(config) {
     super();
@@ -102,13 +101,30 @@ class HandlesClient extends EventEmitter {
     /**
      * @type {CommandLoader}
      */
-    this.loader = new CommandLoader(this.config);
-    remit(this.loader, this, [ 'commandsLoaded' ]);
+    this.loader = new CommandLoader(this);
 
     /**
      * @type {CommandHandler}
      */
     this.handler = new CommandHandler(this);
+
+    /**
+     * A set of user:channel pairs to ignore.
+     * @type {Array}
+     */
+    this.ignore = [];
+
+    this.on('middlewareStarted', cmd => {
+      this.ignore.push(cmd.session);
+    });
+
+    this.on('middlewareFinished', cmd => {
+      this.ignore.splice(this.ignore.indexOf(cmd.session), 1);
+    });
+
+    this.on('middlewareFailed', ({ command: cmd }) => {
+      this.ignore.splice(this.ignore.indexOf(cmd.session), 1);
+    });
 
     this.handle = this.handle.bind(this);
   }
@@ -117,15 +133,15 @@ class HandlesClient extends EventEmitter {
    * Handle a message as a command.
    * @param {Message} msg - The message to handle as a command.
    * @param {string} [body] - An optional, separate command body.
-   * @return {Promise}
+   * @return {?Promise}
    *
    * @fires HandlesClient#commandUnknown
-   * @fires CommandMessage#middlewareStarted
-   * @fires CommandMessage#middlewareFinished
-   * @fires CommandMessage#commandStarted
-   * @fires CommandMessage#commandFinished
-   * @fires CommandMessage#commandFailed
-   * @fires CommandMessage#commandError
+   * @fires HandlesClient#middlewareStarted
+   * @fires HandlesClient#middlewareFinished
+   * @fires HandlesClient#commandStarted
+   * @fires HandlesClient#commandFinished
+   * @fires HandlesClient#commandFailed
+   * @fires HandlesClient#commandError
    *
    * @example
    * const client = new discord.Client();
@@ -143,7 +159,12 @@ class HandlesClient extends EventEmitter {
    * });
    */
   handle(msg) {
-    if (msg.webhookID || msg.system || msg.author.bot || (!msg.client.user.bot && msg.author.id !== msg.client.user.id)) return;
+    if (
+      msg.webhookID ||
+      msg.system ||
+      msg.author.bot ||
+      (!msg.client.user.bot && msg.author.id !== msg.client.user.id)
+    ) return null;
 
     const cmd = this.handler.resolve(msg);
     if (!cmd) {
@@ -153,19 +174,12 @@ class HandlesClient extends EventEmitter {
        * @type {Message}
        */
       this.emit('commandUnknown', msg);
-      return;
+      return null;
     }
 
-    remit(cmd, this, [
-      'middlewareStarted',
-      'middlewareFinished',
-      'commandStarted',
-      'commandFinished',
-      'commandFailed',
-      'commandError'
-    ]);
+    if (this.ignore.includes(cmd.session)) return null;
 
-    return CommandHandler.exec(cmd);
+    return this.handler.exec(cmd);
   }
 }
 

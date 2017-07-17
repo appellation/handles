@@ -95,7 +95,7 @@ class CommandHandler {
    * @param {CommandMessage} msg
    * @returns {Promise}
    */
-  static exec(msg) {
+  exec(msg) {
     if (typeof msg.command.exec !== 'function') throw new Error('Command executor must be a function.');
 
     return new Promise((resolve, reject) => {
@@ -103,26 +103,37 @@ class CommandHandler {
 
         /**
          * Fired when middleware is started.
-         * @event CommandMessage#middlewareStarted
+         * @event HandlesClient#middlewareStarted
          * @type {CommandMessage}
          */
-        msg.emit('middlewareStarted', msg);
+        this.client.emit('middlewareStarted', msg);
 
-        (function iterate(generator, value) {
+        const iterate = ((generator, value) => {
           const next = generator.next(value);
           if (next.done) {
 
             /**
-             * Fired when middleware is done.
-             * @event CommandMessage#middlewareFinished
+             * Fired when middleware is done and has not errored.
+             * @event HandlesClient#middlewareFinished
              * @type {CommandMessage}
              */
-            msg.emit('middlewareFinished', msg);
+            this.client.emit('middlewareFinished', msg);
             resolve();
           } else {
             Promise.resolve(next.value.run(msg))
               .then(val => iterate(generator, val))
-              .catch(reject);
+              .catch(err => {
+
+                /**
+                 * Fired when middleware has failed.  Emitted before {@link HandlesClient#commandFailed}.
+                 * @event HandlesClient#middlewareFailed
+                 * @type {Object}
+                 * @property {CommandMessage} command
+                 * @property {BaseError|Error|*} error
+                 */
+                this.client.emit('middlewareFailed', { command: msg, error: err });
+                reject(err);
+              });
           }
         })(msg.command.middleware(msg));
       } else {
@@ -131,36 +142,40 @@ class CommandHandler {
     }).then(() => {
 
       /**
-       * @event CommandMessage#commandStarted
+       * @event HandlesClient#commandStarted
        * @type {CommandMessage}
        */
-      msg.emit('commandStarted', msg);
+      this.client.emit('commandStarted', msg);
       return Promise.resolve(msg.command.exec(msg));
     }).then(result => {
 
       /**
-       * @event CommandMessage#commandFinished
+       * @event HandlesClient#commandFinished
        * @type {Object}
        * @property {CommandMessage} command
        * @property {*} result The returned result of the command, resolved as a promise.
        */
-      msg.emit('commandFinished', { command: msg, result });
+      this.client.emit('commandFinished', { command: msg, result });
     }).catch(e => {
       /**
-       * @event CommandMessage#commandFailed
+       * Emitted any time a command fails to execute due to middleware.  These are planned and are
+       * the result of user interaction: eg. cancelled argument prompt or failed validation.
+       * @event HandlesClient#commandFailed
        * @type {Object}
        * @property {CommandMessage} command
        * @property {BaseError} error
        */
-      if (e instanceof BaseError) msg.emit('commandFailed', { command: msg, error: e });
+      if (e instanceof BaseError) this.client.emit('commandFailed', { command: msg, error: e });
 
       /**
-       * @event CommandMessage#commandError
+       * Emitted any time a command throws an error.  These are unplanned and represent an error
+       * in your code.
+       * @event HandlesClient#commandError
        * @type {Object}
        * @property {CommandMessage} command
        * @property {Error|*} error
        */
-      else msg.emit('commandError', { command: msg, error: e });
+      else this.client.emit('commandError', { command: msg, error: e });
     });
   }
 }
