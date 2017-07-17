@@ -1,1 +1,1 @@
-export type ResolvedContent = String | RegExp;
+export type ResolvedContent = string | RegExp;

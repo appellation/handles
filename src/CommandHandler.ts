@@ -3,8 +3,11 @@ import CommandLoader from './CommandLoader';
 import CommandMessage from './CommandMessage';
 import BaseError from './errors/BaseError';
 
+import { ICommand } from './interfaces/ICommand';
+import { IConfig } from './interfaces/IConfig';
+import { IMiddleware } from './interfaces/IMiddleware';
+
 import { MessageValidator } from './types/MessageValidator';
-import { Config } from './types/Config';
 
 import { Message } from 'discord.js';
 
@@ -14,7 +17,7 @@ import { Message } from 'discord.js';
 export default class CommandHandler {
 
   public client: HandlesClient;
-  public readonly config: Config = this.client.config;
+  public readonly config: IConfig = this.client.config;
   public readonly loader: CommandLoader = this.client.loader;
 
   private _validator: MessageValidator;
@@ -29,8 +32,9 @@ export default class CommandHandler {
      */
     this.client = handles;
 
-    if (typeof this.config.validator !== 'function' && (!this.config.prefixes || !this.config.prefixes.size))
+    if (typeof this.config.validator !== 'function' && (!this.config.prefixes || !this.config.prefixes.size)) {
       throw new Error('Unable to validate commands: no validator or prefixes were provided.');
+    }
 
     /**
      * The validator function to determine if a command is valid.
@@ -38,9 +42,12 @@ export default class CommandHandler {
      * @private
      */
     this._validator = this.config.validator || ((message) => {
-      for (const p of this.config.prefixes)
-        if (message.content.startsWith(p))
+      for (const p of this.config.prefixes) {
+        if (message.content.startsWith(p)) {
           return message.content.substring(p.length).trim();
+        }
+      }
+
       return null;
     });
 
@@ -55,18 +62,18 @@ export default class CommandHandler {
   /**
    * @param {Message} message - The message that could be a command.
    */
-  resolve(message: Message) {
+  public resolve(message: Message) {
     const content = this._validator(message);
     if (typeof content !== 'string' || !content) return null;
 
-    const [, command, commandContent] = content.match(this._regex);
-    const cmd = this.loader.commands.get(command);
+    const [, cmd, commandContent] = content.match(this._regex);
+    const mod: ICommand = this.loader.commands.get(cmd);
     if (cmd) {
       return new CommandMessage(this.client, {
-        command: cmd,
-        message,
         body: commandContent.trim(),
-        trigger: command
+        command: mod,
+        message,
+        trigger: cmd,
       });
     }
 
@@ -83,10 +90,10 @@ export default class CommandHandler {
 
       if (body !== null) {
         return new CommandMessage(this.client, {
+          body,
           command,
           message,
-          body,
-          trigger
+          trigger,
         });
       }
     }
@@ -99,7 +106,7 @@ export default class CommandHandler {
    * @param {CommandMessage} msg
    * @returns {Promise}
    */
-  exec(msg: CommandMessage) {
+  public exec(msg: CommandMessage) {
     if (typeof msg.command.exec !== 'function') throw new Error('Command executor must be a function.');
 
     return new Promise((resolve, reject) => {
@@ -112,7 +119,7 @@ export default class CommandHandler {
          */
         this.client.emit('middlewareStarted', msg);
 
-        const iterate = ((generator: { next: Function, done: boolean }, value?: any): void => {
+        const iterate = (generator: Iterator<IMiddleware>, value?: any): void => {
           const next = generator.next(value);
           if (next.done) {
 
@@ -125,10 +132,8 @@ export default class CommandHandler {
             resolve();
           } else {
             Promise.resolve(next.value.run(msg))
-              .then(val => {
-                iterate(generator, val)
-              })
-              .catch(err => {
+              .then((val) => iterate(generator, val))
+              .catch((err) => {
 
                 /**
                  * Fired when middleware has failed.  Emitted before {@link HandlesClient#commandFailed}.
@@ -141,7 +146,7 @@ export default class CommandHandler {
                 reject(err);
               });
           }
-        });
+        };
 
         iterate(msg.command.middleware(msg));
       } else {
@@ -155,7 +160,7 @@ export default class CommandHandler {
        */
       this.client.emit('commandStarted', msg);
       return Promise.resolve(msg.command.exec(msg));
-    }).then(result => {
+    }).then((result) => {
 
       /**
        * @event HandlesClient#commandFinished
@@ -164,7 +169,7 @@ export default class CommandHandler {
        * @property {*} result The returned result of the command, resolved as a promise.
        */
       this.client.emit('commandFinished', { command: msg, result });
-    }).catch(e => {
+    }).catch((e) => {
       /**
        * Emitted any time a command fails to execute due to middleware.  These are planned and are
        * the result of user interaction: eg. cancelled argument prompt or failed validation.

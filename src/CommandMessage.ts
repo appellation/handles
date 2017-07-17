@@ -2,21 +2,17 @@ import { EventEmitter } from 'events';
 import HandlesClient from './Client';
 import Response from './Response';
 
-import { Command, Trigger } from './types/Command';
-import { Config } from './types/Config';
+import { ICommand, Trigger } from './interfaces/ICommand';
+import { IConfig } from './interfaces/IConfig';
 import { TextBasedChannel } from './types/modules/TextBasedChannel';
 
-import { Message, Client, Guild } from 'discord.js';
+import { Client, Guild, Message } from 'discord.js';
 
-const Prompter = require('./Prompter');
-const Argument = require('./Argument');
-const ArgumentError = require('./errors/ArgumentError');
-
-export type CommandMessageOptions = {
-  command: Command,
-  trigger: Trigger,
-  message: Message,
-  body: string
+export interface ICommandMessageOptions {
+  command: ICommand;
+  trigger: Trigger;
+  message: Message;
+  body: string;
 }
 
 /**
@@ -26,11 +22,11 @@ export type CommandMessageOptions = {
 export default class CommandMessage extends EventEmitter {
 
   public handles: HandlesClient;
-  public command: Command;
+  public command: ICommand;
   public trigger: Trigger;
   public message: Message;
   public body: string;
-  public config: Config;
+  public config: IConfig;
   public args?: any;
   public response: Response;
 
@@ -41,7 +37,7 @@ export default class CommandMessage extends EventEmitter {
    * @param {Message} data.message
    * @param {string} data.body
    */
-  constructor(client: HandlesClient, { command, trigger, message, body }: CommandMessageOptions) {
+  constructor(client: HandlesClient, { command, trigger, message, body }: ICommandMessageOptions) {
     super();
 
     /**

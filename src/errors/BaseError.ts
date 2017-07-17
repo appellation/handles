@@ -5,7 +5,7 @@ export default class BaseError {
     this.message = message;
   }
 
-  toString() {
+  public toString() {
     return this.message;
   }
 }

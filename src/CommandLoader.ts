@@ -1,7 +1,7 @@
 import HandlesClient from './Client';
 
-import { Config } from './types/Config';
-import { Command, Trigger, CommandExecutor } from './types/Command';
+import { ICommand, Trigger } from './interfaces/ICommand';
+import { IConfig } from './interfaces/IConfig';
 
 import fs = require('fs');
 import EventEmitter = require('events');
@@ -17,7 +17,7 @@ import clearRequire = require('clear-require');
 export default class CommandLoader extends EventEmitter {
 
   public client: HandlesClient;
-  public commands: Map<Trigger, Command>;
+  public commands: Map<Trigger, ICommand>;
 
   constructor(client: HandlesClient) {
     super();
@@ -31,7 +31,7 @@ export default class CommandLoader extends EventEmitter {
     this.loadCommands();
   }
 
-  get config(): Config {
+  get config(): IConfig {
     return this.client.config;
   }
 
@@ -41,20 +41,20 @@ export default class CommandLoader extends EventEmitter {
    * @fires CommandLoader#commandsLoaded
    * @returns {Promise.<Map.<Trigger, Command>>}
    */
-  loadCommands(): Promise<Map<Trigger, Command>> {
+  public loadCommands(): Promise<Map<Trigger, ICommand>> {
     /**
      * Currently loaded commands.
      * @type {Map<Trigger, Command>}
      */
     this.commands = new Map();
-    return this._loadDir(this.config.directory).then(files => {
+    return this._loadDir(this.config.directory).then((files) => {
       const failed = [];
       for (const file of files) {
 
         /**
          * @type {Command}
          */
-        let mod: Command;
+        let mod: ICommand;
         const location = path.resolve(process.cwd(), file);
 
         try {
@@ -62,7 +62,7 @@ export default class CommandLoader extends EventEmitter {
           mod = require(location);
         } catch (e) {
           failed.push(file);
-          console.error(e); // eslint-disable-line no-console
+          console.error(e); // tslint:disable-line no-console
           continue;
         }
 
@@ -89,12 +89,12 @@ export default class CommandLoader extends EventEmitter {
     });
   }
 
-  _loadDir(dir: string): Promise<string[]> {
+  private _loadDir(dir: string): Promise<string[]> {
     return new Promise((resolve, reject) => {
       fs.readdir(dir, (err, files) => {
         if (err) return reject(err);
 
-        const loading: Promise<void | {}>[] = [];
+        const loading: Array<Promise<void | {}>> = [];
         const list: string[] = [];
 
         for (const f of files) {
@@ -109,7 +109,7 @@ export default class CommandLoader extends EventEmitter {
                   list.push(currentPath);
                   resolve();
                 } else if (stat.isDirectory()) {
-                  this._loadDir(currentPath).then(files => {
+                  this._loadDir(currentPath).then((files) => {
                     list.push(...files);
                     resolve();
                   });
@@ -117,7 +117,7 @@ export default class CommandLoader extends EventEmitter {
                   resolve();
                 }
               });
-            }).catch(console.error) // eslint-disable-line no-console
+            }).catch(console.error), // tslint:disable-line no-console
           );
         }
         return Promise.all(loading).then(() => resolve(list));

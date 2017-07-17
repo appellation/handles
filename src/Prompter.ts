@@ -1,6 +1,6 @@
+import Argument from './Argument';
 import HandlesClient from './Client';
 import Response from './Response';
-import Argument from './Argument';
 
 import { Message } from 'discord.js';
 
@@ -12,9 +12,9 @@ export default class Prompter {
   public response: Response;
 
   /**
-     * @param {HandlesClient} client
-     * @param {Response} response
-     */
+   * @param {HandlesClient} client
+   * @param {Response} response
+   */
   constructor(client: HandlesClient, response: Response) {
     /**
      * The handles client.
@@ -37,11 +37,13 @@ export default class Prompter {
    * @returns {Promise} - The result of the resolver.  Reject with `string` reason
    * that the collector failed.
    */
-  collectPrompt(arg: Argument, first = true): Promise<any> {
+  public collectPrompt(arg: Argument, first = true): Promise<any> {
     const text = first ? arg.prompt : arg.rePrompt;
-    const defaultSuffix = this.client.config.argsSuffix || `\nCommand will be cancelled in **${arg.timeout} seconds**.  Type \`cancel\` to cancel immediately.`;
-    return this.awaitResponse(text + (arg.suffix || defaultSuffix), arg.timeout * 1000).then(response => {
-      if (response.content === 'cancel') throw 'cancelled';
+    const defaultSuffix = this.client.config.argsSuffix ||
+      `\nCommand will be cancelled in **${arg.timeout} seconds**.  Type \`cancel\` to cancel immediately.`;
+
+    return this.awaitResponse(text + (arg.suffix || defaultSuffix), arg.timeout * 1000).then((response) => {
+      if (response.content === 'cancel') throw 'cancelled'; // tslint:disable-line no-string-throw
       const resolved = arg.resolver(response.content, response, arg);
       if (resolved === null) return this.collectPrompt(arg, false);
       return resolved;
@@ -53,10 +55,12 @@ export default class Prompter {
    * @param {string} text - The text to send prior to waiting.
    * @returns {Message}
    */
-  awaitResponse(text: string, time = 30000): Promise<Message> {
+  public awaitResponse(text: string, time = 30000): Promise<Message> {
     return this.response.send(text).then(() => {
-      return this.response.message.channel.awaitMessages(m => m.author.id === this.response.message.author.id, { time, max: 1, errors: ['time'] });
-    }).then(responses => {
+      return this.response.message.channel.awaitMessages(
+        (m) => m.author.id === this.response.message.author.id, { time, max: 1, errors: ['time'] },
+      );
+    }).then((responses) => {
       return responses.first();
     });
   }

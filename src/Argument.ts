@@ -1,20 +1,20 @@
 import CommandMessage from './CommandMessage';
-import Prompter from './Prompter';
 import ArgumentError from './errors/ArgumentError';
+import Prompter from './Prompter';
 
 import { Message } from 'discord.js';
 
 export type Resolver = (content: string, message: Message, arg: Argument) => any | null;
-export type Options = {
-  key: string,
-  prompt: string,
-  rePrompt: string,
-  optional: boolean,
-  resolver: Resolver,
-  timeout: number,
-  pattern: RegExp,
-  suffix?: string
-};
+export interface IOptions {
+  key: string;
+  prompt: string;
+  rePrompt: string;
+  optional: boolean;
+  resolver: Resolver;
+  timeout: number;
+  pattern: RegExp;
+  suffix?: string;
+}
 export type Matcher = (content: string) => string | null;
 
 /**
@@ -33,7 +33,7 @@ export type Matcher = (content: string) => string | null;
 /**
  * Represents a command argument.
  */
-export default class Argument implements Options {
+export default class Argument implements IOptions {
 
   public key: string;
   public prompt: string;
@@ -57,8 +57,8 @@ export default class Argument implements Options {
     resolver = (content: string) => content || null,
     timeout = 30,
     suffix = null,
-    pattern = /^\S+/
-  }: Options) {
+    pattern = /^\S+/,
+  }: IOptions) {
 
     /**
      * The key that this arg will be set to.
@@ -136,7 +136,7 @@ export default class Argument implements Options {
      * @returns {string} The potential argument string contents (to still be resolved).
      * @see Argument#pattern
      */
-    this.matcher = content => {
+    this.matcher = (content) => {
       const m = content.match(regex);
       return m === null ? '' : m[0];
     };
@@ -146,7 +146,7 @@ export default class Argument implements Options {
    * Make this argument take up the rest of the words in the command.
    * @returns {Argument}
    */
-  setInfinite() {
+  public setInfinite() {
     return this.setPattern(/.*/);
   }
 
@@ -155,7 +155,7 @@ export default class Argument implements Options {
    * @param {RegExp} pattern The pattern to apply to potential args strings.
    * @returns {Argument}
    */
-  setPattern(pattern: RegExp) {
+  public setPattern(pattern: RegExp) {
     this.pattern = pattern;
     return this;
   }
@@ -165,7 +165,7 @@ export default class Argument implements Options {
    * @param {string} [prompt=null] The prompt.
    * @returns {Argument}
    */
-  setPrompt(prompt: string = null) {
+  public setPrompt(prompt: string = null) {
     this.prompt = prompt;
     return this;
   }
@@ -175,7 +175,7 @@ export default class Argument implements Options {
    * @param {string} [rePrompt=null] The re-prompt text.
    * @returns {Argument}
    */
-  setRePrompt(rePrompt: string = null) {
+  public setRePrompt(rePrompt: string = null) {
     this.rePrompt = rePrompt;
     return this;
   }
@@ -185,7 +185,7 @@ export default class Argument implements Options {
    * @param {boolean} [optional=true] - True if the argument is optional.
    * @returns {Argument}
    */
-  setOptional(optional: boolean = true) {
+  public setOptional(optional: boolean = true) {
     this.optional = optional;
     return this;
   }
@@ -195,7 +195,7 @@ export default class Argument implements Options {
    * @param {function} [resolver] - The resolver (defaults to returning null).
    * @returns {Argument}
    */
-  setResolver(resolver: Resolver = content => content || null) {
+  public setResolver(resolver: Resolver = (content) => content || null) {
     this.resolver = resolver;
     return this;
   }
@@ -205,7 +205,7 @@ export default class Argument implements Options {
    * @param {number} [time=30] The time to wait.
    * @returns {Argument}
    */
-  setTimeout(time: number = 30) {
+  public setTimeout(time: number = 30) {
     this.timeout = time;
     return this;
   }
@@ -215,18 +215,21 @@ export default class Argument implements Options {
    * @param {string} [text=''] The text.
    * @returns {Argument}
    */
-  setSuffix(text: string = '') {
+  public setSuffix(text: string = '') {
     this.suffix = text;
     return this;
   }
 
-  run(command: CommandMessage) {
+  public run(command: CommandMessage) {
     const matched = this.matcher(command.body);
-    if (typeof matched !== 'string') return Promise.reject(new Error('Argument matchers must return a substring of the command body.'));
+    if (typeof matched !== 'string') {
+      return Promise.reject(new Error('Argument matchers must return a substring of the command body.'));
+    }
+
     command.body = command.body.replace(matched, '').trim();
 
     return Promise.resolve(this.resolver(matched, command.message, this))
-      .then(resolved => {
+      .then((resolved) => {
         if (resolved === null) {
           if (this.optional && !matched.length) {
             return null;
@@ -243,7 +246,7 @@ export default class Argument implements Options {
           return resolved;
         }
       })
-      .then(value => {
+      .then((value) => {
         if (!command.args) command.args = {};
         command.args[this.key] = value;
         return value;

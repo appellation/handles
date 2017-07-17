@@ -1,5 +1,5 @@
-import ValidationError from './errors/ValidationError';
 import CommandMessage from './CommandMessage';
+import ValidationError from './errors/ValidationError';
 
 export type ValidationFunction = (m: CommandMessage, v: Validator) => boolean | boolean;
 
@@ -46,7 +46,7 @@ export default class Validator {
   public reason?: string = null;
   public respond: boolean = true;
   public valid = true;
-  private _exec: Map<Function, string> = new Map();
+  private exec: Map<ValidationFunction, string> = new Map();
 
   /**
    * Test a new boolean for validity.
@@ -58,13 +58,13 @@ export default class Validator {
    * @param {?string} reason
    * @return {Validator}
    */
-  apply(test: ValidationFunction, reason: string) {
-    this._exec.set(typeof test === 'function' ? test : () => test, reason);
+  public apply(test: ValidationFunction, reason: string) {
+    this.exec.set(typeof test === 'function' ? test : () => test, reason);
     return this;
   }
 
-  run(command: CommandMessage) {
-    for (const [test, reason] of this._exec) {
+  public run(command: CommandMessage) {
+    for (const [test, reason] of this.exec) {
       try {
         if (!test(command, this)) {
           this.reason = reason;

@@ -1,13 +1,10 @@
 import { EventEmitter } from 'events';
+import CommandHandler from './CommandHandler';
 import CommandLoader from './CommandLoader';
 import CommandMessage from './CommandMessage';
-import CommandHandler from './CommandHandler';
-import Prompter from './Prompter';
-import Response from './Response';
 import Validator from './Validator';
-import Argument from './Argument';
 
-import { Config } from './types/Config';
+import { IConfig } from './interfaces/IConfig';
 
 import { Message } from 'discord.js';
 
@@ -45,7 +42,8 @@ import { Message } from 'discord.js';
  * @property {Set<string>} [prefixes] - Prefixes to use, if any.  Unneeded when providing a `MessageValidator`.
  * @property {string} [argsSuffix] - A global suffix to use for argument prompting. Can be overwritten individually.
  * @property {string} [userID] - If provided, will add mentions into the prefixes.
- * @property {string} [directory='./commands'] - Where your command files are located, relative to the current working directory.
+ * @property {string} [directory='./commands'] - Where your command files are located, relative to the
+ * current working directory.
  * @property {MessageValidator} [validator] - Valid command forms.
  * @property {Response} [Response] - A custom response class (should extend the built-in class).
  */
@@ -85,7 +83,7 @@ import { Message } from 'discord.js';
  */
 export default class HandlesClient extends EventEmitter {
 
-  public config: Config;
+  public config: IConfig;
   public readonly loader: CommandLoader = new CommandLoader(this);
   public readonly handler: CommandHandler = new CommandHandler(this);
   public readonly ignore: string[] = [];
@@ -95,14 +93,14 @@ export default class HandlesClient extends EventEmitter {
    * @return {function} - Command handler.
    * @fires HandlesClient#commandsLoaded
    */
-  constructor(config: Config) {
+  constructor(config: IConfig) {
     super();
 
     this.config = Object.assign({
-      prefixes: new Set(),
-      directory: './commands',
       Response,
-      Validator
+      Validator,
+      directory: './commands',
+      prefixes: new Set(),
     }, config);
 
     if (this.config.userID) this.config.prefixes.add(`<@${this.config.userID}>`).add(`<@!${this.config.userID}>`);
@@ -153,7 +151,7 @@ export default class HandlesClient extends EventEmitter {
    *   handler.handle(message);
    * });
    */
-  handle(msg: Message) {
+  public handle(msg: Message) {
     if (
       msg.webhookID ||
       msg.system ||

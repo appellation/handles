@@ -1,12 +1,14 @@
 import queue from 'queue';
-import { Message, MessageOptions, TextChannel, DMChannel, GroupDMChannel } from 'discord.js';
+
+import { Message, MessageOptions } from 'discord.js';
+import { TextBasedChannel } from './types/modules/TextBasedChannel';
 
 export type SentResponse = Message | Message[];
-export type ResponseOptions = {
-  catchall?: boolean,
-  force?: boolean,
-  type?: 'success' | 'error'
-};
+export interface IResponseOptions {
+  catchall?: boolean;
+  force?: boolean;
+  type?: 'success' | 'error';
+}
 
 /**
  * Send responses to a message.
@@ -15,7 +17,7 @@ export default class Response {
 
   public message: Message;
   public edit: boolean = true;
-  public channel: TextChannel | DMChannel | GroupDMChannel;
+  public channel: TextBasedChannel;
   public responseMessage?: Message;
   private _q: any[];
 
@@ -56,7 +58,7 @@ export default class Response {
      */
     this._q = queue({
       autostart: true,
-      concurrency: 1
+      concurrency: 1,
     });
   }
 
@@ -74,7 +76,11 @@ export default class Response {
    * of any prior responses.
    * @returns {Promise.<Message>}
    */
-  send(data: string, { catchall, force, type }: ResponseOptions = {}, messageOptions?: MessageOptions): Promise<SentResponse> {
+  public send(
+    data: string,
+    { catchall, force, type }: IResponseOptions = {},
+    messageOptions?: MessageOptions,
+  ): Promise<SentResponse> {
 
     if (type === 'success') data = `\`✅\` | ${data}`;
     else if (type === 'error') data = `\`❌\` | ${data}`;
@@ -92,11 +98,10 @@ export default class Response {
           reject(e);
         }
 
-
         if (this.responseMessage && this.edit && !force) {
           this.responseMessage.edit(data).then(success, error);
         } else {
-          this.channel.send(data, messageOptions).then(m => {
+          this.channel.send(data, messageOptions).then((m) => {
             if (Array.isArray(m)) this.responseMessage = m[0];
             else this.responseMessage = m;
             success(m);
