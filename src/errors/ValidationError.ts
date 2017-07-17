@@ -1,7 +1,7 @@
 import BaseError from './BaseError';
 import Validator from '../Validator';
 
-class ValidationError extends BaseError {
+export default class ValidationError extends BaseError {
   public validator: Validator;
 
   constructor(validator: Validator) {
@@ -9,5 +9,3 @@ class ValidationError extends BaseError {
     this.validator = validator;
   }
 }
-
-module.exports = ValidationError;

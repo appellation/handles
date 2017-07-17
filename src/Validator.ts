@@ -72,7 +72,7 @@ export default class Validator {
           throw new ValidationError(this);
         }
       } catch (e) {
-        if (this.respond) command.response.error(e);
+        if (this.respond) command.response.send(e, { type: 'error' });
         throw e;
       }
     }

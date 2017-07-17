@@ -1,3 +1,7 @@
 language: node_js
+before_script:
+  - npm install -g gulp-cli && gulp
 node_js:
   - "6"
+  - "7"
+  - "8"
