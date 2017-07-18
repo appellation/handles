@@ -9,8 +9,7 @@
     ],
     "declaration": true,
     "sourceMap": true,
-    "removeComments": false,
-    "allowJs": true
+    "removeComments": false
   },
   "include": [
     "./src/"

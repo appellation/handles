@@ -5,7 +5,11 @@ const project = ts.createProject('tsconfig.json');
 
 gulp.task('default', () => {
   del.sync(['dist/**', '!dist']);
-  return project.src()
-    .pipe(project())
-    .js.pipe(gulp.dest('dist'));
+  del.sync(['typings/**', '!typings']);
+
+  const result = project.src()
+    .pipe(project());
+
+  result.dts.pipe(gulp.dest('typings'));
+  result.js.pipe(gulp.dest('dist'));
 });
