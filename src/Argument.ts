@@ -12,7 +12,7 @@ export interface IOptions {
   resolver?: Resolver;
   timeout?: number;
   pattern?: RegExp;
-  suffix?: string;
+  suffix?: string | null;
 }
 export type Matcher = (content: string) => string | null;
 
@@ -40,7 +40,7 @@ export default class Argument implements IOptions {
   public optional: boolean = false;
   public resolver: Resolver;
   public timeout: number;
-  public suffix?: string;
+  public suffix: string | null;
   public matcher: Matcher;
 
   private _pattern: RegExp;
@@ -164,7 +164,7 @@ export default class Argument implements IOptions {
    * @param {string} [prompt=null] The prompt.
    * @returns {Argument}
    */
-  public setPrompt(prompt: string = null) {
+  public setPrompt(prompt: string = '') {
     this.prompt = prompt;
     return this;
   }
@@ -174,7 +174,7 @@ export default class Argument implements IOptions {
    * @param {string} [rePrompt=null] The re-prompt text.
    * @returns {Argument}
    */
-  public setRePrompt(rePrompt: string = null) {
+  public setRePrompt(rePrompt: string = '') {
     this.rePrompt = rePrompt;
     return this;
   }

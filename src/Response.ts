@@ -12,7 +12,7 @@ export interface IResponseOptions {
 
 export type Send = (
     data: string,
-    { catchall, force, type }?: IResponseOptions,
+    options?: IResponseOptions,
     messageOptions?: MessageOptions,
   ) => Promise<SentResponse>;
 
@@ -24,7 +24,7 @@ export default class Response {
   public message: Message;
   public edit: boolean = true;
   public channel: TextBasedChannel;
-  public responseMessage?: Message;
+  public responseMessage?: Message | null;
   private _q: any[];
 
   /**
@@ -82,7 +82,9 @@ export default class Response {
    * of any prior responses.
    * @returns {Promise.<Message>}
    */
-  public send: Send = (data, { catchall = true, force = false, type = 'default' } = {}, messageOptions) => {
+  public send: Send = (data, options = { catchall: true, force: false }, messageOptions) => {
+    const { type, force, catchall } = options;
+
     if (type === 'success') data = `\`✅\` | ${data}`;
     else if (type === 'error') data = `\`❌\` | ${data}`;
 

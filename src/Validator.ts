@@ -43,7 +43,7 @@ export type ValidationFunction = (m: CommandMessage, v: Validator) => boolean | 
  * @see CommandValidator
  */
 export default class Validator {
-  public reason?: string = null;
+  public reason: string | null = null;
   public respond: boolean = true;
   public valid = true;
   private exec: Map<ValidationFunction, string> = new Map();

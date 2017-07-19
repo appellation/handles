@@ -61,25 +61,30 @@ export default class CommandHandler {
   /**
    * @param {Message} message - The message that could be a command.
    */
-  public resolve(message: Message): CommandMessage {
+  public resolve(message: Message): CommandMessage | null {
     const content = this._validator(message);
     if (typeof content !== 'string' || !content) return null;
 
-    const [, cmd, commandContent] = content.match(this._regex);
-    const mod: ICommand = this.client.loader.commands.get(cmd);
-    if (mod) {
-      return new CommandMessage(this.client, {
-        body: commandContent.trim(),
-        command: mod,
-        message,
-        trigger: cmd,
-      });
+    const match = content.match(this._regex);
+    if (match) {
+      const [, cmd, commandContent] = match;
+      const mod: ICommand | undefined = this.client.loader.commands.get(cmd);
+
+      if (mod) {
+        return new CommandMessage(this.client, {
+          body: commandContent.trim(),
+          command: mod,
+          message,
+          trigger: cmd,
+        });
+      }
     }
 
     for (const [trigger, command] of this.client.loader.commands) {
       let body = null;
       if (trigger instanceof RegExp) {
-        if (trigger.test(content)) body = content.match(trigger)[0].trim();
+        const match = content.match(trigger);
+        if (match) body = match[0].trim();
       } else if (typeof trigger === 'string') {
         // if the trigger is lowercase, make the command case-insensitive
         if ((trigger.toLowerCase() === trigger ? content.toLowerCase() : content).startsWith(trigger)) {
