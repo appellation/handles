@@ -3,7 +3,7 @@
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 const discord = require('discord.js');
-const handles = require('../src/index');
+const handles = require('../dist/index');
 
 const client = new discord.Client();
 const handler = new handles.Client({

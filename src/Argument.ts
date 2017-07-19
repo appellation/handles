@@ -6,13 +6,12 @@ import { Message } from 'discord.js';
 
 export type Resolver = (content: string, message: Message, arg: Argument) => any | null;
 export interface IOptions {
-  key: string;
-  prompt: string;
-  rePrompt: string;
-  optional: boolean;
-  resolver: Resolver;
-  timeout: number;
-  pattern: RegExp;
+  prompt?: string;
+  rePrompt?: string;
+  optional?: boolean;
+  resolver?: Resolver;
+  timeout?: number;
+  pattern?: RegExp;
   suffix?: string;
 }
 export type Matcher = (content: string) => string | null;
@@ -58,7 +57,7 @@ export default class Argument implements IOptions {
     timeout = 30,
     suffix = null,
     pattern = /^\S+/,
-  }: IOptions) {
+  }: IOptions = {}) {
 
     /**
      * The key that this arg will be set to.
@@ -231,7 +230,7 @@ export default class Argument implements IOptions {
     return Promise.resolve(this.resolver(matched, command.message, this))
       .then((resolved) => {
         if (resolved === null) {
-          if (this.optional && !matched.length) {
+          if (this.optional) {
             return null;
           } else {
             const Response = command.config.Response;

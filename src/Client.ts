@@ -85,8 +85,8 @@ import { Message } from 'discord.js';
 export default class HandlesClient extends EventEmitter {
 
   public config: IConfig;
-  public readonly loader: CommandLoader = new CommandLoader(this);
-  public readonly handler: CommandHandler = new CommandHandler(this);
+  public readonly loader: CommandLoader;
+  public readonly handler: CommandHandler;
   public readonly ignore: string[] = [];
 
   /**
@@ -103,6 +103,9 @@ export default class HandlesClient extends EventEmitter {
       directory: './commands',
       prefixes: new Set(),
     }, config);
+
+    this.loader = new CommandLoader(this);
+    this.handler = new CommandHandler(this);
 
     if (this.config.userID) this.config.prefixes.add(`<@${this.config.userID}>`).add(`<@!${this.config.userID}>`);
 

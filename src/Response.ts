@@ -1,4 +1,4 @@
-import queue from 'queue';
+import queue = require('queue');
 
 import { Message, MessageOptions } from 'discord.js';
 import { TextBasedChannel } from './types/modules/TextBasedChannel';
@@ -9,6 +9,12 @@ export interface IResponseOptions {
   force?: boolean;
   type?: 'success' | 'error';
 }
+
+export type Send = (
+    data: string,
+    { catchall, force, type }?: IResponseOptions,
+    messageOptions?: MessageOptions,
+  ) => Promise<SentResponse>;
 
 /**
  * Send responses to a message.
@@ -25,7 +31,7 @@ export default class Response {
    * @param {Message} message The message to respond to.
    * @param {boolean} edit Whether to edit previous responses.
    */
-  constructor(message: Message, edit?: boolean) {
+  constructor(message: Message, edit: boolean = true) {
 
     /**
      * The message to respond to.
@@ -76,12 +82,7 @@ export default class Response {
    * of any prior responses.
    * @returns {Promise.<Message>}
    */
-  public send(
-    data: string,
-    { catchall, force, type }: IResponseOptions = {},
-    messageOptions?: MessageOptions,
-  ): Promise<SentResponse> {
-
+  public send: Send = (data, { catchall = true, force = false, type = 'default' } = {}, messageOptions) => {
     if (type === 'success') data = `\`✅\` | ${data}`;
     else if (type === 'error') data = `\`❌\` | ${data}`;
 
@@ -111,5 +112,13 @@ export default class Response {
         }
       });
     });
+  }
+
+  public error: Send = (data, options = { type: 'error' }, messageOptions) => {
+    return this.send(data, options, messageOptions);
+  }
+
+  public success: Send = (data, options = { type: 'success' }, messageOptions) => {
+    return this.send(data, options, messageOptions);
   }
 }

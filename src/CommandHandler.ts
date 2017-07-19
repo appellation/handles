@@ -17,8 +17,6 @@ import { Message } from 'discord.js';
 export default class CommandHandler {
 
   public client: HandlesClient;
-  public readonly config: IConfig = this.client.config;
-  public readonly loader: CommandLoader = this.client.loader;
 
   private _validator: MessageValidator;
   private _regex: RegExp;
@@ -32,7 +30,8 @@ export default class CommandHandler {
      */
     this.client = handles;
 
-    if (typeof this.config.validator !== 'function' && (!this.config.prefixes || !this.config.prefixes.size)) {
+    if (typeof this.client.config.validator !== 'function' &&
+      (!this.client.config.prefixes || !this.client.config.prefixes.size)) {
       throw new Error('Unable to validate commands: no validator or prefixes were provided.');
     }
 
@@ -41,8 +40,8 @@ export default class CommandHandler {
      * @type {function}
      * @private
      */
-    this._validator = this.config.validator || ((message) => {
-      for (const p of this.config.prefixes) {
+    this._validator = this.client.config.validator || ((message) => {
+      for (const p of this.client.config.prefixes) {
         if (message.content.startsWith(p)) {
           return message.content.substring(p.length).trim();
         }
@@ -67,7 +66,7 @@ export default class CommandHandler {
     if (typeof content !== 'string' || !content) return null;
 
     const [, cmd, commandContent] = content.match(this._regex);
-    const mod: ICommand = this.loader.commands.get(cmd);
+    const mod: ICommand = this.client.loader.commands.get(cmd);
     if (cmd) {
       return new CommandMessage(this.client, {
         body: commandContent.trim(),
@@ -77,7 +76,7 @@ export default class CommandHandler {
       });
     }
 
-    for (const [trigger, command] of this.loader.commands) {
+    for (const [trigger, command] of this.client.loader.commands) {
       let body = null;
       if (trigger instanceof RegExp) {
         if (trigger.test(content)) body = content.match(trigger)[0].trim();

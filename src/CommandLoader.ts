@@ -16,8 +16,8 @@ import clearRequire = require('clear-require');
  */
 export default class CommandLoader extends EventEmitter {
 
-  public client: HandlesClient;
-  public commands: Map<Trigger, ICommand>;
+  public readonly client: HandlesClient;
+  public readonly commands: Map<Trigger, ICommand> = new Map();
 
   constructor(client: HandlesClient) {
     super();
@@ -31,10 +31,6 @@ export default class CommandLoader extends EventEmitter {
     this.loadCommands();
   }
 
-  get config(): IConfig {
-    return this.client.config;
-  }
-
   /**
    * Load all commands into memory.  Use when reloading commands.
    *
@@ -46,8 +42,8 @@ export default class CommandLoader extends EventEmitter {
      * Currently loaded commands.
      * @type {Map<Trigger, Command>}
      */
-    this.commands = new Map();
-    return this._loadDir(this.config.directory).then((files) => {
+    this.commands.clear();
+    return this._loadDir(this.client.config.directory).then((files) => {
       const failed = [];
       for (const file of files) {
 
