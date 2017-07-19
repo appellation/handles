@@ -1,7 +1,7 @@
 import CommandMessage from './CommandMessage';
 import ValidationError from './errors/ValidationError';
 
-export type ValidationFunction = (m: CommandMessage, v: Validator) => boolean | boolean;
+export type ValidationFunction = (m: CommandMessage, v: Validator) => boolean;
 
 /**
  * @typedef {Function|boolean} ValidationFunction - Passed to {@link Validator#apply} and executed when the
@@ -58,7 +58,7 @@ export default class Validator {
    * @param {?string} reason
    * @return {Validator}
    */
-  public apply(test: ValidationFunction, reason: string) {
+  public apply(test: ValidationFunction | boolean, reason: string) {
     this.exec.set(typeof test === 'function' ? test : () => test, reason);
     return this;
   }
@@ -69,11 +69,11 @@ export default class Validator {
         if (!test(command, this)) {
           this.reason = reason;
           this.valid = false;
-          throw new ValidationError(this);
+          return Promise.reject(new ValidationError(this));
         }
       } catch (e) {
         if (this.respond) command.response.send(e, { type: 'error' });
-        throw e;
+        return Promise.reject(e);
       }
     }
   }
