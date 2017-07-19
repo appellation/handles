@@ -61,13 +61,13 @@ export default class CommandHandler {
   /**
    * @param {Message} message - The message that could be a command.
    */
-  public resolve(message: Message) {
+  public resolve(message: Message): CommandMessage {
     const content = this._validator(message);
     if (typeof content !== 'string' || !content) return null;
 
     const [, cmd, commandContent] = content.match(this._regex);
     const mod: ICommand = this.client.loader.commands.get(cmd);
-    if (cmd) {
+    if (mod) {
       return new CommandMessage(this.client, {
         body: commandContent.trim(),
         command: mod,
@@ -105,7 +105,7 @@ export default class CommandHandler {
    * @param {CommandMessage} msg
    * @returns {Promise}
    */
-  public exec(msg: CommandMessage) {
+  public exec(msg: CommandMessage): Promise<any> {
     if (typeof msg.command.exec !== 'function') throw new Error('Command executor must be a function.');
 
     return new Promise((resolve, reject) => {
