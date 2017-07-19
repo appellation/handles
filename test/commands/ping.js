@@ -1,4 +1,4 @@
-const Argument = require('../../src/Argument');
+const Argument = require('../../dist/Argument');
 
 // const HTTPPing = require('node-http-ping')
 

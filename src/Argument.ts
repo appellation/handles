@@ -227,7 +227,8 @@ export default class Argument implements IOptions {
 
     command.body = command.body.replace(matched, '').trim();
 
-    return Promise.resolve(this.resolver(matched, command.message, this))
+    // if there is no matched content, skip straight to prompting if necessary; otherwise resolve first
+    return Promise.resolve(!matched ? null : this.resolver(matched, command.message, this))
       .then((resolved) => {
         if (resolved === null) {
           if (this.optional) {
