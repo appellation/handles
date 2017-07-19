@@ -1,7 +1,6 @@
 import HandlesClient from './Client';
 
 import { ICommand, Trigger } from './interfaces/ICommand';
-import { IConfig } from './interfaces/IConfig';
 
 import fs = require('fs');
 import EventEmitter = require('events');
