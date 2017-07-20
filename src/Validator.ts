@@ -69,10 +69,10 @@ export default class Validator {
         if (!test(command, this)) {
           this.reason = reason;
           this.valid = false;
-          return Promise.reject(new ValidationError(this));
+          throw new ValidationError(this);
         }
       } catch (e) {
-        if (this.respond) command.response.send(e, { type: 'error' });
+        if (this.respond) command.response.error(e);
         return Promise.reject(e);
       }
     }

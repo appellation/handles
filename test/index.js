@@ -11,8 +11,8 @@ const handler = new handles.Client({
   prefixes: new Set(['x!'])
 });
 
-handler.on('commandFailed', console.error);
-handler.on('commandError', console.error);
+// handler.on('commandFailed', console.error);
+// handler.on('commandError', console.error);
 
 client.on('message', handler.handle);
 client.once('ready', () => console.log('ready'));
