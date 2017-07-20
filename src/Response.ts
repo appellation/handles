@@ -123,4 +123,9 @@ export default class Response {
   public success: Send = (data, options = { type: 'success' }, messageOptions) => {
     return this.send(data, options, messageOptions);
   }
+
+  public dm: Send = async (data, options, messageOptions) => {
+    this.channel = this.message.author.dmChannel || await this.message.author.createDM();
+    return this.send(data, options, messageOptions);
+  }
 }
