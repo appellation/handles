@@ -3,9 +3,10 @@ import { MessageValidator } from '../types/MessageValidator';
 
 export interface IConfig {
   prefixes: Set<string>;
-  argsSuffix: string;
-  userID: string;
+  argsSuffix?: string;
+  userID?: string;
   directory: string;
-  validator: MessageValidator;
+  validator?: MessageValidator;
   Response: typeof Response;
+  silent: boolean;
 }

@@ -99,9 +99,9 @@ export default class HandlesClient extends EventEmitter {
 
     this.config = Object.assign({
       Response,
-      Validator,
       directory: './commands',
       prefixes: new Set(),
+      silent: true,
     }, config);
 
     this.loader = new CommandLoader(this);

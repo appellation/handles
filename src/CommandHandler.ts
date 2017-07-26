@@ -173,7 +173,7 @@ export default class CommandHandler {
        * @property {*} result The returned result of the command, resolved as a promise.
        */
       this.client.emit('commandFinished', { command: msg, result });
-    }).catch((e) => {
+    }).catch((e): Promise<any> | void => {
       /**
        * Emitted any time a command fails to execute due to middleware.  These are planned and are
        * the result of user interaction: eg. cancelled argument prompt or failed validation.
@@ -184,7 +184,7 @@ export default class CommandHandler {
        */
       if (e instanceof BaseError) {
         this.client.emit('commandFailed', { command: msg, error: e });
-        return Promise.resolve(e);
+        if (!this.client.config.silent) return Promise.resolve(e);
 
       /**
        * Emitted any time a command throws an error.  These are unplanned and represent an error
@@ -196,7 +196,7 @@ export default class CommandHandler {
        */
       } else {
         this.client.emit('commandError', { command: msg, error: e });
-        return Promise.reject(e);
+        if (!this.client.config.silent) return Promise.reject(e);
       }
     });
   }
