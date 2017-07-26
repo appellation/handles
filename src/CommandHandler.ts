@@ -182,7 +182,9 @@ export default class CommandHandler {
        * @property {CommandMessage} command
        * @property {BaseError} error
        */
-      if (e instanceof BaseError) this.client.emit('commandFailed', { command: msg, error: e });
+      if (e instanceof BaseError) {
+        this.client.emit('commandFailed', { command: msg, error: e });
+        return Promise.resolve(e);
 
       /**
        * Emitted any time a command throws an error.  These are unplanned and represent an error
@@ -192,7 +194,10 @@ export default class CommandHandler {
        * @property {CommandMessage} command
        * @property {Error|*} error
        */
-      else this.client.emit('commandError', { command: msg, error: e });
+      } else {
+        this.client.emit('commandError', { command: msg, error: e });
+        return Promise.reject(e);
+      }
     });
   }
 }
