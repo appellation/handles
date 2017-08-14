@@ -2,9 +2,9 @@ import HandlesClient from './Client';
 
 import { ICommand, Trigger } from './interfaces/ICommand';
 
+import clearRequire = require('clear-require');
 import fs = require('fs');
 import path = require('path');
-import clearRequire = require('clear-require');
 
 /**
  * Manage command loading.
