@@ -42,6 +42,6 @@ This will automatically load all commands in the `./commands` directory and hand
 ```js
 const handler = new handles.Client({
     directory: './some/other/awesome/directory',
-    prefixes: ['dank', 'memes']
+    prefixes: new Set(['dank', 'memes'])
 });
 ```
