@@ -1,14 +1,14 @@
 {
   "name": "discord-handles",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "A simple Discord command handler.",
   "main": "dist/index.js",
   "typings": "typings/index.d.ts",
   "scripts": {
     "prepare": "npm run build",
-    "build": "gulp",
+    "build": "gulp build",
     "test": "tslint --project tsconfig.json src/**",
-    "docs": "jsdoc -c jsdoc.conf.json"
+    "docs": "gulp docs"
   },
   "repository": {
     "type": "git",
@@ -33,16 +33,16 @@
     "discord.js": "^11.1.0"
   },
   "devDependencies": {
-    "@types/node": "^8.0.13",
+    "@types/node": "^8.0.19",
     "del": "^3.0.0",
     "discord.js": "^11.1.0",
-    "docdash": "^0.4.0",
     "dotenv": "^4.0.0",
     "gulp": "^3.9.1",
+    "gulp-typedoc": "^2.0.3",
     "gulp-typescript": "^3.2.1",
-    "jsdoc": "^3.4.3",
     "raven": "^2.1.0",
     "tslint": "^5.5.0",
+    "typedoc": "^0.8.0",
     "typescript": "^2.4.1"
   }
 }

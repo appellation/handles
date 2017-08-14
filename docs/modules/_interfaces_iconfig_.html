@@ -3,17 +3,17 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>discord-handles</title>
+	<title>&quot;interfaces/IConfig&quot; | discord-handles</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="assets/css/main.css">
+	<link rel="stylesheet" href="../assets/css/main.css">
 </head>
 <body>
 <header>
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.js" data-base="..">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">discord-handles</a>
+					<a href="../index.html" class="title">discord-handles</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -53,116 +53,103 @@
 		<div class="container">
 			<ul class="tsd-breadcrumb">
 				<li>
-					<a href="globals.html">Globals</a>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="_interfaces_iconfig_.html">&quot;interfaces/IConfig&quot;</a>
 				</li>
 			</ul>
-			<h1> discord-handles</h1>
+			<h1>External module &quot;interfaces/IConfig&quot;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<div class="tsd-panel tsd-typography">
-				<h1 id="handles">Handles</h1>
-				<p><a href="https://discord.gg/DPuaDvP"><img src="https://discordapp.com/api/guilds/251245211416657931/embed.png" alt="Handles support server"></a>
-					<a href="https://travis-ci.org/appellation/handles"><img src="https://travis-ci.org/appellation/handles.svg?branch=master" alt="Build Status"></a>
-				<img src="https://img.shields.io/npm/dt/discord-handles.svg" alt="Downloads"></p>
-				<p>For those of us who get frustrated with writing command handlers but don&#39;t quite want to use a full framework.  Intended for use with <a href="https://github.com/hydrabolt/discord.js">Discord.js</a>.</p>
-				<p>Documentation is available at <a href="http://handles.topkek.pw">handles.topkek.pw</a>.</p>
-				<h2 id="getting-started">Getting started</h2>
-				<h3 id="installation">Installation</h3>
-				<pre><code class="lang-xl">npm install --save discord-handles
-</code></pre>
-				<p>Or, if you want to risk cutting yourself, install the bleeding edge version:</p>
-				<pre><code class="lang-xl">npm install --save appellation/handles#master
-</code></pre>
-				<p>Usually I try to avoid pushing broken code, but sometimes I move a little too fast.</p>
-				<h3 id="the-basics">The basics</h3>
-				<pre><code class="lang-js"><span class="hljs-keyword">const</span> discord = <span class="hljs-built_in">require</span>(<span class="hljs-string">'discord.js'</span>);
-<span class="hljs-keyword">const</span> handles = <span class="hljs-built_in">require</span>(<span class="hljs-string">'discord-handles'</span>);
-
-<span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> discord.Client();
-<span class="hljs-keyword">const</span> handler = <span class="hljs-keyword">new</span> handles.Client();
-
-client.on(<span class="hljs-string">'message'</span>, handler.handle);
-client.login(<span class="hljs-string">'token'</span>);
-</code></pre>
-				<p>This will automatically load all commands in the <code>./commands</code> directory and handle incoming messages.  See <a href="http://handles.topkek.pw/global.html#Command"><code>Command</code></a> in the docs for information on how to format the exports of the files you place in <code>./commands</code>.  The loader and handler can be configured according to <a href="http://handles.topkek.pw/global.html#Config"><code>Config</code></a> options passed to the constructor.</p>
-				<pre><code class="lang-js"><span class="hljs-keyword">const</span> handler = <span class="hljs-keyword">new</span> handles.Client({
-    <span class="hljs-attr">directory</span>: <span class="hljs-string">'./some/other/awesome/directory'</span>,
-    <span class="hljs-attr">prefixes</span>: [<span class="hljs-string">'dank'</span>, <span class="hljs-string">'memes'</span>]
-});
-</code></pre>
-			</div>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section tsd-is-external">
+							<h3>Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-external"><a href="../interfaces/_interfaces_iconfig_.iconfig.html" class="tsd-kind-icon">IConfig</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
 			<nav class="tsd-navigation primary">
 				<ul>
 					<li class="globals  ">
-						<a href="globals.html"><em>Globals</em></a>
+						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="label tsd-is-external">
 						<span>Internals</span>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_client_.html">"<wbr>Client"</a>
+						<a href="_client_.html">"<wbr>Client"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_commandhandler_.html">"<wbr>Command<wbr>Handler"</a>
+						<a href="_commandhandler_.html">"<wbr>Command<wbr>Handler"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_commandloader_.html">"<wbr>Command<wbr>Loader"</a>
+						<a href="_commandloader_.html">"<wbr>Command<wbr>Loader"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_commandmessage_.html">"<wbr>Command<wbr>Message"</a>
+						<a href="_commandmessage_.html">"<wbr>Command<wbr>Message"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_prompter_.html">"<wbr>Prompter"</a>
+						<a href="_prompter_.html">"<wbr>Prompter"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_response_.html">"<wbr>Response"</a>
+						<a href="_response_.html">"<wbr>Response"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_index_.html">"index"</a>
+						<a href="_index_.html">"index"</a>
 					</li>
 					<li class="label tsd-is-external">
 						<span>Externals</span>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="modules/_errors_argumenterror_.html">"errors/<wbr>Argument<wbr>Error"</a>
+						<a href="_errors_argumenterror_.html">"errors/<wbr>Argument<wbr>Error"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="modules/_errors_baseerror_.html">"errors/<wbr>Base<wbr>Error"</a>
+						<a href="_errors_baseerror_.html">"errors/<wbr>Base<wbr>Error"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="modules/_errors_validationerror_.html">"errors/<wbr>Validation<wbr>Error"</a>
+						<a href="_errors_validationerror_.html">"errors/<wbr>Validation<wbr>Error"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="modules/_interfaces_icommand_.html">"interfaces/ICommand"</a>
+						<a href="_interfaces_icommand_.html">"interfaces/ICommand"</a>
+					</li>
+					<li class="current tsd-kind-external-module tsd-is-external">
+						<a href="_interfaces_iconfig_.html">"interfaces/IConfig"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="modules/_interfaces_iconfig_.html">"interfaces/IConfig"</a>
+						<a href="_interfaces_imiddleware_.html">"interfaces/IMiddleware"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="modules/_interfaces_imiddleware_.html">"interfaces/IMiddleware"</a>
+						<a href="_middleware_argument_.html">"middleware/<wbr>Argument"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="modules/_middleware_argument_.html">"middleware/<wbr>Argument"</a>
+						<a href="_middleware_validator_.html">"middleware/<wbr>Validator"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="modules/_middleware_validator_.html">"middleware/<wbr>Validator"</a>
+						<a href="_types_messagevalidator_.html">"types/<wbr>Message<wbr>Validator"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="modules/_types_messagevalidator_.html">"types/<wbr>Message<wbr>Validator"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="modules/_types_modules_textbasedchannel_.html">"types/modules/<wbr>Text<wbr>Based<wbr>Channel"</a>
+						<a href="_types_modules_textbasedchannel_.html">"types/modules/<wbr>Text<wbr>Based<wbr>Channel"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
+						<a href="../interfaces/_interfaces_iconfig_.iconfig.html" class="tsd-kind-icon">IConfig</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
@@ -231,7 +218,7 @@ client.login(<span class="hljs-string">'token'</span>);
 	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
-<script src="assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+<script src="../assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="../assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>

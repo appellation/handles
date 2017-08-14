@@ -1,5 +1,5 @@
-import Argument from './Argument';
 import HandlesClient from './Client';
+import Argument from './middleware/Argument';
 import Response from './Response';
 
 import { Message } from 'discord.js';
@@ -8,34 +8,26 @@ import { Message } from 'discord.js';
  * To prompt for arguments.
  */
 export default class Prompter {
+  /**
+   * The handles client.
+   */
   public client: HandlesClient;
-  public response: Response;
 
   /**
-   * @param {HandlesClient} client
-   * @param {Response} response
+   * The responder to use for prompting.
    */
-  constructor(client: HandlesClient, response: Response) {
-    /**
-     * The handles client.
-     * @type {HandlesClient}
-     */
-    this.client = client;
+  public response: Response;
 
-    /**
-     * The responder to use for prompting.
-     * @type {Response}
-     */
+  constructor(client: HandlesClient, response: Response) {
+    this.client = client;
     this.response = response;
     this.response.edit = false;
   }
 
   /**
    * Collect prompts for an argument.
-   * @param {Argument} arg - The argument to prompt for.
-   * @param {boolean} [first=true] - Whether this is the first prompt.
-   * @returns {Promise} - The result of the resolver.  Reject with `string` reason
-   * that the collector failed.
+   * @param arg The argument for which to prompt.
+   * @param first Whether this is the first prompt.
    */
   public collectPrompt(arg: Argument, first = true): Promise<any> {
     const text = first ? arg.prompt : arg.rePrompt;
@@ -52,8 +44,8 @@ export default class Prompter {
 
   /**
    * Wait for a response to some text.
-   * @param {string} text - The text to send prior to waiting.
-   * @returns {Message}
+   * @param text The text for which to await a response.
+   * @param time The time (in seconds) for which to wait.
    */
   public awaitResponse(text: string, time = 30000): Promise<Message> {
     return this.response.send(text).then(() => {

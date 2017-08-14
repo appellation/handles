@@ -5,8 +5,20 @@ import { TextBasedChannel } from './types/modules/TextBasedChannel';
 
 export type SentResponse = Message | Message[];
 export interface IResponseOptions {
+  /**
+   * Whether to catch all rejections when sending.  The promise will always resolve when this option
+   * is enabled; if there is an error, the resolution will be undefined.
+   */
   catchall?: boolean;
+
+  /**
+   * Whether to send a new message regardless of any prior responses.
+   */
   force?: boolean;
+
+  /**
+   * The type of response.
+   */
   type?: 'success' | 'error';
 }
 
@@ -21,47 +33,41 @@ export type Send = (
  */
 export default class Response {
 
+  /**
+   * The message to respond to.
+   */
   public message: Message;
-  public edit: boolean = true;
-  public channel: TextBasedChannel;
-  public responseMessage?: Message | null;
-  private _q: any[];
 
   /**
-   * @param {Message} message The message to respond to.
-   * @param {boolean} edit Whether to edit previous responses.
+   * Whether to edit previous responses.
+   */
+  public edit: boolean = true;
+
+  /**
+   * The channel to send responses in.
+   */
+  public channel: TextBasedChannel;
+
+  /**
+   * The message to edit, if enabled.
+   */
+  public responseMessage?: Message | null;
+
+  /**
+   * The queue of response jobs.
+   */
+  private readonly _q: any[];
+
+  /**
+   * @param message The message to respond to.
+   * @param edit Whether to edit previous responses.
    */
   constructor(message: Message, edit: boolean = true) {
 
-    /**
-     * The message to respond to.
-     * @type {Message}
-     */
     this.message = message;
-
-    /**
-     * The channel to send responses in.
-     * @type {TextChannel}
-     */
     this.channel = message.channel;
-
-    /**
-     * Whether to edit previous responses.
-     * @type {boolean}
-     */
     this.edit = edit;
-
-    /**
-     * Previously sent responses will be edited.
-     * @type {Message}
-     */
     this.responseMessage = null;
-
-    /**
-     * The queue of responses that are being sent.
-     * @type {Array}
-     * @private
-     */
     this._q = queue({
       autostart: true,
       concurrency: 1,
@@ -73,14 +79,9 @@ export default class Response {
    * response has been sent, it will edit that unless the `force` parameter
    * is set.  Automatically attempts to fallback to DM responses.  You can
    * send responses without waiting for prior responses to succeed.
-   * @param {*} data The data to send
-   * @param {MessageOptions} [options={}] Message options.
-   * @param {boolean} [catchall=true] Whether to catch all rejections when sending.  The promise
-   * will always resolve when this option is enabled; if there is an error, the resolution will
-   * be undefined.
-   * @param {boolean} [force=false] Whether to send a new message regardless
-   * of any prior responses.
-   * @returns {Promise.<Message>}
+   * @param data The data to send
+   * @param options Message options.
+   * @param messageOptions Discord.js message options.
    */
   public send: Send = (data, options = { catchall: true, force: false }, messageOptions) => {
     const { type, force, catchall } = options;

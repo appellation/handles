@@ -3,28 +3,24 @@ import HandlesClient from './Client';
 import { ICommand, Trigger } from './interfaces/ICommand';
 
 import fs = require('fs');
-import EventEmitter = require('events');
 import path = require('path');
 import clearRequire = require('clear-require');
 
 /**
  * Manage command loading.
- * @param {HandlesClient} client - Handles client.
- * @extends {EventEmitter}
- * @constructor
  */
-export default class CommandLoader extends EventEmitter {
-
+export default class CommandLoader {
+  /**
+   * Handles client.
+   */
   public readonly client: HandlesClient;
+
+  /**
+   * Loaded commands.
+   */
   public readonly commands: Map<Trigger, ICommand> = new Map();
 
   constructor(client: HandlesClient) {
-    super();
-
-    /**
-     * Handles client.
-     * @type {HandlesClient}
-     */
     this.client = client;
 
     this.loadCommands();
@@ -32,23 +28,12 @@ export default class CommandLoader extends EventEmitter {
 
   /**
    * Load all commands into memory.  Use when reloading commands.
-   *
-   * @fires CommandLoader#commandsLoaded
-   * @returns {Promise.<Map.<Trigger, Command>>}
    */
   public loadCommands(): Promise<Map<Trigger, ICommand>> {
-    /**
-     * Currently loaded commands.
-     * @type {Map<Trigger, Command>}
-     */
     this.commands.clear();
     return this._loadDir(this.client.config.directory).then((files) => {
       const failed = [];
       for (const file of files) {
-
-        /**
-         * @type {Command}
-         */
         let mod: ICommand;
         const location = path.resolve(process.cwd(), file);
 
@@ -73,17 +58,15 @@ export default class CommandLoader extends EventEmitter {
         }
       }
 
-      /**
-       * @event HandlesClient#commandsLoaded
-       * @type {Object}
-       * @property {Map<Trigger, Command>} commands - Currently loaded commands.
-       * @property {Array} failed - Directory listing of commands that failed to load.
-       */
       this.client.emit('commandsLoaded', { commands: this.commands, failed });
       return this.commands;
     });
   }
 
+  /**
+   * Get all the file paths recursively in a directory.
+   * @param dir The directory to start at.
+   */
   private _loadDir(dir: string): Promise<string[]> {
     return new Promise((resolve, reject) => {
       fs.readdir(dir, (err, files) => {
