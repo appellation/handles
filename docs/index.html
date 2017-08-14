@@ -91,7 +91,7 @@ client.login(<span class="hljs-string">'token'</span>);
 				<p>This will automatically load all commands in the <code>./commands</code> directory and handle incoming messages.  See <a href="http://handles.topkek.pw/global.html#Command"><code>Command</code></a> in the docs for information on how to format the exports of the files you place in <code>./commands</code>.  The loader and handler can be configured according to <a href="http://handles.topkek.pw/global.html#Config"><code>Config</code></a> options passed to the constructor.</p>
 				<pre><code class="lang-js"><span class="hljs-keyword">const</span> handler = <span class="hljs-keyword">new</span> handles.Client({
     <span class="hljs-attr">directory</span>: <span class="hljs-string">'./some/other/awesome/directory'</span>,
-    <span class="hljs-attr">prefixes</span>: [<span class="hljs-string">'dank'</span>, <span class="hljs-string">'memes'</span>]
+    <span class="hljs-attr">prefixes</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-string">'dank'</span>, <span class="hljs-string">'memes'</span>])
 });
 </code></pre>
 			</div>
