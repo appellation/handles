@@ -40,6 +40,8 @@ export default class CommandHandler {
     }
 
     this._validator = this.client.config.validator || ((message) => {
+      if (!this.client.config.prefixes) return null;
+
       for (const p of this.client.config.prefixes) {
         if (message.content.startsWith(p)) {
           return message.content.substring(p.length).trim();

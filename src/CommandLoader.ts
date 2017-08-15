@@ -31,7 +31,7 @@ export default class CommandLoader {
    */
   public loadCommands(): Promise<Map<Trigger, ICommand>> {
     this.commands.clear();
-    return this._loadDir(this.client.config.directory).then((files) => {
+    return this._loadDir(this.client.config.directory || './commands').then((files) => {
       const failed = [];
       for (const file of files) {
         let mod: ICommand;

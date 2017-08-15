@@ -67,7 +67,7 @@ export default class CommandMessage {
     this.body = body;
     this.config = client.config;
     this.args = null;
-    this.response = new (this.config.Response)(this.message);
+    this.response = new (this.config.Response || Response)(this.message);
   }
 
   /**

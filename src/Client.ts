@@ -35,17 +35,13 @@ export default class HandlesClient extends EventEmitter {
   constructor(config: IConfig) {
     super();
 
-    this.config = Object.assign({
-      Response,
-      directory: './commands',
-      prefixes: new Set(),
-      silent: true,
-    }, config);
-
+    this.config = config;
     this.loader = new CommandLoader(this);
     this.handler = new CommandHandler(this);
 
-    if (this.config.userID) this.config.prefixes.add(`<@${this.config.userID}>`).add(`<@!${this.config.userID}>`);
+    if (this.config.userID && this.config.prefixes) {
+      this.config.prefixes.add(`<@${this.config.userID}>`).add(`<@!${this.config.userID}>`);
+    }
 
     this.on('middlewareStarted', (cmd: CommandMessage) => {
       this.ignore.push(cmd.session);

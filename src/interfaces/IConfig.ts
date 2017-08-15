@@ -5,7 +5,7 @@ export interface IConfig {
   /**
    * Command prefixes (will not be used if a [[validator]] is provided).
    */
-  prefixes: Set<string>;
+  prefixes?: Set<string>;
 
   /**
    * A global setting for configuring the argument suffix.
@@ -20,7 +20,7 @@ export interface IConfig {
   /**
    * Directory to load commands from. Default to `./commands` relative to the cwd.
    */
-  directory: string;
+  directory?: string;
 
   /**
    * This will get run on every message. Use to manually determine whether a message is a command.
@@ -30,7 +30,7 @@ export interface IConfig {
   /**
    * A custom response class to use. Should extend the built-in class.
    */
-  Response: typeof Response;
+  Response?: typeof Response;
 
   /**
    * Set to false to resolve/reject the command handling process properly. When true,
@@ -38,5 +38,5 @@ export interface IConfig {
    * [[HandlesClient#commandFailed]] and [[HandlesClient#commandFinished]] to check completion status in this
    * case).
    */
-  silent: boolean;
+  silent?: boolean;
 }
