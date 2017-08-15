@@ -37,7 +37,7 @@ client.on('message', handler.handle);
 client.login('token');
 ```
 
-This will automatically load all commands in the `./commands` directory and handle incoming messages.  See [`Command`](http://handles.topkek.pw/global.html#Command) in the docs for information on how to format the exports of the files you place in `./commands`.  The loader and handler can be configured according to [`Config`](http://handles.topkek.pw/global.html#Config) options passed to the constructor.
+This will automatically load all commands in the `./commands` directory and handle incoming messages.  See [`Command`](https://handles.topkek.pw/interfaces/_interfaces_icommand_.icommand.html) in the docs for information on how to format the exports of the files you place in `./commands`.  The loader and handler can be configured according to [`Config`](https://handles.topkek.pw/interfaces/_interfaces_iconfig_.iconfig.html) options passed to the constructor.
 
 ```js
 const handler = new handles.Client({
