@@ -1,6 +1,6 @@
 {
   "name": "discord-handles",
-  "version": "5.2.1",
+  "version": "5.2.2",
   "description": "A simple Discord command handler.",
   "main": "dist/index.js",
   "typings": "typings/index.d.ts",
