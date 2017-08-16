@@ -118,11 +118,11 @@
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="disabled" class="tsd-anchor"></a>
-					<h3>disabled</h3>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> disabled</h3>
 					<div class="tsd-signature tsd-kind-icon">disabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/36ce50c/src/interfaces/ICommand.ts#L47">interfaces/ICommand.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/f77ef21/src/interfaces/ICommand.ts#L47">interfaces/ICommand.ts:47</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -137,7 +137,7 @@
 					<div class="tsd-signature tsd-kind-icon">exec<span class="tsd-signature-symbol">:</span> <a href="../modules/_interfaces_icommand_.html#commandexecutor" class="tsd-signature-type">CommandExecutor</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/36ce50c/src/interfaces/ICommand.ts#L52">interfaces/ICommand.ts:52</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/f77ef21/src/interfaces/ICommand.ts#L52">interfaces/ICommand.ts:52</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -148,11 +148,11 @@
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="middleware" class="tsd-anchor"></a>
-					<h3>middleware</h3>
-					<div class="tsd-signature tsd-kind-icon">middleware<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> middleware</h3>
+					<div class="tsd-signature tsd-kind-icon">middleware<span class="tsd-signature-symbol">:</span> <a href="../modules/_interfaces_icommand_.html#commandmiddleware" class="tsd-signature-type">CommandMiddleware</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/36ce50c/src/interfaces/ICommand.ts#L57">interfaces/ICommand.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/f77ef21/src/interfaces/ICommand.ts#L57">interfaces/ICommand.ts:57</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -160,35 +160,14 @@
 							<p>Command middleware.</p>
 						</div>
 					</div>
-					<div class="tsd-type-declaration">
-						<h4>Type declaration</h4>
-						<ul class="tsd-parameters">
-							<li class="tsd-parameter-siganture">
-								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-property tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><a href="../classes/_commandmessage_.commandmessage.html" class="tsd-signature-type">CommandMessage</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Iterator</span><span class="tsd-signature-symbol">&lt;</span><a href="_interfaces_imiddleware_.imiddleware.html" class="tsd-signature-type">IMiddleware</a><span class="tsd-signature-symbol">&gt;</span></li>
-								</ul>
-								<ul class="tsd-descriptions">
-									<li class="tsd-description">
-										<h4 class="tsd-parameters-title">Parameters</h4>
-										<ul class="tsd-parameters">
-											<li>
-												<h5>msg: <a href="../classes/_commandmessage_.commandmessage.html" class="tsd-signature-type">CommandMessage</a></h5>
-											</li>
-										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Iterator</span><span class="tsd-signature-symbol">&lt;</span><a href="_interfaces_imiddleware_.imiddleware.html" class="tsd-signature-type">IMiddleware</a><span class="tsd-signature-symbol">&gt;</span></h4>
-									</li>
-								</ul>
-							</li>
-						</ul>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="triggers" class="tsd-anchor"></a>
-					<h3>triggers</h3>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> triggers</h3>
 					<div class="tsd-signature tsd-kind-icon">triggers<span class="tsd-signature-symbol">:</span> <a href="../modules/_interfaces_icommand_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><a href="../modules/_interfaces_icommand_.html#trigger" class="tsd-signature-type">Trigger</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/36ce50c/src/interfaces/ICommand.ts#L42">interfaces/ICommand.ts:42</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/f77ef21/src/interfaces/ICommand.ts#L42">interfaces/ICommand.ts:42</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -209,28 +188,19 @@
 						<span>Internals</span>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="../modules/_client_.html">"<wbr>Client"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_commandhandler_.html">"<wbr>Command<wbr>Handler"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_commandloader_.html">"<wbr>Command<wbr>Loader"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_commandmessage_.html">"<wbr>Command<wbr>Message"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_prompter_.html">"<wbr>Prompter"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_response_.html">"<wbr>Response"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
 						<a href="../modules/_index_.html">"index"</a>
 					</li>
 					<li class="label tsd-is-external">
 						<span>Externals</span>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="../modules/_core_client_.html">"core/<wbr>Client"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="../modules/_core_commandhandler_.html">"core/<wbr>Command<wbr>Handler"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="../modules/_core_commandregistry_.html">"core/<wbr>Command<wbr>Registry"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_errors_argumenterror_.html">"errors/<wbr>Argument<wbr>Error"</a>
@@ -257,10 +227,22 @@
 						<a href="../modules/_middleware_validator_.html">"middleware/<wbr>Validator"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="../modules/_structures_commandmessage_.html">"structures/<wbr>Command<wbr>Message"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="../modules/_structures_prompter_.html">"structures/<wbr>Prompter"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="../modules/_structures_response_.html">"structures/<wbr>Response"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_types_messagevalidator_.html">"types/<wbr>Message<wbr>Validator"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_types_modules_textbasedchannel_.html">"types/modules/<wbr>Text<wbr>Based<wbr>Channel"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="../modules/_util_queue_.html">"util/<wbr>Queue"</a>
 					</li>
 				</ul>
 			</nav>

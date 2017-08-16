@@ -88,7 +88,7 @@
 client.on(<span class="hljs-string">'message'</span>, handler.handle);
 client.login(<span class="hljs-string">'token'</span>);
 </code></pre>
-				<p>This will automatically load all commands in the <code>./commands</code> directory and handle incoming messages.  See <a href="http://handles.topkek.pw/global.html#Command"><code>Command</code></a> in the docs for information on how to format the exports of the files you place in <code>./commands</code>.  The loader and handler can be configured according to <a href="http://handles.topkek.pw/global.html#Config"><code>Config</code></a> options passed to the constructor.</p>
+				<p>This will automatically load all commands in the <code>./commands</code> directory and handle incoming messages.  See <a href="https://handles.topkek.pw/interfaces/_interfaces_icommand_.icommand.html"><code>Command</code></a> in the docs for information on how to format the exports of the files you place in <code>./commands</code>.  The loader and handler can be configured according to <a href="https://handles.topkek.pw/interfaces/_interfaces_iconfig_.iconfig.html"><code>Config</code></a> options passed to the constructor.</p>
 				<pre><code class="lang-js"><span class="hljs-keyword">const</span> handler = <span class="hljs-keyword">new</span> handles.Client({
     <span class="hljs-attr">directory</span>: <span class="hljs-string">'./some/other/awesome/directory'</span>,
     <span class="hljs-attr">prefixes</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-string">'dank'</span>, <span class="hljs-string">'memes'</span>])
@@ -106,28 +106,19 @@ client.login(<span class="hljs-string">'token'</span>);
 						<span>Internals</span>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="modules/_client_.html">"<wbr>Client"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_commandhandler_.html">"<wbr>Command<wbr>Handler"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_commandloader_.html">"<wbr>Command<wbr>Loader"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_commandmessage_.html">"<wbr>Command<wbr>Message"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_prompter_.html">"<wbr>Prompter"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_response_.html">"<wbr>Response"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
 						<a href="modules/_index_.html">"index"</a>
 					</li>
 					<li class="label tsd-is-external">
 						<span>Externals</span>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="modules/_core_client_.html">"core/<wbr>Client"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="modules/_core_commandhandler_.html">"core/<wbr>Command<wbr>Handler"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="modules/_core_commandregistry_.html">"core/<wbr>Command<wbr>Registry"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="modules/_errors_argumenterror_.html">"errors/<wbr>Argument<wbr>Error"</a>
@@ -154,10 +145,22 @@ client.login(<span class="hljs-string">'token'</span>);
 						<a href="modules/_middleware_validator_.html">"middleware/<wbr>Validator"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="modules/_structures_commandmessage_.html">"structures/<wbr>Command<wbr>Message"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="modules/_structures_prompter_.html">"structures/<wbr>Prompter"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="modules/_structures_response_.html">"structures/<wbr>Response"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="modules/_types_messagevalidator_.html">"types/<wbr>Message<wbr>Validator"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="modules/_types_modules_textbasedchannel_.html">"types/modules/<wbr>Text<wbr>Based<wbr>Channel"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="modules/_util_queue_.html">"util/<wbr>Queue"</a>
 					</li>
 				</ul>
 			</nav>

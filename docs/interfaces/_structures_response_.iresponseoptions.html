@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;CommandMessage&quot; | discord-handles</title>
+	<title>IResponseOptions | discord-handles</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,32 +56,88 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_commandmessage_.html">&quot;CommandMessage&quot;</a>
+					<a href="../modules/_structures_response_.html">&quot;structures/Response&quot;</a>
+				</li>
+				<li>
+					<a href="_structures_response_.iresponseoptions.html">IResponseOptions</a>
 				</li>
 			</ul>
-			<h1>External module &quot;CommandMessage&quot;</h1>
+			<h1>Interface IResponseOptions</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">IResponseOptions</span>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
-							<h3>Classes</h3>
+						<section class="tsd-index-section tsd-is-external">
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-class tsd-parent-kind-external-module"><a href="../classes/_commandmessage_.commandmessage.html" class="tsd-kind-icon">Command<wbr>Message</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_structures_response_.iresponseoptions.html#catchall" class="tsd-kind-icon">catchall</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_structures_response_.iresponseoptions.html#force" class="tsd-kind-icon">force</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_structures_response_.iresponseoptions.html#type" class="tsd-kind-icon">type</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section ">
-							<h3>Interfaces</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-interface tsd-parent-kind-external-module"><a href="../interfaces/_commandmessage_.icommandmessageoptions.html" class="tsd-kind-icon">ICommand<wbr>Message<wbr>Options</a></li>
-							</ul>
-						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group tsd-is-external">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="catchall" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> catchall</h3>
+					<div class="tsd-signature tsd-kind-icon">catchall<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/f77ef21/src/structures/Response.ts#L12">structures/Response.ts:12</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Whether to catch all rejections when sending.  The promise will always resolve when this option
+							is enabled; if there is an error, the resolution will be undefined.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="force" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> force</h3>
+					<div class="tsd-signature tsd-kind-icon">force<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/f77ef21/src/structures/Response.ts#L17">structures/Response.ts:17</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Whether to send a new message regardless of any prior responses.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="type" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> type</h3>
+					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"success"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"error"</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/f77ef21/src/structures/Response.ts#L22">structures/Response.ts:22</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The type of response.</p>
+						</div>
 					</div>
 				</section>
 			</section>
@@ -96,68 +152,92 @@
 						<span>Internals</span>
 					</li>
 					<li class=" tsd-kind-external-module">
-						<a href="_client_.html">"<wbr>Client"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_commandhandler_.html">"<wbr>Command<wbr>Handler"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_commandloader_.html">"<wbr>Command<wbr>Loader"</a>
-					</li>
-					<li class="current tsd-kind-external-module">
-						<a href="_commandmessage_.html">"<wbr>Command<wbr>Message"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_prompter_.html">"<wbr>Prompter"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_response_.html">"<wbr>Response"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="_index_.html">"index"</a>
+						<a href="../modules/_index_.html">"index"</a>
 					</li>
 					<li class="label tsd-is-external">
 						<span>Externals</span>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_errors_argumenterror_.html">"errors/<wbr>Argument<wbr>Error"</a>
+						<a href="../modules/_core_client_.html">"core/<wbr>Client"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_errors_baseerror_.html">"errors/<wbr>Base<wbr>Error"</a>
+						<a href="../modules/_core_commandhandler_.html">"core/<wbr>Command<wbr>Handler"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_errors_validationerror_.html">"errors/<wbr>Validation<wbr>Error"</a>
+						<a href="../modules/_core_commandregistry_.html">"core/<wbr>Command<wbr>Registry"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_interfaces_icommand_.html">"interfaces/ICommand"</a>
+						<a href="../modules/_errors_argumenterror_.html">"errors/<wbr>Argument<wbr>Error"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_interfaces_iconfig_.html">"interfaces/IConfig"</a>
+						<a href="../modules/_errors_baseerror_.html">"errors/<wbr>Base<wbr>Error"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_interfaces_imiddleware_.html">"interfaces/IMiddleware"</a>
+						<a href="../modules/_errors_validationerror_.html">"errors/<wbr>Validation<wbr>Error"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_middleware_argument_.html">"middleware/<wbr>Argument"</a>
+						<a href="../modules/_interfaces_icommand_.html">"interfaces/ICommand"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_middleware_validator_.html">"middleware/<wbr>Validator"</a>
+						<a href="../modules/_interfaces_iconfig_.html">"interfaces/IConfig"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_types_messagevalidator_.html">"types/<wbr>Message<wbr>Validator"</a>
+						<a href="../modules/_interfaces_imiddleware_.html">"interfaces/IMiddleware"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_types_modules_textbasedchannel_.html">"types/modules/<wbr>Text<wbr>Based<wbr>Channel"</a>
+						<a href="../modules/_middleware_argument_.html">"middleware/<wbr>Argument"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="../modules/_middleware_validator_.html">"middleware/<wbr>Validator"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="../modules/_structures_commandmessage_.html">"structures/<wbr>Command<wbr>Message"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="../modules/_structures_prompter_.html">"structures/<wbr>Prompter"</a>
+					</li>
+					<li class="current tsd-kind-external-module tsd-is-external">
+						<a href="../modules/_structures_response_.html">"structures/<wbr>Response"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="../modules/_types_messagevalidator_.html">"types/<wbr>Message<wbr>Validator"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="../modules/_types_modules_textbasedchannel_.html">"types/modules/<wbr>Text<wbr>Based<wbr>Channel"</a>
+					</li>
+					<li class=" tsd-kind-external-module tsd-is-external">
+						<a href="../modules/_util_queue_.html">"util/<wbr>Queue"</a>
 					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="../classes/_commandmessage_.commandmessage.html" class="tsd-kind-icon">Command<wbr>Message</a>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-is-external">
+						<a href="../classes/_structures_response_.response.html" class="tsd-kind-icon">Response</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module">
-						<a href="../interfaces/_commandmessage_.icommandmessageoptions.html" class="tsd-kind-icon">ICommand<wbr>Message<wbr>Options</a>
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
+						<a href="_structures_response_.iresponseoptions.html" class="tsd-kind-icon">IResponse<wbr>Options</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_structures_response_.iresponseoptions.html#catchall" class="tsd-kind-icon">catchall</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_structures_response_.iresponseoptions.html#force" class="tsd-kind-icon">force</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="_structures_response_.iresponseoptions.html#type" class="tsd-kind-icon">type</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">
+						<a href="../modules/_structures_response_.html#send" class="tsd-kind-icon">Send</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">
+						<a href="../modules/_structures_response_.html#sentresponse" class="tsd-kind-icon">Sent<wbr>Response</a>
 					</li>
 				</ul>
 			</nav>
