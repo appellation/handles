@@ -1,10 +1,10 @@
+import Client from './core/Client';
+import CommandHandler from './core/CommandHandler';
+import CommandRegistry from './core/CommandRegistry';
 
-import Client from './Client';
-import CommandHandler from './CommandHandler';
-import CommandLoader from './CommandLoader';
-import CommandMessage from './CommandMessage';
-import Prompter from './Prompter';
-import Response from './Response';
+import CommandMessage from './structures/CommandMessage';
+import Prompter from './structures/Prompter';
+import Response from './structures/Response';
 
 import Argument from './middleware/Argument';
 import Validator from './middleware/Validator';
@@ -19,7 +19,7 @@ export {
   Argument,
   Client,
   CommandHandler,
-  CommandLoader,
+  CommandRegistry,
   CommandMessage,
   Prompter,
   Response,

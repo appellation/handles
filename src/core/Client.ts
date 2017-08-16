@@ -1,15 +1,17 @@
 import EventEmitter = require('events');
+import BaseError from '../errors/BaseError';
+import Validator from '../middleware/Validator';
+import CommandMessage from '../structures/CommandMessage';
+import Response from '../structures/Response';
+
 import CommandHandler from './CommandHandler';
-import CommandLoader from './CommandLoader';
-import CommandMessage from './CommandMessage';
-import BaseError from './errors/BaseError';
-import Validator from './middleware/Validator';
-import Response from './Response';
+import CommandRegistry from './CommandRegistry';
 
-import { ICommand } from './interfaces/ICommand';
-import { IConfig } from './interfaces/IConfig';
+import { ICommand } from '../interfaces/ICommand';
+import { IConfig } from '../interfaces/IConfig';
+import { IMiddleware } from '../interfaces/IMiddleware';
 
-import { Message } from 'discord.js';
+import { Client, Message } from 'discord.js';
 
 /**
  * The starting point for using handles.
@@ -26,36 +28,24 @@ import { Message } from 'discord.js';
  * ```
  */
 export default class HandlesClient extends EventEmitter {
-
-  public config: IConfig;
-  public readonly loader: CommandLoader;
+  public readonly registry: CommandRegistry;
   public readonly handler: CommandHandler;
-  public readonly ignore: string[] = [];
 
-  constructor(config: IConfig) {
+  public Response: typeof Response;
+  public argsSuffix?: string;
+  public readonly prefixes: Set<string>;
+
+  constructor(client: Client, config: IConfig = {}) {
     super();
 
-    this.config = config;
-    this.loader = new CommandLoader(this);
-    this.handler = new CommandHandler(this);
+    this.Response = Response;
+    this.argsSuffix = config.argsSuffix;
+    this.prefixes = config.prefixes || new Set();
 
-    if (this.config.userID && this.config.prefixes) {
-      this.config.prefixes.add(`<@${this.config.userID}>`).add(`<@!${this.config.userID}>`);
-    }
+    this.registry = new CommandRegistry(this, config);
+    this.handler = new CommandHandler(this, config);
 
-    this.on('middlewareStarted', (cmd: CommandMessage) => {
-      this.ignore.push(cmd.session);
-    });
-
-    this.on('middlewareFinished', (cmd: CommandMessage) => {
-      if (!this.ignore.includes(cmd.session)) return;
-      this.ignore.splice(this.ignore.indexOf(cmd.session), 1);
-    });
-
-    this.on('middlewareFailed', ({ command: cmd }: { command: CommandMessage }) => {
-      if (!this.ignore.includes(cmd.session)) return;
-      this.ignore.splice(this.ignore.indexOf(cmd.session), 1);
-    });
+    client.once('ready', () => this.prefixes.add(`<@${client.user.id}>`).add(`<@!${client.user.id}>`));
 
     this.handle = this.handle.bind(this);
   }
@@ -90,25 +80,18 @@ export default class HandlesClient extends EventEmitter {
 
     const cmd = this.handler.resolve(msg);
     if (!cmd) {
-      /**
-       * Fired when the command could not be resolved.
-       * @event HandlesClient#commandUnknown
-       * @type {Message}
-       */
       this.emit('commandUnknown', msg);
       return null;
     }
-
-    if (this.ignore.includes(cmd.session)) return null;
 
     return this.handler.exec(cmd);
   }
 
   public on(
-    event: 'commandStarted' | 'middlewareStarted' | 'middlewareFinished',
+    event: 'commandStarted' | 'commandUnknown',
     listener: (cmd: CommandMessage) => void): this;
 
-  public on(event: 'middlewareFailed' | 'commandError', listener:
+  public on(event: 'commandError', listener:
     ({ command, error }: { command: CommandMessage, error: Error | BaseError }) => void): this;
 
   public on(event: 'commandFinished', listener:

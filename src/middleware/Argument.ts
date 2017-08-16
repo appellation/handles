@@ -1,8 +1,8 @@
-import CommandMessage from '../CommandMessage';
 import ArgumentError from '../errors/ArgumentError';
 import { IMiddleware } from '../interfaces/IMiddleware';
-import Prompter from '../Prompter';
-import Response from '../Response';
+import CommandMessage from '../structures/CommandMessage';
+import Prompter from '../structures/Prompter';
+import Response from '../structures/Response';
 
 import { Message } from 'discord.js';
 
@@ -202,8 +202,7 @@ export default class Argument implements IOptions, IMiddleware {
           if (this.optional) {
             return null;
           } else {
-            const R = command.config.Response || Response;
-            const prompter = new Prompter(command.handles, new R(command.message, false));
+            const prompter = new Prompter(command.handles, new command.handles.Response(command.message, false));
             return prompter.collectPrompt(this, matched.length === 0)
               .catch((reason: string) => {
                 command.response.send('Command cancelled.');

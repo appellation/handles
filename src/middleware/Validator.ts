@@ -1,6 +1,6 @@
-import CommandMessage from '../CommandMessage';
 import ValidationError from '../errors/ValidationError';
 import { IMiddleware } from '../interfaces/IMiddleware';
+import CommandMessage from '../structures/CommandMessage';
 
 /**
  * ```js

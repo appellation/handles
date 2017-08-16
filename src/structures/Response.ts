@@ -1,7 +1,7 @@
-import queue = require('queue');
+import Queue from '../util/Queue';
 
 import { Message, MessageOptions } from 'discord.js';
-import { TextBasedChannel } from './types/modules/TextBasedChannel';
+import { TextBasedChannel } from '../types/modules/TextBasedChannel';
 
 export type SentResponse = Message | Message[];
 export interface IResponseOptions {
@@ -56,7 +56,7 @@ export default class Response {
   /**
    * The queue of response jobs.
    */
-  private readonly _q: any[];
+  private readonly _q: Queue;
 
   /**
    * @param message The message to respond to.
@@ -68,10 +68,7 @@ export default class Response {
     this.channel = message.channel;
     this.edit = edit;
     this.responseMessage = null;
-    this._q = queue({
-      autostart: true,
-      concurrency: 1,
-    });
+    this._q = new Queue();
   }
 
   /**
@@ -90,27 +87,28 @@ export default class Response {
     else if (type === 'error') data = `\`❌\` | ${data}`;
 
     return new Promise((resolve, reject) => {
-      this._q.push((cb: (e: Error | null, m?: SentResponse) => void) => {
+      this._q.push(async (): Promise<void> => {
         function success(m?: SentResponse): void {
-          cb(null, m);
           resolve(m);
         }
 
         function error(e: Error): void {
           if (catchall) return success();
-          cb(e);
           reject(e);
         }
 
         if (this.responseMessage && this.edit && !force) {
-          this.responseMessage.edit(data).then(success, error);
+          await this.responseMessage.edit(data).then(success, error);
         } else {
-          this.channel.send(data, messageOptions).then((m) => {
+          await this.channel.send(data, messageOptions).then((m) => {
             if (Array.isArray(m)) this.responseMessage = m[0];
             else this.responseMessage = m;
-            success(m);
+
+            return success(m);
           }, () => {
-            if (this.channel.type === 'text') this.message.author.send(data, messageOptions).then(success, error);
+            if (this.channel.type === 'text') {
+              return this.message.author.send(data, messageOptions).then(success, error);
+            }
           });
         }
       });

@@ -1,4 +1,4 @@
-const Argument = require('../../dist/Argument');
+const Argument = require('../../dist/middleware/Argument').default;
 
 // const HTTPPing = require('node-http-ping')
 
@@ -6,7 +6,7 @@ class PingCommand
 {
     exec(command)
     {
-        if (!command.args.length) {
+        if (!command.args.site) {
             return command.response.success(`${Math.round(command.message.client.ping)}ms 💓`)
         }
 
@@ -15,9 +15,9 @@ class PingCommand
         }).catch(console.error)
     }
 
-    * arguments()
+    * middleware()
     {
-        yield new Argument()
+        yield new Argument('site')
             .setPrompt('plz provide websit')
             .setRePrompt('this is no link my fRIEND')
             .setOptional()

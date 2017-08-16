@@ -1,9 +1,10 @@
-import HandlesClient from './Client';
+import HandlesClient from '../core/Client';
+
 import Response from './Response';
 
-import { ICommand, Trigger } from './interfaces/ICommand';
-import { IConfig } from './interfaces/IConfig';
-import { TextBasedChannel } from './types/modules/TextBasedChannel';
+import { ICommand, Trigger } from '../interfaces/ICommand';
+import { IConfig } from '../interfaces/IConfig';
+import { TextBasedChannel } from '../types/modules/TextBasedChannel';
 
 import { Client, Guild, Message } from 'discord.js';
 
@@ -20,7 +21,7 @@ export interface ICommandMessageOptions {
 export default class CommandMessage {
 
   /**
-   * The handles client. Named so in order to avoid confusion with the Discord.js client, which is exposed here.
+   * The handles client.
    */
   public readonly handles: HandlesClient;
 
@@ -65,9 +66,8 @@ export default class CommandMessage {
     this.trigger = trigger;
     this.message = message;
     this.body = body;
-    this.config = client.config;
     this.args = null;
-    this.response = new (this.config.Response || Response)(this.message);
+    this.response = new this.handles.Response(this.message);
   }
 
   /**

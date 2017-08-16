@@ -7,7 +7,7 @@ class Command {
     const val2 = new Handles.Validator(cmd)
       .apply(true, 'lol');
 
-    yield val1;
+    // yield val1;
 
     yield new Handles.Argument('first')
       .setPrompt('Please provide the first digit.')

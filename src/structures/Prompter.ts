@@ -1,5 +1,5 @@
-import HandlesClient from './Client';
-import Argument from './middleware/Argument';
+import HandlesClient from '../core/Client';
+import Argument from '../middleware/Argument';
 import Response from './Response';
 
 import { Message } from 'discord.js';
@@ -11,7 +11,7 @@ export default class Prompter {
   /**
    * The handles client.
    */
-  public client: HandlesClient;
+  public handles: HandlesClient;
 
   /**
    * The responder to use for prompting.
@@ -19,7 +19,7 @@ export default class Prompter {
   public response: Response;
 
   constructor(client: HandlesClient, response: Response) {
-    this.client = client;
+    this.handles = client;
     this.response = response;
     this.response.edit = false;
   }
@@ -31,7 +31,7 @@ export default class Prompter {
    */
   public collectPrompt(arg: Argument, first = true): Promise<any> {
     const text = first ? arg.prompt : arg.rePrompt;
-    const defaultSuffix = this.client.config.argsSuffix ||
+    const defaultSuffix = this.handles.argsSuffix ||
       `\nCommand will be cancelled in **${arg.timeout} seconds**.  Type \`cancel\` to cancel immediately.`;
 
     return this.awaitResponse(text + (arg.suffix || defaultSuffix), arg.timeout * 1000).then((response) => {
@@ -45,7 +45,7 @@ export default class Prompter {
   /**
    * Wait for a response to some text.
    * @param text The text for which to await a response.
-   * @param time The time (in seconds) for which to wait.
+   * @param time The time (in ms) for which to wait.
    */
   public awaitResponse(text: string, time = 30000): Promise<Message> {
     return this.response.send(text).then(() => {

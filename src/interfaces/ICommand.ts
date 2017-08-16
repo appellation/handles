@@ -1,4 +1,4 @@
-import CommandMessage from '../CommandMessage';
+import CommandMessage from '../structures/CommandMessage';
 import { IMiddleware } from './IMiddleware';
 
 /**
@@ -39,12 +39,12 @@ export interface ICommand {
   /**
    * Defaults to the file name.
    */
-  triggers: Trigger[] | Trigger;
+  triggers?: Trigger[] | Trigger;
 
   /**
    * Whether the command is globally disabled.
    */
-  disabled: boolean;
+  disabled?: boolean;
 
   /**
    * The command function to execute.
@@ -54,5 +54,5 @@ export interface ICommand {
   /**
    * Command middleware.
    */
-  middleware: (msg: CommandMessage) => Iterator<IMiddleware>;
+  middleware?: CommandMiddleware;
 }

@@ -1,4 +1,4 @@
-import Response from '../Response';
+import Response from '../structures/Response';
 import { MessageValidator } from '../types/MessageValidator';
 
 export interface IConfig {
@@ -13,11 +13,6 @@ export interface IConfig {
   argsSuffix?: string;
 
   /**
-   * Set this to enable mention prefix.
-   */
-  userID?: string;
-
-  /**
    * Directory to load commands from. Default to `./commands` relative to the cwd.
    */
   directory?: string;
@@ -26,11 +21,6 @@ export interface IConfig {
    * This will get run on every message. Use to manually determine whether a message is a command.
    */
   validator?: MessageValidator;
-
-  /**
-   * A custom response class to use. Should extend the built-in class.
-   */
-  Response?: typeof Response;
 
   /**
    * Set to false to resolve/reject the command handling process properly. When true,
