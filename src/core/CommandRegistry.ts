@@ -79,21 +79,18 @@ export default class CommandRegistry extends Map {
     const files = await readdir(dir);
     const list: string[] = [];
 
-    return Promise.all(files.map((f) => {
+    await Promise.all(files.map(async (f) => {
       const currentPath = path.join(dir, f);
+      const stats = await stat(currentPath);
 
-      return new Promise(async (resolve, reject) => {
-        const stats = await stat(currentPath);
+      if (stats.isFile() && path.extname(currentPath) === '.js') {
+        list.push(currentPath);
+      } else if (stats.isDirectory()) {
+        const files = await this._loadDir(currentPath);
+        list.push(...files);
+      }
+    }));
 
-        if (stats.isFile() && path.extname(currentPath) === '.js') {
-          list.push(currentPath);
-        } else if (stats.isDirectory()) {
-          const files = await this._loadDir(currentPath);
-          list.push(...files);
-        }
-
-        resolve();
-      }).catch(console.error); // tslint:disable-line no-console
-    })).then(() => list);
+    return list;
   }
 }
