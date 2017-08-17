@@ -25,9 +25,10 @@ export interface IOptions {
 /**
  * This function takes a string which contains any number of arguments and returns the first of them.
  * The return should be a substring of the input, which will then be removed from the input string. The remaining
- * input will be fed back into this function for the next argument, etc. until no more arguments remain.
+ * input will be fed back into this function for the next argument, etc. until no more arguments remain. Use this
+ * to determine whether an argument *exists*; use [[Argument#resolver]] to determine if the argument is *valid*.
  */
-export type Matcher = (content: string) => string | null;
+export type Matcher = (content: string) => string;
 
 /**
  * Represents a command argument.
@@ -125,7 +126,8 @@ export default class Argument implements IOptions, IMiddleware {
   }
 
   /**
-   * Make this argument take up the rest of the words in the command.
+   * Make this argument take up the rest of the words in the command. Any remaining required arguments
+   * will be prompted for.
    */
   public setInfinite() {
     return this.setPattern(/.*/);
@@ -187,36 +189,26 @@ export default class Argument implements IOptions, IMiddleware {
     return this;
   }
 
-  public run(command: CommandMessage) {
+  public async run(command: CommandMessage) {
     const matched = this.matcher(command.body);
-    if (typeof matched !== 'string') {
-      return Promise.reject(new Error('Argument matchers must return a substring of the command body.'));
-    }
-
     command.body = command.body.replace(matched, '').trim();
 
-    // if there is no matched content, skip straight to prompting if necessary; otherwise resolve first
-    return Promise.resolve(!matched ? null : this.resolver(matched, command.message, this))
-      .then((resolved) => {
-        if (resolved === null) {
-          if (this.optional) {
-            return null;
-          } else {
-            const prompter = new Prompter(command.handles, new command.handles.Response(command.message, false));
-            return prompter.collectPrompt(this, matched.length === 0)
-              .catch((reason: string) => {
-                command.response.send('Command cancelled.');
-                return Promise.reject(new ArgumentError(this, reason));
-              });
-          }
-        } else {
-          return resolved;
-        }
-      })
-      .then((value) => {
-        if (!command.args) command.args = {};
-        command.args[this.key] = value;
-        return value;
-      });
+    let resolved = !matched ? null : await this.resolver(matched, command.message, this);
+
+    // if there is no matched content and the argument is not optional, collect a prompt
+    if (resolved === null && !this.optional) {
+      const prompter = new Prompter(command.handles, new command.handles.Response(command.message, false));
+      try {
+        resolved = await prompter.collectPrompt(this, matched.length === 0);
+      } catch (e) {
+        command.response.send('Command cancelled.');
+        if (typeof e === 'string') throw new ArgumentError(this, e);
+        throw e;
+      }
+    }
+
+    if (!command.args) command.args = {};
+    command.args[this.key] = resolved;
+    return resolved;
   }
 }

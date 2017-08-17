@@ -56,7 +56,7 @@ export default class Validator implements IMiddleware {
   /**
    * Functions to execute when determining validity. Maps validation functions to reasons.
    */
-  private exec: Map<ValidationFunction, string> = new Map();
+  private exec: Map<ValidationFunction, string | null> = new Map();
 
   /**
    * Test a new boolean for validity.
@@ -67,7 +67,7 @@ export default class Validator implements IMiddleware {
    * yield validator;
    * ```
    */
-  public apply(test: ValidationFunction | boolean, reason: string) {
+  public apply(test: ValidationFunction | boolean, reason: string | null = null) {
     this.exec.set(typeof test === 'function' ? test : () => test, reason);
     return this;
   }
@@ -75,7 +75,7 @@ export default class Validator implements IMiddleware {
   /**
    * Run this validator.
    */
-  public run(command: CommandMessage) {
+  public async run(command: CommandMessage) {
     for (const [test, reason] of this.exec) {
       try {
         if (!test(command, this)) {
@@ -85,7 +85,7 @@ export default class Validator implements IMiddleware {
         }
       } catch (e) {
         if (this.respond) command.response.error(e);
-        return Promise.reject(e);
+        throw e;
       }
     }
   }

@@ -1,4 +1,5 @@
 import HandlesClient from '../core/Client';
+import ArgumentError from '../errors/ArgumentError';
 import Argument from '../middleware/Argument';
 import Response from './Response';
 
@@ -29,17 +30,18 @@ export default class Prompter {
    * @param arg The argument for which to prompt.
    * @param first Whether this is the first prompt.
    */
-  public collectPrompt(arg: Argument, first = true): Promise<any> {
+  public async collectPrompt(arg: Argument, first = true): Promise<any> {
     const text = first ? arg.prompt : arg.rePrompt;
-    const defaultSuffix = this.handles.argsSuffix ||
+    const defaultSuffix = arg.suffix || this.handles.argsSuffix ||
       `\nCommand will be cancelled in **${arg.timeout} seconds**.  Type \`cancel\` to cancel immediately.`;
 
-    return this.awaitResponse(text + (arg.suffix || defaultSuffix), arg.timeout * 1000).then((response) => {
-      if (response.content === 'cancel') throw 'cancelled'; // tslint:disable-line no-string-throw
-      const resolved = arg.resolver(response.content, response, arg);
-      if (resolved === null) return this.collectPrompt(arg, false);
-      return resolved;
-    });
+    const response = await this.awaitResponse(text + defaultSuffix, arg.timeout * 1000);
+    if (response.content === 'cancel') throw new ArgumentError(arg, 'cancelled');
+
+    const resolved = await arg.resolver(response.content, response, arg);
+    if (resolved === null) return this.collectPrompt(arg, false);
+
+    return resolved;
   }
 
   /**
@@ -47,13 +49,13 @@ export default class Prompter {
    * @param text The text for which to await a response.
    * @param time The time (in ms) for which to wait.
    */
-  public awaitResponse(text: string, time = 30000): Promise<Message> {
-    return this.response.send(text).then(() => {
-      return this.response.message.channel.awaitMessages(
-        (m) => m.author.id === this.response.message.author.id, { time, max: 1, errors: ['time'] },
-      );
-    }).then((responses) => {
-      return responses.first();
-    });
+  public async awaitResponse(text: string, time = 30000): Promise<Message> {
+    await this.response.send(text);
+
+    const responses = await this.response.channel.awaitMessages(
+      (m) => m.author.id === this.response.message.author.id,
+      { time, max: 1, errors: ['time'] },
+    );
+    return responses.first();
   }
 }
