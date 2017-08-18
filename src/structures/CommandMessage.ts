@@ -4,7 +4,7 @@ import Response from './Response';
 
 import { ICommand, Trigger } from '../interfaces/ICommand';
 import { IConfig } from '../interfaces/IConfig';
-import { TextBasedChannel } from '../types/modules/TextBasedChannel';
+import { TextBasedChannel } from './Response';
 
 import { Client, Guild, Message } from 'discord.js';
 

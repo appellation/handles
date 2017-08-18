@@ -8,9 +8,9 @@ import { CommandMiddleware, ICommand } from '../interfaces/ICommand';
 import { IConfig } from '../interfaces/IConfig';
 import { IMiddleware } from '../interfaces/IMiddleware';
 
-import { MessageValidator } from '../types/MessageValidator';
-
 import { Message } from 'discord.js';
+
+export type MessageValidator = (m: Message) => string | null | Promise<string | null>;
 
 /**
  * Class for handling a command.
@@ -42,19 +42,14 @@ export default class CommandHandler {
    */
   public middleware: CommandMiddleware[] = [];
 
-  /**
-   * An internal regex used to parse command bits.
-   */
-  private _regex: RegExp;
-
   constructor(handles: HandlesClient, config: IConfig) {
     this.handles = handles;
     this.silent = typeof config.silent === 'undefined' ? true : config.silent;
 
-    if (typeof config.validator !== 'function' &&
-      (!this.handles.prefixes || !this.handles.prefixes.size)) {
-      throw new Error('Unable to validate commands: no validator or prefixes were provided.');
-    }
+    if (
+      typeof config.validator !== 'function' &&
+      (!this.handles.prefixes || !this.handles.prefixes.size)
+    ) throw new Error('Unable to validate commands: no validator or prefixes were provided.');
 
     this.validator = config.validator || ((message) => {
       for (const p of this.handles.prefixes) {
@@ -65,18 +60,16 @@ export default class CommandHandler {
 
       return null;
     });
-
-    this._regex = /^([^\s]+)(.*)/;
   }
 
   /**
    * Resolve a command from a message.
    */
-  public resolve(message: Message): CommandMessage | null {
-    const content = this.validator(message);
+  public async resolve(message: Message): Promise<CommandMessage | null> {
+    const content = await this.validator(message);
     if (typeof content !== 'string' || !content) return null;
 
-    const match = content.match(this._regex);
+    const match = content.match(/^([^\s]+)(.*)/);
     if (match) {
       const [, cmd, commandContent] = match;
       const mod: ICommand | undefined = this.handles.registry.get(cmd);

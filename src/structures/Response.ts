@@ -1,7 +1,8 @@
 import Queue from '../util/Queue';
 
-import { Message, MessageOptions } from 'discord.js';
-import { TextBasedChannel } from '../types/modules/TextBasedChannel';
+import { DMChannel, GroupDMChannel, Message, MessageOptions, TextChannel } from 'discord.js';
+
+export type TextBasedChannel = TextChannel | DMChannel | GroupDMChannel;
 
 export type SentResponse = Message | Message[];
 export interface IResponseOptions {

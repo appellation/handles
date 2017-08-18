@@ -70,7 +70,7 @@ export default class HandlesClient extends EventEmitter {
    * });
    * ```
    */
-  public handle(msg: Message) {
+  public async handle(msg: Message) {
     if (
       msg.webhookID ||
       msg.system ||
@@ -78,7 +78,7 @@ export default class HandlesClient extends EventEmitter {
       (!msg.client.user.bot && msg.author.id !== msg.client.user.id)
     ) return null;
 
-    const cmd = this.handler.resolve(msg);
+    const cmd = await this.handler.resolve(msg);
     if (!cmd) {
       this.emit('commandUnknown', msg);
       return null;
@@ -87,9 +87,7 @@ export default class HandlesClient extends EventEmitter {
     return this.handler.exec(cmd);
   }
 
-  public on(
-    event: 'commandStarted' | 'commandUnknown',
-    listener: (cmd: CommandMessage) => void): this;
+  public on(event: 'commandStarted' | 'commandUnknown', listener: (cmd: CommandMessage) => void): this;
 
   public on(event: 'commandError', listener:
     ({ command, error }: { command: CommandMessage, error: Error | BaseError }) => void): this;

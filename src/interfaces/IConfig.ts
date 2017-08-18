@@ -1,5 +1,5 @@
+import { MessageValidator } from '../core/CommandHandler';
 import Response from '../structures/Response';
-import { MessageValidator } from '../types/MessageValidator';
 
 export interface IConfig {
   /**

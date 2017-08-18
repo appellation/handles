@@ -13,8 +13,6 @@ export * from './interfaces/ICommand';
 export * from './interfaces/IConfig';
 export * from './interfaces/IMiddleware';
 
-export { MessageValidator } from './types/MessageValidator';
-
 export {
   Argument,
   Client,

@@ -53,7 +53,7 @@ export default class Prompter {
     await this.response.send(text);
 
     const responses = await this.response.channel.awaitMessages(
-      (m) => m.author.id === this.response.message.author.id,
+      (m: Message) => m.author.id === this.response.message.author.id,
       { time, max: 1, errors: ['time'] },
     );
     return responses.first();
