@@ -1,4 +1,4 @@
-import { promisify } from 'util';
+import { promisify } from 'tsubaki';
 
 import HandlesClient from './Client';
 
@@ -73,8 +73,8 @@ export default class CommandRegistry extends Map<Trigger, ICommand> {
    * @param dir The directory to start at.
    */
   private async _loadDir(dir: string): Promise<string[]> {
-    const readdir = promisify(fs.readdir);
-    const stat = promisify(fs.stat);
+    const readdir: (dir: string) => Promise<string[]> = promisify(fs.readdir);
+    const stat: (path: string) => Promise<fs.Stats> = promisify(fs.stat);
 
     const files = await readdir(dir);
     const list: string[] = [];
