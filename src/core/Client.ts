@@ -99,7 +99,7 @@ export default class HandlesClient extends EventEmitter {
     ({ command, error }: { command: CommandMessage, error: BaseError }) => void): this;
 
   public on(event: 'commandsLoaded', listener:
-    ({ commands, failed }: { commands: Map<string, ICommand>, failed: string[] }) => void): this;
+    ({ commands, failed, time }: { commands: Map<string, ICommand>, failed: string[], time: number }) => void): this;
 
   public on(event: string, listener: (...args: any[]) => void): this {
     return super.on(event, listener);

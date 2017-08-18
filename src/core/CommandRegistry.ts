@@ -35,6 +35,8 @@ export default class CommandRegistry extends Map<Trigger, ICommand> {
    * Load all commands into memory.  Use when reloading commands.
    */
   public async load(): Promise<Map<Trigger, ICommand>> {
+    const start = Date.now();
+
     this.clear();
     const files = await this._loadDir(this.directory);
 
@@ -64,7 +66,7 @@ export default class CommandRegistry extends Map<Trigger, ICommand> {
       }
     }
 
-    this.handles.emit('commandsLoaded', { commands: this, failed });
+    this.handles.emit('commandsLoaded', { commands: this, failed, time: Date.now() - start });
     return this;
   }
 
