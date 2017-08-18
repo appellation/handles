@@ -11,7 +11,7 @@ import path = require('path');
 /**
  * Manage command loading.
  */
-export default class CommandRegistry extends Map {
+export default class CommandRegistry extends Map<Trigger, ICommand> {
   /**
    * Handles client.
    */
