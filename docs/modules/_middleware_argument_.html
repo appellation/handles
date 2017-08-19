@@ -100,14 +100,15 @@
 					<div class="tsd-signature tsd-kind-icon">Matcher<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/f77ef21/src/middleware/Argument.ts#L30">middleware/Argument.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L31">middleware/Argument.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>This function takes a string which contains any number of arguments and returns the first of them.
 								The return should be a substring of the input, which will then be removed from the input string. The remaining
-							input will be fed back into this function for the next argument, etc. until no more arguments remain.</p>
+								input will be fed back into this function for the next argument, etc. until no more arguments remain. Use this
+							to determine whether an argument <em>exists</em>; use [[Argument#resolver]] to determine if the argument is <em>valid</em>.</p>
 						</div>
 					</div>
 					<div class="tsd-type-declaration">
@@ -115,7 +116,7 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-siganture">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>content<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>content<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
@@ -125,10 +126,7 @@
 												<h5>content: <span class="tsd-signature-type">string</span></h5>
 											</li>
 										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
-											<span class="tsd-signature-symbol"> | </span>
-											<span class="tsd-signature-type">null</span>
-										</h4>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 									</li>
 								</ul>
 							</li>
@@ -141,7 +139,7 @@
 					<div class="tsd-signature tsd-kind-icon">Resolver<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/f77ef21/src/middleware/Argument.ts#L13">middleware/Argument.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L13">middleware/Argument.ts:13</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -217,13 +215,13 @@
 						<a href="_errors_validationerror_.html">"errors/<wbr>Validation<wbr>Error"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_interfaces_icommand_.html">"interfaces/ICommand"</a>
+						<a href="_interfaces_command_.html">"interfaces/<wbr>Command"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_interfaces_iconfig_.html">"interfaces/IConfig"</a>
+						<a href="_interfaces_config_.html">"interfaces/<wbr>Config"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_interfaces_imiddleware_.html">"interfaces/IMiddleware"</a>
+						<a href="_interfaces_middleware_.html">"interfaces/<wbr>Middleware"</a>
 					</li>
 					<li class="current tsd-kind-external-module tsd-is-external">
 						<a href="_middleware_argument_.html">"middleware/<wbr>Argument"</a>
@@ -239,12 +237,6 @@
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="_structures_response_.html">"structures/<wbr>Response"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_types_messagevalidator_.html">"types/<wbr>Message<wbr>Validator"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_types_modules_textbasedchannel_.html">"types/modules/<wbr>Text<wbr>Based<wbr>Channel"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="_util_queue_.html">"util/<wbr>Queue"</a>

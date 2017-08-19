@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>&quot;types/MessageValidator&quot; | discord-handles</title>
+	<title>&quot;interfaces/Command&quot; | discord-handles</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="_types_messagevalidator_.html">&quot;types/MessageValidator&quot;</a>
+					<a href="_interfaces_command_.html">&quot;interfaces/Command&quot;</a>
 				</li>
 			</ul>
-			<h1>External module &quot;types/MessageValidator&quot;</h1>
+			<h1>External module &quot;interfaces/Command&quot;</h1>
 		</div>
 	</div>
 </header>
@@ -71,9 +71,17 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section tsd-is-external">
+							<h3>Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-external-module tsd-is-external"><a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-kind-icon">ICommand</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-external">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external"><a href="_types_messagevalidator_.html#messagevalidator" class="tsd-kind-icon">Message<wbr>Validator</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external"><a href="_interfaces_command_.html#commandexecutor" class="tsd-kind-icon">Command<wbr>Executor</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external"><a href="_interfaces_command_.html#commandmiddleware" class="tsd-kind-icon">Command<wbr>Middleware</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external"><a href="_interfaces_command_.html#trigger" class="tsd-kind-icon">Trigger</a></li>
 							</ul>
 						</section>
 					</div>
@@ -82,24 +90,17 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Type aliases</h2>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">
-					<a name="messagevalidator" class="tsd-anchor"></a>
-					<h3>Message<wbr>Validator</h3>
-					<div class="tsd-signature tsd-kind-icon">Message<wbr>Validator<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<a name="commandexecutor" class="tsd-anchor"></a>
+					<h3>Command<wbr>Executor</h3>
+					<div class="tsd-signature tsd-kind-icon">Command<wbr>Executor<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/f77ef21/src/types/MessageValidator.ts#L14">types/MessageValidator.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/interfaces/Command.ts#L12">interfaces/Command.ts:12</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<pre><code class="lang-js"><span class="hljs-keyword">const</span> handler = <span class="hljs-keyword">new</span> handles.Client({
-  <span class="hljs-attr">validator</span>: <span class="hljs-function">(<span class="hljs-params">msg</span>) =&gt;</span> {
-    <span class="hljs-comment">// this will validate any message in a DM and/or starting with `memes` as a command.</span>
-    <span class="hljs-keyword">const</span> prefix = <span class="hljs-regexp">/^memes/</span>;
-    <span class="hljs-keyword">if</span>(prefix.test(msg.content) || msg.channel.type === <span class="hljs-string">'dm'</span>) <span class="hljs-keyword">return</span> msg.content.replace(prefix, <span class="hljs-string">''</span>);
-  }
-});
-</code></pre>
+							<p>A function that will get executed when the command is run.</p>
 						</div>
 					</div>
 					<div class="tsd-type-declaration">
@@ -107,24 +108,72 @@
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter-siganture">
 								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
-									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>m<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></li>
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>m<span class="tsd-signature-symbol">: </span><a href="../classes/_structures_commandmessage_.commandmessage.html" class="tsd-signature-type">CommandMessage</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 								</ul>
 								<ul class="tsd-descriptions">
 									<li class="tsd-description">
 										<h4 class="tsd-parameters-title">Parameters</h4>
 										<ul class="tsd-parameters">
 											<li>
-												<h5>m: <span class="tsd-signature-type">Message</span></h5>
+												<h5>m: <a href="../classes/_structures_commandmessage_.commandmessage.html" class="tsd-signature-type">CommandMessage</a></h5>
 											</li>
 										</ul>
-										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
-											<span class="tsd-signature-symbol"> | </span>
-											<span class="tsd-signature-type">null</span>
-										</h4>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
 									</li>
 								</ul>
 							</li>
 						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">
+					<a name="commandmiddleware" class="tsd-anchor"></a>
+					<h3>Command<wbr>Middleware</h3>
+					<div class="tsd-signature tsd-kind-icon">Command<wbr>Middleware<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/interfaces/Command.ts#L17">interfaces/Command.ts:17</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A generator function that yields middleware.</p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-siganture">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias tsd-is-not-exported">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>m<span class="tsd-signature-symbol">: </span><a href="../classes/_structures_commandmessage_.commandmessage.html" class="tsd-signature-type">CommandMessage</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Iterator</span><span class="tsd-signature-symbol">&lt;</span><a href="_interfaces_middleware_.html#middleware" class="tsd-signature-type">Middleware</a><span class="tsd-signature-symbol">&gt;</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>m: <a href="../classes/_structures_commandmessage_.commandmessage.html" class="tsd-signature-type">CommandMessage</a></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Iterator</span><span class="tsd-signature-symbol">&lt;</span><a href="_interfaces_middleware_.html#middleware" class="tsd-signature-type">Middleware</a><span class="tsd-signature-symbol">&gt;</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">
+					<a name="trigger" class="tsd-anchor"></a>
+					<h3>Trigger</h3>
+					<div class="tsd-signature tsd-kind-icon">Trigger<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">RegExp</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/interfaces/Command.ts#L7">interfaces/Command.ts:7</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Something that will trigger a command.</p>
+						</div>
 					</div>
 				</section>
 			</section>
@@ -162,14 +211,14 @@
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="_errors_validationerror_.html">"errors/<wbr>Validation<wbr>Error"</a>
 					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_interfaces_icommand_.html">"interfaces/ICommand"</a>
+					<li class="current tsd-kind-external-module tsd-is-external">
+						<a href="_interfaces_command_.html">"interfaces/<wbr>Command"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_interfaces_iconfig_.html">"interfaces/IConfig"</a>
+						<a href="_interfaces_config_.html">"interfaces/<wbr>Config"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_interfaces_imiddleware_.html">"interfaces/IMiddleware"</a>
+						<a href="_interfaces_middleware_.html">"interfaces/<wbr>Middleware"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="_middleware_argument_.html">"middleware/<wbr>Argument"</a>
@@ -186,12 +235,6 @@
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="_structures_response_.html">"structures/<wbr>Response"</a>
 					</li>
-					<li class="current tsd-kind-external-module tsd-is-external">
-						<a href="_types_messagevalidator_.html">"types/<wbr>Message<wbr>Validator"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="_types_modules_textbasedchannel_.html">"types/modules/<wbr>Text<wbr>Based<wbr>Channel"</a>
-					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="_util_queue_.html">"util/<wbr>Queue"</a>
 					</li>
@@ -199,8 +242,17 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
+						<a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-kind-icon">ICommand</a>
+					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">
-						<a href="_types_messagevalidator_.html#messagevalidator" class="tsd-kind-icon">Message<wbr>Validator</a>
+						<a href="_interfaces_command_.html#commandexecutor" class="tsd-kind-icon">Command<wbr>Executor</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">
+						<a href="_interfaces_command_.html#commandmiddleware" class="tsd-kind-icon">Command<wbr>Middleware</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">
+						<a href="_interfaces_command_.html#trigger" class="tsd-kind-icon">Trigger</a>
 					</li>
 				</ul>
 			</nav>
