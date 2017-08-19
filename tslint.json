@@ -16,6 +16,7 @@
         "triple-equals": true,
         "no-invalid-this": true,
         "no-trailing-whitespace": true,
+        "no-unused-variable": true,
         "prefer-const": [true],
         "prefer-template": true,
         "variable-name": [
