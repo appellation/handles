@@ -1,5 +1,5 @@
 import ArgumentError from '../errors/ArgumentError';
-import { IMiddleware } from '../interfaces/IMiddleware';
+import { IMiddleware } from '../interfaces/Middleware';
 import CommandMessage from '../structures/CommandMessage';
 import Prompter from '../structures/Prompter';
 import Response from '../structures/Response';

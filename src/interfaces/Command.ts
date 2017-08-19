@@ -1,5 +1,5 @@
 import CommandMessage from '../structures/CommandMessage';
-import { IMiddleware } from './IMiddleware';
+import { Middleware } from './Middleware';
 
 /**
  * Something that will trigger a command.
@@ -14,7 +14,7 @@ export type CommandExecutor = (m: CommandMessage) => any;
 /**
  * A generator function that yields middleware.
  */
-export type CommandMiddleware = (m: CommandMessage) => Iterator<IMiddleware>;
+export type CommandMiddleware = (m: CommandMessage) => Iterator<Middleware>;
 
 /**
  * Structure of exported commands.

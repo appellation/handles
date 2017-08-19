@@ -4,9 +4,9 @@ import CommandMessage from '../structures/CommandMessage';
 import HandlesClient from './Client';
 import CommandRegistry from './CommandRegistry';
 
-import { CommandMiddleware, ICommand } from '../interfaces/ICommand';
-import { IConfig } from '../interfaces/IConfig';
-import { IMiddleware } from '../interfaces/IMiddleware';
+import { CommandMiddleware, ICommand } from '../interfaces/Command';
+import { IConfig } from '../interfaces/Config';
+import { Middleware } from '../interfaces/Middleware';
 
 import { Message } from 'discord.js';
 
@@ -119,11 +119,14 @@ export default class CommandHandler {
     this.handles.emit('commandStarted', msg);
 
     try {
-      const iterate = async (generator: Iterator<IMiddleware>, value?: any): Promise<void> => {
+      const iterate = async (generator: Iterator<Middleware>, value?: any): Promise<void> => {
         const next = generator.next(value);
 
-        if (next.done) return;
-        else return iterate(generator, await next.value.run(msg));
+        if (next.done) {
+          return;
+        } else {
+          return iterate(generator, await (typeof next.value === 'function' ? next.value(msg) : next.value.run(msg)));
+        }
       };
 
       for (const middleware of this.middleware) await iterate(middleware(msg));

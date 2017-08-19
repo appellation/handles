@@ -2,8 +2,8 @@ import { promisify } from 'tsubaki';
 
 import HandlesClient from './Client';
 
-import { ICommand, Trigger } from '../interfaces/ICommand';
-import { IConfig } from '../interfaces/IConfig';
+import { ICommand, Trigger } from '../interfaces/Command';
+import { IConfig } from '../interfaces/Config';
 
 import fs = require('fs');
 import path = require('path');

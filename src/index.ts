@@ -9,9 +9,9 @@ import Response from './structures/Response';
 import Argument from './middleware/Argument';
 import Validator from './middleware/Validator';
 
-export * from './interfaces/ICommand';
-export * from './interfaces/IConfig';
-export * from './interfaces/IMiddleware';
+export * from './interfaces/Command';
+export * from './interfaces/Config';
+export * from './interfaces/Middleware';
 
 export {
   Argument,

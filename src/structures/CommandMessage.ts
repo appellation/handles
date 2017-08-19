@@ -2,8 +2,8 @@ import HandlesClient from '../core/Client';
 
 import Response from './Response';
 
-import { ICommand, Trigger } from '../interfaces/ICommand';
-import { IConfig } from '../interfaces/IConfig';
+import { ICommand, Trigger } from '../interfaces/Command';
+import { IConfig } from '../interfaces/Config';
 import { TextBasedChannel } from './Response';
 
 import { Client, Guild, Message } from 'discord.js';

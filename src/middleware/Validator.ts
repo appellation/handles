@@ -1,5 +1,5 @@
 import ValidationError from '../errors/ValidationError';
-import { IMiddleware } from '../interfaces/IMiddleware';
+import { IMiddleware } from '../interfaces/Middleware';
 import CommandMessage from '../structures/CommandMessage';
 
 /**

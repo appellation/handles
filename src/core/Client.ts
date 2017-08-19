@@ -7,9 +7,8 @@ import Response from '../structures/Response';
 import CommandHandler from './CommandHandler';
 import CommandRegistry from './CommandRegistry';
 
-import { ICommand } from '../interfaces/ICommand';
-import { IConfig } from '../interfaces/IConfig';
-import { IMiddleware } from '../interfaces/IMiddleware';
+import { ICommand } from '../interfaces/Command';
+import { IConfig } from '../interfaces/Config';
 
 import { Client, Message } from 'discord.js';
 
