@@ -64,7 +64,6 @@ export default class Response {
    * @param edit Whether to edit previous responses.
    */
   constructor(message: Message, edit: boolean = true) {
-
     this.message = message;
     this.channel = message.channel;
     this.edit = edit;

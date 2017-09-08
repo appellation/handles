@@ -1,6 +1,5 @@
 import ValidationError from '../errors/ValidationError';
-import { IMiddleware } from '../interfaces/Middleware';
-import CommandMessage from '../structures/CommandMessage';
+import Command from '../structures/Command';
 
 /**
  * ```js
@@ -9,7 +8,7 @@ import CommandMessage from '../structures/CommandMessage';
  * validator.apply(cmd.message.author.id === 'some id', 'uh oh'); // executed immediately
  * ```
  */
-export type ValidationFunction = (m: CommandMessage, v: Validator) => boolean;
+export type ValidationFunction = (m: Command, v: Validator) => boolean;
 
 /**
  * Passed as a parameter to command validators.  Arguments will not be available in this class,
@@ -37,7 +36,7 @@ export type ValidationFunction = (m: CommandMessage, v: Validator) => boolean;
  * }
  * ```
  */
-export default class Validator implements IMiddleware {
+export default class Validator {
   /**
    * The reason this validator is invalid.
    */
@@ -75,7 +74,7 @@ export default class Validator implements IMiddleware {
   /**
    * Run this validator.
    */
-  public async run(command: CommandMessage) {
+  public async run(command: Command) {
     for (const [test, reason] of this.exec) {
       try {
         if (!test(command, this)) {

@@ -1,34 +1,28 @@
 import HandlesClient from '../core/Client';
 
-import Response from './Response';
-
-import { ICommand, Trigger } from '../interfaces/Command';
 import { IConfig } from '../interfaces/Config';
-import { TextBasedChannel } from './Response';
+import Response, { TextBasedChannel } from './Response';
 
-import { Client, Guild, Message } from 'discord.js';
+import { Client, Guild, Message, User } from 'discord.js';
 
-export interface ICommandMessageOptions {
-  command: ICommand;
+export type Trigger = string | RegExp;
+
+export interface ICommandOptions {
   trigger: Trigger;
   message: Message;
   body: string;
 }
 
 /**
- * A message to be processed as a command.
+ * A command.
  */
-export default class CommandMessage {
+export default class Command {
+  public static triggers?: Trigger | Trigger[];
 
   /**
    * The handles client.
    */
   public readonly handles: HandlesClient;
-
-  /**
-   * The command associated with this message.
-   */
-  public readonly command: ICommand;
 
   /**
    * The command trigger that caused the message to run this command.
@@ -60,9 +54,8 @@ export default class CommandMessage {
    */
   public response: Response;
 
-  constructor(client: HandlesClient, { command, trigger, message, body }: ICommandMessageOptions) {
+  constructor(client: HandlesClient, { trigger, message, body }: ICommandOptions) {
     this.handles = client;
-    this.command = command;
     this.trigger = trigger;
     this.message = message;
     this.body = body;
@@ -92,10 +85,33 @@ export default class CommandMessage {
   }
 
   /**
+   * The author of this command.
+   */
+  get author(): User {
+    return this.message.author;
+  }
+
+  /**
    * Ensure unique commands for an author in a channel.
    * Format: "authorID:channelID"
    */
   get session() {
     return `${this.message.author.id}:${this.message.channel.id}`;
+  }
+
+  public pre() {
+    // implemented by command
+  }
+
+  public exec() {
+    // implemented by command
+  }
+
+  public post() {
+    // implemented by command
+  }
+
+  public error() {
+    // implemented by command
   }
 }
