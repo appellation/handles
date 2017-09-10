@@ -70,7 +70,7 @@ module.exports = class extends Command {
                 // if they provided a raw user ID
                 if (member) return member;
                 // if they mentioned someone
-                else if (c.test(MessageMentions.USERS_PATTERN)) return this.guild.members.get(c.match(MessageMentions.USERS_PATTERN)[1]);
+                else if (MessageMentions.USERS_PATTERN.test(c)) return this.guild.members.get(c.match(MessageMentions.USERS_PATTERN)[1]);
                 // if they provided a user tag
                 else if (this.guild.members.exists(u => u.tag === c)) return this.guild.members.find(u => u.tag === c);
                 else return null;
