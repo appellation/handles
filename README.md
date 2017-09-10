@@ -64,7 +64,7 @@ module.exports = class extends Command {
             .apply(this.member.permissions.has(Permissions.FLAGS.BAN_MEMBERS), 'You don\'t have permission to ban people.');
 
         const member = await new Argument(this, 'member')
-            .setResolver(async c => {
+            .setResolver(c => {
                 const member = this.guild.members.get(c);
 
                 // if they provided a raw user ID
