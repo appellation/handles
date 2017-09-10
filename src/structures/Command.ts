@@ -3,7 +3,7 @@ import HandlesClient from '../core/Client';
 import { IConfig } from '../interfaces/Config';
 import Response, { TextBasedChannel } from './Response';
 
-import { Client, Guild, Message, User } from 'discord.js';
+import { Client, Guild, GuildMember, Message, User } from 'discord.js';
 
 export type Trigger = string | RegExp;
 
@@ -15,6 +15,17 @@ export interface ICommandOptions {
 
 /**
  * A command.
+ * ```js
+ * const { Command } = require('discord-handles');
+ * module.exports = class extends Command {
+ *   static get triggers() {
+ *     return ['ping', 'pung', 'poing', 'pong'];
+ *   }
+ *
+ *   exec() {
+ *     return this.response.success(`${this.trigger} ${Date.now() - this.message.createdTimestamp}ms`);
+ *   }
+ * };
  */
 export default class Command {
   public static triggers?: Trigger | Trigger[];
@@ -91,6 +102,10 @@ export default class Command {
     return this.message.author;
   }
 
+  get member(): GuildMember {
+    return this.message.member;
+  }
+
   /**
    * Ensure unique commands for an author in a channel.
    * Format: "authorID:channelID"
@@ -99,18 +114,35 @@ export default class Command {
     return `${this.message.author.id}:${this.message.channel.id}`;
   }
 
+  /**
+   * Executed prior to {@link Command#exec}. Should be used for middleware/validation.
+   * ```js
+   * async pre() {
+   *   await new handles.Argument(this, 'someArgument')
+   *     .setResolver(c => c === 'dank memes' ? 'top kek' : null);
+   * }
+   */
   public pre() {
     // implemented by command
   }
 
+  /**
+   * The command execution method
+   */
   public exec() {
     // implemented by command
   }
 
+  /**
+   * Executed after {@link Command#exec}. Can be used for responses.
+   */
   public post() {
     // implemented by command
   }
 
+  /**
+   * Executed when any of the command execution methods error. Any errors here will be discarded.
+   */
   public error() {
     // implemented by command
   }

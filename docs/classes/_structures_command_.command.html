@@ -72,8 +72,18 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A command.</p>
+						<p>A command.
+							```js
+							const { Command } = require(&#39;discord-handles&#39;);
+							module.exports = class extends Command {
+							static get triggers() {
+							return [&#39;ping&#39;, &#39;pung&#39;, &#39;poing&#39;, &#39;pong&#39;];
+						}</p>
 					</div>
+					<p>  exec() {
+						return this.response.success(<code>${this.trigger} ${Date.now() - this.message.createdTimestamp}ms</code>);
+						}
+					};</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
@@ -114,6 +124,7 @@
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-external"><a href="_structures_command_.command.html#channel" class="tsd-kind-icon">channel</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-external"><a href="_structures_command_.command.html#client" class="tsd-kind-icon">client</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-external"><a href="_structures_command_.command.html#guild" class="tsd-kind-icon">guild</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-external"><a href="_structures_command_.command.html#member" class="tsd-kind-icon">member</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-external"><a href="_structures_command_.command.html#session" class="tsd-kind-icon">session</a></li>
 							</ul>
 						</section>
@@ -141,7 +152,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L55">structures/Command.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L66">structures/Command.ts:66</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -177,7 +188,7 @@
 					<div class="tsd-signature tsd-kind-icon">args<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L50">structures/Command.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L61">structures/Command.ts:61</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -192,7 +203,7 @@
 					<div class="tsd-signature tsd-kind-icon">body<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L40">structures/Command.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L51">structures/Command.ts:51</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -207,7 +218,7 @@
 					<div class="tsd-signature tsd-kind-icon">config<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_interfaces_config_.iconfig.html" class="tsd-signature-type">IConfig</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L45">structures/Command.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L56">structures/Command.ts:56</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -222,7 +233,7 @@
 					<div class="tsd-signature tsd-kind-icon">handles<span class="tsd-signature-symbol">:</span> <a href="_core_client_.handlesclient.html" class="tsd-signature-type">HandlesClient</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L25">structures/Command.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L36">structures/Command.ts:36</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -237,7 +248,7 @@
 					<div class="tsd-signature tsd-kind-icon">message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Message</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L35">structures/Command.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L46">structures/Command.ts:46</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -252,7 +263,7 @@
 					<div class="tsd-signature tsd-kind-icon">response<span class="tsd-signature-symbol">:</span> <a href="_structures_response_.response.html" class="tsd-signature-type">Response</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L55">structures/Command.ts:55</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L66">structures/Command.ts:66</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -267,7 +278,7 @@
 					<div class="tsd-signature tsd-kind-icon">trigger<span class="tsd-signature-symbol">:</span> <a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L30">structures/Command.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L41">structures/Command.ts:41</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -282,7 +293,7 @@
 					<div class="tsd-signature tsd-kind-icon">triggers<span class="tsd-signature-symbol">:</span> <a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol"> | </span><a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L20">structures/Command.ts:20</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L31">structures/Command.ts:31</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -299,7 +310,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L90">structures/Command.ts:90</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L101">structures/Command.ts:101</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -321,7 +332,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L83">structures/Command.ts:83</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L94">structures/Command.ts:94</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -343,7 +354,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L69">structures/Command.ts:69</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L80">structures/Command.ts:80</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -365,7 +376,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L76">structures/Command.ts:76</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L87">structures/Command.ts:87</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -374,6 +385,23 @@
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Guild</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
+					<a name="member" class="tsd-anchor"></a>
+					<h3>member</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> member<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GuildMember</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L105">structures/Command.ts:105</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">GuildMember</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -387,7 +415,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L98">structures/Command.ts:98</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L113">structures/Command.ts:113</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -413,9 +441,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L114">structures/Command.ts:114</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L146">structures/Command.ts:146</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Executed when any of the command execution methods error. Any errors here will be discarded.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -430,9 +463,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L106">structures/Command.ts:106</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L132">structures/Command.ts:132</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The command execution method</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -447,9 +485,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L110">structures/Command.ts:110</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L139">structures/Command.ts:139</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Executed after {@link Command#exec}. Can be used for responses.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -464,9 +507,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L102">structures/Command.ts:102</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/b2f6f94/src/structures/Command.ts#L125">structures/Command.ts:125</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Executed prior to {@link Command#exec}. Should be used for middleware/validation.
+										```js
+										async pre() {
+										await new handles.Argument(this, &#39;someArgument&#39;)
+										.setResolver(c =&gt; c === &#39;dank memes&#39; ? &#39;top kek&#39; : null);
+									}</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
@@ -571,6 +624,9 @@
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
 								<a href="_structures_command_.command.html#guild" class="tsd-kind-icon">guild</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
+								<a href="_structures_command_.command.html#member" class="tsd-kind-icon">member</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
 								<a href="_structures_command_.command.html#session" class="tsd-kind-icon">session</a>

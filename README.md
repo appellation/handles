@@ -37,11 +37,59 @@ client.on('message', handler.handle);
 client.login('token');
 ```
 
-This will automatically load all commands in the `./commands` directory and handle incoming messages.  See [`Command`](https://handles.topkek.pw/interfaces/_interfaces_icommand_.icommand.html) in the docs for information on how to format the exports of the files you place in `./commands`.  The loader and handler can be configured according to [`Config`](https://handles.topkek.pw/interfaces/_interfaces_iconfig_.iconfig.html) options passed to the constructor.
+This will automatically load all commands in the `./commands` directory and handle incoming messages.  See [`Command`](https://handles.topkek.pw/modules/_structures_command_.html) in the docs for information on how to format the exports of the files you place in `./commands`.  Particularly of interest are the `pre`, `exec`, and `post` methods.  The loader and handler can be configured according to [`Config`](https://handles.topkek.pw/modules/_interfaces_config_.html) options passed to the constructor.
 
 ```js
 const handler = new handles.Client({
     directory: './some/other/awesome/directory',
     prefixes: new Set(['dank', 'memes'])
 });
+```
+
+Here's an example of what you might place in the `./commands` directory.
+```js
+const { MessageMentions, Permissions } = require('discord.js');
+const { Command, Argument, Validator } = require('discord-handles');
+
+module.exports = class extends Command {
+    static get triggers() {
+        return ['banne', 'ban'];
+    }
+
+    async pre() {
+        await this.guild.fetchMembers();
+
+        await new Validator(this)
+            .apply(this.guild.me.permissions.has(Permissions.FLAGS.BAN_MEMBERS), 'I don\'t have permission to ban people.')
+            .apply(this.member.permissions.has(Permissions.FLAGS.BAN_MEMBERS), 'You don\'t have permission to ban people.');
+
+        const member = await new Argument(this, 'member')
+            .setResolver(async c => {
+                const member = this.guild.members.get(c);
+
+                // if they provided a raw user ID
+                if (member) return member;
+                // if they mentioned someone
+                else if (c.test(MessageMentions.USERS_PATTERN)) return this.guild.members.get(c.match(MessageMentions.USERS_PATTERN)[1]);
+                // if they provided a user tag
+                else if (this.guild.members.exists(u => u.tag === c)) return this.guild.members.find(u => u.tag === c);
+                else return null;
+            })
+            .setPrompt('Who would you like to ban?')
+            .setRePrompt('You provided an invalid user. Please try again.');
+
+        await new Validator(this)
+            .apply(member.bannable, 'I cannot ban this person.');
+            .apply(member.highestRole.position < this.member.highestRole.position, 'You cannot ban this person.')
+
+        await new Argument(this, 'days')
+            .setResolver(c => parseInt(c) || null);
+            .setOptional();
+    }
+
+    async exec() {
+        await this.args.member.ban(this.args.days);
+        return this.response.success(`banned ${this.args.member.user.tag}`);
+    }
+};
 ```

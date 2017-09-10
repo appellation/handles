@@ -88,11 +88,57 @@
 client.on(<span class="hljs-string">'message'</span>, handler.handle);
 client.login(<span class="hljs-string">'token'</span>);
 </code></pre>
-				<p>This will automatically load all commands in the <code>./commands</code> directory and handle incoming messages.  See <a href="https://handles.topkek.pw/interfaces/_interfaces_icommand_.icommand.html"><code>Command</code></a> in the docs for information on how to format the exports of the files you place in <code>./commands</code>.  The loader and handler can be configured according to <a href="https://handles.topkek.pw/interfaces/_interfaces_iconfig_.iconfig.html"><code>Config</code></a> options passed to the constructor.</p>
+				<p>This will automatically load all commands in the <code>./commands</code> directory and handle incoming messages.  See <a href="https://handles.topkek.pw/modules/_structures_command_.html"><code>Command</code></a> in the docs for information on how to format the exports of the files you place in <code>./commands</code>.  Particularly of interest are the <code>pre</code>, <code>exec</code>, and <code>post</code> methods.  The loader and handler can be configured according to <a href="https://handles.topkek.pw/modules/_interfaces_config_.html"><code>Config</code></a> options passed to the constructor.</p>
 				<pre><code class="lang-js"><span class="hljs-keyword">const</span> handler = <span class="hljs-keyword">new</span> handles.Client({
     <span class="hljs-attr">directory</span>: <span class="hljs-string">'./some/other/awesome/directory'</span>,
     <span class="hljs-attr">prefixes</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-string">'dank'</span>, <span class="hljs-string">'memes'</span>])
 });
+</code></pre>
+				<p>Here&#39;s an example of what you might place in the <code>./commands</code> directory.</p>
+				<pre><code class="lang-js"><span class="hljs-keyword">const</span> { MessageMentions, Permissions } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'discord.js'</span>);
+<span class="hljs-keyword">const</span> { Command, Argument, Validator } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'discord-handles'</span>);
+
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Command</span> </span>{
+    <span class="hljs-keyword">static</span> get triggers() {
+        <span class="hljs-keyword">return</span> [<span class="hljs-string">'banne'</span>, <span class="hljs-string">'ban'</span>];
+    }
+
+    <span class="hljs-keyword">async</span> pre() {
+        <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.guild.fetchMembers();
+
+        <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> Validator(<span class="hljs-keyword">this</span>)
+            .apply(<span class="hljs-keyword">this</span>.guild.me.permissions.has(Permissions.FLAGS.BAN_MEMBERS), <span class="hljs-string">'I don\'t have permission to ban people.'</span>)
+            .apply(<span class="hljs-keyword">this</span>.member.permissions.has(Permissions.FLAGS.BAN_MEMBERS), <span class="hljs-string">'You don\'t have permission to ban people.'</span>);
+
+        <span class="hljs-keyword">const</span> member = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> Argument(<span class="hljs-keyword">this</span>, <span class="hljs-string">'member'</span>)
+            .setResolver(<span class="hljs-keyword">async</span> c =&gt; {
+                <span class="hljs-keyword">const</span> member = <span class="hljs-keyword">this</span>.guild.members.get(c);
+
+                <span class="hljs-comment">// if they provided a raw user ID</span>
+                <span class="hljs-keyword">if</span> (member) <span class="hljs-keyword">return</span> member;
+                <span class="hljs-comment">// if they mentioned someone</span>
+                <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (c.test(MessageMentions.USERS_PATTERN)) <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.guild.members.get(c.match(MessageMentions.USERS_PATTERN)[<span class="hljs-number">1</span>]);
+                <span class="hljs-comment">// if they provided a user tag</span>
+                <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.guild.members.exists(<span class="hljs-function"><span class="hljs-params">u</span> =&gt;</span> u.tag === c)) <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.guild.members.find(<span class="hljs-function"><span class="hljs-params">u</span> =&gt;</span> u.tag === c);
+                <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+            })
+            .setPrompt(<span class="hljs-string">'Who would you like to ban?'</span>)
+            .setRePrompt(<span class="hljs-string">'You provided an invalid user. Please try again.'</span>);
+
+        <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> Validator(<span class="hljs-keyword">this</span>)
+            .apply(member.bannable, <span class="hljs-string">'I cannot ban this person.'</span>);
+            .apply(member.highestRole.position &lt; <span class="hljs-keyword">this</span>.member.highestRole.position, <span class="hljs-string">'You cannot ban this person.'</span>)
+
+        <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> Argument(<span class="hljs-keyword">this</span>, <span class="hljs-string">'days'</span>)
+            .setResolver(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> <span class="hljs-built_in">parseInt</span>(c) || <span class="hljs-literal">null</span>);
+            .setOptional();
+    }
+
+    <span class="hljs-keyword">async</span> exec() {
+        <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.args.member.ban(<span class="hljs-keyword">this</span>.args.days);
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.response.success(<span class="hljs-string">`banned <span class="hljs-subst">${<span class="hljs-keyword">this</span>.args.member.user.tag}</span>`</span>);
+    }
+};
 </code></pre>
 			</div>
 		</div>
