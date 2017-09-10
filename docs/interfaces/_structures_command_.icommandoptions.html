@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ICommand | discord-handles</title>
+	<title>ICommandOptions | discord-handles</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,45 +56,24 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_interfaces_command_.html">&quot;interfaces/Command&quot;</a>
+					<a href="../modules/_structures_command_.html">&quot;structures/Command&quot;</a>
 				</li>
 				<li>
-					<a href="_interfaces_command_.icommand.html">ICommand</a>
+					<a href="_structures_command_.icommandoptions.html">ICommandOptions</a>
 				</li>
 			</ul>
-			<h1>Interface ICommand</h1>
+			<h1>Interface ICommandOptions</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>Structure of exported commands.</p>
-					</div>
-					<pre><code class="lang-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SomeCommand</span> </span>{
-  exec(command) {
-    <span class="hljs-keyword">return</span> command.response.send(<span class="hljs-string">'dank memes'</span>);
-  }
-  * middleware(command) {
-    <span class="hljs-keyword">yield</span> <span class="hljs-keyword">new</span> Argument(<span class="hljs-string">'meme'</span>) <span class="hljs-comment">// this arg will be accessible as `command.args.meme`</span>
-       .setPrompt(<span class="hljs-string">'Please provide a thing.'</span>)
-       .setRePrompt(<span class="hljs-string">'The thing you provided was invalid.'</span>)
-       .setResolver(<span class="hljs-function"><span class="hljs-params">content</span> =&gt;</span> content === <span class="hljs-string">'thing'</span> ? { <span class="hljs-attr">stuff</span>: <span class="hljs-string">'is what I want to be in the args property'</span> } : <span class="hljs-literal">null</span>);
-  }
-}
-
-<span class="hljs-built_in">module</span>.exports = SomeCommand;
-</code></pre>
-				</div>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ICommand</span>
+						<span class="target">ICommandOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -105,10 +84,9 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_interfaces_command_.icommand.html#disabled" class="tsd-kind-icon">disabled</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_interfaces_command_.icommand.html#exec" class="tsd-kind-icon">exec</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_interfaces_command_.icommand.html#middleware" class="tsd-kind-icon">middleware</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_interfaces_command_.icommand.html#triggers" class="tsd-kind-icon">triggers</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_structures_command_.icommandoptions.html#body" class="tsd-kind-icon">body</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_structures_command_.icommandoptions.html#message" class="tsd-kind-icon">message</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="_structures_command_.icommandoptions.html#trigger" class="tsd-kind-icon">trigger</a></li>
 							</ul>
 						</section>
 					</div>
@@ -117,64 +95,34 @@
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="disabled" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> disabled</h3>
-					<div class="tsd-signature tsd-kind-icon">disabled<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<a name="body" class="tsd-anchor"></a>
+					<h3>body</h3>
+					<div class="tsd-signature tsd-kind-icon">body<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/interfaces/Command.ts#L47">interfaces/Command.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L13">structures/Command.ts:13</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Whether the command is globally disabled.</p>
-						</div>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="exec" class="tsd-anchor"></a>
-					<h3>exec</h3>
-					<div class="tsd-signature tsd-kind-icon">exec<span class="tsd-signature-symbol">:</span> <a href="../modules/_interfaces_command_.html#commandexecutor" class="tsd-signature-type">CommandExecutor</a></div>
+					<a name="message" class="tsd-anchor"></a>
+					<h3>message</h3>
+					<div class="tsd-signature tsd-kind-icon">message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Message</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/interfaces/Command.ts#L52">interfaces/Command.ts:52</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L12">structures/Command.ts:12</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The command function to execute.</p>
-						</div>
-					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="middleware" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> middleware</h3>
-					<div class="tsd-signature tsd-kind-icon">middleware<span class="tsd-signature-symbol">:</span> <a href="../modules/_interfaces_command_.html#commandmiddleware" class="tsd-signature-type">CommandMiddleware</a></div>
+					<a name="trigger" class="tsd-anchor"></a>
+					<h3>trigger</h3>
+					<div class="tsd-signature tsd-kind-icon">trigger<span class="tsd-signature-symbol">:</span> <a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/interfaces/Command.ts#L57">interfaces/Command.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/structures/Command.ts#L11">structures/Command.ts:11</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Command middleware.</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="triggers" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> triggers</h3>
-					<div class="tsd-signature tsd-kind-icon">triggers<span class="tsd-signature-symbol">:</span> <a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/interfaces/Command.ts#L42">interfaces/Command.ts:42</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>Defaults to the file name.</p>
-						</div>
-					</div>
 				</section>
 			</section>
 		</div>
@@ -211,14 +159,8 @@
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_errors_validationerror_.html">"errors/<wbr>Validation<wbr>Error"</a>
 					</li>
-					<li class="current tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_interfaces_command_.html">"interfaces/<wbr>Command"</a>
-					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_interfaces_config_.html">"interfaces/<wbr>Config"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_interfaces_middleware_.html">"interfaces/<wbr>Middleware"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_middleware_argument_.html">"middleware/<wbr>Argument"</a>
@@ -226,11 +168,8 @@
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_middleware_validator_.html">"middleware/<wbr>Validator"</a>
 					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_structures_commandmessage_.html">"structures/<wbr>Command<wbr>Message"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_structures_prompter_.html">"structures/<wbr>Prompter"</a>
+					<li class="current tsd-kind-external-module tsd-is-external">
+						<a href="../modules/_structures_command_.html">"structures/<wbr>Command"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_structures_response_.html">"structures/<wbr>Response"</a>
@@ -242,35 +181,29 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module tsd-is-external">
+						<a href="../classes/_structures_command_.command.html" class="tsd-kind-icon">Command</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
-						<a href="_interfaces_command_.icommand.html" class="tsd-kind-icon">ICommand</a>
+						<a href="_structures_command_.icommandoptions.html" class="tsd-kind-icon">ICommand<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_interfaces_command_.icommand.html#disabled" class="tsd-kind-icon">disabled</a>
+								<a href="_structures_command_.icommandoptions.html#body" class="tsd-kind-icon">body</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_interfaces_command_.icommand.html#exec" class="tsd-kind-icon">exec</a>
+								<a href="_structures_command_.icommandoptions.html#message" class="tsd-kind-icon">message</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_interfaces_command_.icommand.html#middleware" class="tsd-kind-icon">middleware</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="_interfaces_command_.icommand.html#triggers" class="tsd-kind-icon">triggers</a>
+								<a href="_structures_command_.icommandoptions.html#trigger" class="tsd-kind-icon">trigger</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">
-						<a href="../modules/_interfaces_command_.html#commandexecutor" class="tsd-kind-icon">Command<wbr>Executor</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">
-						<a href="../modules/_interfaces_command_.html#commandmiddleware" class="tsd-kind-icon">Command<wbr>Middleware</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">
-						<a href="../modules/_interfaces_command_.html#trigger" class="tsd-kind-icon">Trigger</a>
+						<a href="../modules/_structures_command_.html#trigger" class="tsd-kind-icon">Trigger</a>
 					</li>
 				</ul>
 			</nav>

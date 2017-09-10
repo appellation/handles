@@ -99,7 +99,8 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="_core_commandhandler_.commandhandler.html#handles" class="tsd-kind-icon">handles</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="_core_commandhandler_.commandhandler.html#ignore" class="tsd-kind-icon">ignore</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="_core_commandhandler_.commandhandler.html#middleware" class="tsd-kind-icon">middleware</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="_core_commandhandler_.commandhandler.html#post" class="tsd-kind-icon">post</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="_core_commandhandler_.commandhandler.html#pre" class="tsd-kind-icon">pre</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="_core_commandhandler_.commandhandler.html#silent" class="tsd-kind-icon">silent</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="_core_commandhandler_.commandhandler.html#validator" class="tsd-kind-icon">validator</a></li>
 							</ul>
@@ -128,7 +129,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/core/CommandHandler.ts#L43">core/CommandHandler.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/core/CommandHandler.ts#L47">core/CommandHandler.ts:47</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -153,7 +154,7 @@
 					<div class="tsd-signature tsd-kind-icon">handles<span class="tsd-signature-symbol">:</span> <a href="_core_client_.handlesclient.html" class="tsd-signature-type">HandlesClient</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/core/CommandHandler.ts#L23">core/CommandHandler.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/core/CommandHandler.ts#L22">core/CommandHandler.ts:22</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -168,7 +169,7 @@
 					<div class="tsd-signature tsd-kind-icon">ignore<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/core/CommandHandler.ts#L28">core/CommandHandler.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/core/CommandHandler.ts#L27">core/CommandHandler.ts:27</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -178,17 +179,32 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
-					<a name="middleware" class="tsd-anchor"></a>
-					<h3>middleware</h3>
-					<div class="tsd-signature tsd-kind-icon">middleware<span class="tsd-signature-symbol">:</span> <a href="../modules/_interfaces_command_.html#commandmiddleware" class="tsd-signature-type">CommandMiddleware</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<a name="post" class="tsd-anchor"></a>
+					<h3>post</h3>
+					<div class="tsd-signature tsd-kind-icon">post<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/core/CommandHandler.ts#L43">core/CommandHandler.ts:43</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/core/CommandHandler.ts#L47">core/CommandHandler.ts:47</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Global middleware.</p>
+							<p>Methods to run after each command.  Executed in sequence after the command&#39;s <code>post</code> method.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
+					<a name="pre" class="tsd-anchor"></a>
+					<h3>pre</h3>
+					<div class="tsd-signature tsd-kind-icon">pre<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;[]</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/core/CommandHandler.ts#L42">core/CommandHandler.ts:42</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Methods to run before each command. Executed in sequence before the command&#39;s <code>pre</code> method.</p>
 						</div>
 					</div>
 				</section>
@@ -198,7 +214,7 @@
 					<div class="tsd-signature tsd-kind-icon">silent<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/core/CommandHandler.ts#L33">core/CommandHandler.ts:33</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/core/CommandHandler.ts#L32">core/CommandHandler.ts:32</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -213,7 +229,7 @@
 					<div class="tsd-signature tsd-kind-icon">validator<span class="tsd-signature-symbol">:</span> <a href="../modules/_core_commandhandler_.html#messagevalidator" class="tsd-signature-type">MessageValidator</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/core/CommandHandler.ts#L38">core/CommandHandler.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/core/CommandHandler.ts#L37">core/CommandHandler.ts:37</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -235,7 +251,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/core/CommandHandler.ts#L156">core/CommandHandler.ts:156</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/core/CommandHandler.ts#L156">core/CommandHandler.ts:156</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -266,7 +282,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/core/CommandHandler.ts#L164">core/CommandHandler.ts:164</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/core/CommandHandler.ts#L164">core/CommandHandler.ts:164</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -291,13 +307,13 @@
 					<a name="exec" class="tsd-anchor"></a>
 					<h3>exec</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">exec<span class="tsd-signature-symbol">(</span>msg<span class="tsd-signature-symbol">: </span><a href="_structures_commandmessage_.commandmessage.html" class="tsd-signature-type">CommandMessage</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">exec<span class="tsd-signature-symbol">(</span>cmd<span class="tsd-signature-symbol">: </span><a href="_structures_command_.command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/core/CommandHandler.ts#L117">core/CommandHandler.ts:117</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/core/CommandHandler.ts#L119">core/CommandHandler.ts:119</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -308,7 +324,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>msg: <a href="_structures_commandmessage_.commandmessage.html" class="tsd-signature-type">CommandMessage</a></h5>
+									<h5>cmd: <a href="_structures_command_.command.html" class="tsd-signature-type">Command</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -319,13 +335,13 @@
 					<a name="resolve" class="tsd-anchor"></a>
 					<h3>resolve</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">resolve<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_structures_commandmessage_.commandmessage.html" class="tsd-signature-type">CommandMessage</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">resolve<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Message</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_structures_command_.command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/core/CommandHandler.ts#L68">core/CommandHandler.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/core/CommandHandler.ts#L72">core/CommandHandler.ts:72</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -339,7 +355,7 @@
 									<h5>message: <span class="tsd-signature-type">Message</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_structures_commandmessage_.commandmessage.html" class="tsd-signature-type">CommandMessage</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_structures_command_.command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -379,13 +395,7 @@
 						<a href="../modules/_errors_validationerror_.html">"errors/<wbr>Validation<wbr>Error"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_interfaces_command_.html">"interfaces/<wbr>Command"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_interfaces_config_.html">"interfaces/<wbr>Config"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_interfaces_middleware_.html">"interfaces/<wbr>Middleware"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_middleware_argument_.html">"middleware/<wbr>Argument"</a>
@@ -394,10 +404,7 @@
 						<a href="../modules/_middleware_validator_.html">"middleware/<wbr>Validator"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_structures_commandmessage_.html">"structures/<wbr>Command<wbr>Message"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_structures_prompter_.html">"structures/<wbr>Prompter"</a>
+						<a href="../modules/_structures_command_.html">"structures/<wbr>Command"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_structures_response_.html">"structures/<wbr>Response"</a>
@@ -424,7 +431,10 @@
 								<a href="_core_commandhandler_.commandhandler.html#ignore" class="tsd-kind-icon">ignore</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
-								<a href="_core_commandhandler_.commandhandler.html#middleware" class="tsd-kind-icon">middleware</a>
+								<a href="_core_commandhandler_.commandhandler.html#post" class="tsd-kind-icon">post</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
+								<a href="_core_commandhandler_.commandhandler.html#pre" class="tsd-kind-icon">pre</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
 								<a href="_core_commandhandler_.commandhandler.html#silent" class="tsd-kind-icon">silent</a>

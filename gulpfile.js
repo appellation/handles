@@ -20,6 +20,7 @@ gulp.task('build', () => {
 });
 
 gulp.task('docs', () => {
+  del.sync(['docs/**']);
   return gulp.src(['src/*.ts'])
     .pipe(typedoc({
       module: 'commonjs',

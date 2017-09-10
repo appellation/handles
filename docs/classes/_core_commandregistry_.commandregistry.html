@@ -80,7 +80,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">, </span><a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-signature-type">ICommand</a><span class="tsd-signature-symbol">&gt;</span>
+						<span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">, </span><a href="_structures_command_.command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">CommandRegistry</span>
@@ -112,9 +112,9 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external"><a href="_core_commandregistry_.commandregistry.html#_loaddir" class="tsd-kind-icon">_load<wbr>Dir</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_core_commandregistry_.commandregistry.html#load" class="tsd-kind-icon">load</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="_core_commandregistry_.commandregistry.html#___iterator" class="tsd-kind-icon">__@iterator</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static tsd-is-external"><a href="_core_commandregistry_.commandregistry.html#_loaddir" class="tsd-kind-icon">_load<wbr>Dir</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="_core_commandregistry_.commandregistry.html#clear" class="tsd-kind-icon">clear</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="_core_commandregistry_.commandregistry.html#delete" class="tsd-kind-icon">delete</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="_core_commandregistry_.commandregistry.html#entries" class="tsd-kind-icon">entries</a></li>
@@ -141,7 +141,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/core/CommandRegistry.ts#L23">core/CommandRegistry.ts:23</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/core/CommandRegistry.ts#L49">core/CommandRegistry.ts:49</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -166,7 +166,7 @@
 					<div class="tsd-signature tsd-kind-icon">directory<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/core/CommandRegistry.ts#L23">core/CommandRegistry.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/core/CommandRegistry.ts#L49">core/CommandRegistry.ts:49</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -181,7 +181,7 @@
 					<div class="tsd-signature tsd-kind-icon">handles<span class="tsd-signature-symbol">:</span> <a href="_core_client_.handlesclient.html" class="tsd-signature-type">HandlesClient</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/core/CommandRegistry.ts#L18">core/CommandRegistry.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/core/CommandRegistry.ts#L44">core/CommandRegistry.ts:44</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -225,17 +225,62 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="load" class="tsd-anchor"></a>
+					<h3>load</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">load<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/core/CommandRegistry.ts#L63">core/CommandRegistry.ts:63</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Load all commands into memory.  Use when reloading commands.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">this</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+					<a name="___iterator" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> __@iterator</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">__@iterator<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">, </span><a href="_structures_command_.command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from Map.[Symbol.iterator]</p>
+								<ul>
+									<li>Defined in C:/Users/Will/dev/handles/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts:115</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns an iterable of entries in the map.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">, </span><a href="_structures_command_.command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static tsd-is-external">
 					<a name="_loaddir" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> _load<wbr>Dir</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagPrivate">Private</span> _load<wbr>Dir</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static tsd-is-external">
 						<li class="tsd-signature tsd-kind-icon">_load<wbr>Dir<span class="tsd-signature-symbol">(</span>dir<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/core/CommandRegistry.ts#L77">core/CommandRegistry.ts:77</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/core/CommandRegistry.ts#L22">core/CommandRegistry.ts:22</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -253,51 +298,6 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
-					<a name="load" class="tsd-anchor"></a>
-					<h3>load</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">load<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">, </span><a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-signature-type">ICommand</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/core/CommandRegistry.ts#L37">core/CommandRegistry.ts:37</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Load all commands into memory.  Use when reloading commands.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">, </span><a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-signature-type">ICommand</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-					<a name="___iterator" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> __@iterator</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">__@iterator<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">, </span><a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-signature-type">ICommand</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Inherited from Map.[Symbol.iterator]</p>
-								<ul>
-									<li>Defined in C:/Users/Will/dev/handles/node_modules/typedoc/node_modules/typescript/lib/lib.es2015.iterable.d.ts:115</li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns an iterable of entries in the map.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">, </span><a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-signature-type">ICommand</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -323,7 +323,7 @@
 					<a name="delete" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> delete</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">delete<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -336,7 +336,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>key: <a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a></h5>
+									<h5>key: <a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -347,7 +347,7 @@
 					<a name="entries" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> entries</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">entries<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">, </span><a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-signature-type">ICommand</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">entries<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">, </span><a href="_structures_command_.command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -362,7 +362,7 @@
 									<p>Returns an iterable of key, value pairs for every entry in the map.</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">, </span><a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-signature-type">ICommand</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">[</span><a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">, </span><a href="_structures_command_.command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -387,20 +387,20 @@
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-signature-type">ICommand</a>, key<span class="tsd-signature-symbol">: </span><a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a>, map<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">, </span><a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-signature-type">ICommand</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><a href="_structures_command_.command.html" class="tsd-signature-type">Command</a>, key<span class="tsd-signature-symbol">: </span><a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a>, map<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">, </span><a href="_structures_command_.command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 											</ul>
 											<ul class="tsd-descriptions">
 												<li class="tsd-description">
 													<h4 class="tsd-parameters-title">Parameters</h4>
 													<ul class="tsd-parameters">
 														<li>
-															<h5>value: <a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-signature-type">ICommand</a></h5>
+															<h5>value: <a href="_structures_command_.command.html" class="tsd-signature-type">Command</a></h5>
 														</li>
 														<li>
-															<h5>key: <a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a></h5>
+															<h5>key: <a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a></h5>
 														</li>
 														<li>
-															<h5>map: <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">, </span><a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-signature-type">ICommand</a><span class="tsd-signature-symbol">&gt;</span></h5>
+															<h5>map: <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">, </span><a href="_structures_command_.command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">&gt;</span></h5>
 														</li>
 													</ul>
 													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -421,7 +421,7 @@
 					<a name="get" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> get</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-signature-type">ICommand</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_structures_command_.command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -434,10 +434,10 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>key: <a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a></h5>
+									<h5>key: <a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-signature-type">ICommand</a>
+							<h4 class="tsd-returns-title">Returns <a href="_structures_command_.command.html" class="tsd-signature-type">Command</a>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
@@ -448,7 +448,7 @@
 					<a name="has" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> has</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">has<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">has<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -461,7 +461,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>key: <a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a></h5>
+									<h5>key: <a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -472,7 +472,7 @@
 					<a name="keys" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> keys</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">keys<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">keys<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -487,7 +487,7 @@
 									<p>Returns an iterable of keys in the map</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -495,7 +495,7 @@
 					<a name="set" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> set</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a>, value<span class="tsd-signature-symbol">: </span><a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-signature-type">ICommand</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a>, value<span class="tsd-signature-symbol">: </span><a href="_structures_command_.command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -508,10 +508,10 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>key: <a href="../modules/_interfaces_command_.html#trigger" class="tsd-signature-type">Trigger</a></h5>
+									<h5>key: <a href="../modules/_structures_command_.html#trigger" class="tsd-signature-type">Trigger</a></h5>
 								</li>
 								<li>
-									<h5>value: <a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-signature-type">ICommand</a></h5>
+									<h5>value: <a href="_structures_command_.command.html" class="tsd-signature-type">Command</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -522,7 +522,7 @@
 					<a name="values" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> values</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">values<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-signature-type">ICommand</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">values<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><a href="_structures_command_.command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
@@ -537,7 +537,7 @@
 									<p>Returns an iterable of values in the map</p>
 								</div>
 							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_interfaces_command_.icommand.html" class="tsd-signature-type">ICommand</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">IterableIterator</span><span class="tsd-signature-symbol">&lt;</span><a href="_structures_command_.command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -577,13 +577,7 @@
 						<a href="../modules/_errors_validationerror_.html">"errors/<wbr>Validation<wbr>Error"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_interfaces_command_.html">"interfaces/<wbr>Command"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_interfaces_config_.html">"interfaces/<wbr>Config"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_interfaces_middleware_.html">"interfaces/<wbr>Middleware"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_middleware_argument_.html">"middleware/<wbr>Argument"</a>
@@ -592,10 +586,7 @@
 						<a href="../modules/_middleware_validator_.html">"middleware/<wbr>Validator"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_structures_commandmessage_.html">"structures/<wbr>Command<wbr>Message"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_structures_prompter_.html">"structures/<wbr>Prompter"</a>
+						<a href="../modules/_structures_command_.html">"structures/<wbr>Command"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_structures_response_.html">"structures/<wbr>Response"</a>
@@ -630,14 +621,14 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
 								<a href="_core_commandregistry_.commandregistry.html#size" class="tsd-kind-icon">size</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
-								<a href="_core_commandregistry_.commandregistry.html#_loaddir" class="tsd-kind-icon">_load<wbr>Dir</a>
-							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="_core_commandregistry_.commandregistry.html#load" class="tsd-kind-icon">load</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
 								<a href="_core_commandregistry_.commandregistry.html#___iterator" class="tsd-kind-icon">__@iterator</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static tsd-is-external">
+								<a href="_core_commandregistry_.commandregistry.html#_loaddir" class="tsd-kind-icon">_load<wbr>Dir</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
 								<a href="_core_commandregistry_.commandregistry.html#clear" class="tsd-kind-icon">clear</a>
@@ -670,6 +661,12 @@
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/_core_commandregistry_.html#readdir" class="tsd-kind-icon">readdir</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-external tsd-is-not-exported">
+						<a href="../modules/_core_commandregistry_.html#stat" class="tsd-kind-icon">stat</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
