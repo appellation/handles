@@ -83,13 +83,12 @@
 <span class="hljs-keyword">const</span> handles = <span class="hljs-built_in">require</span>(<span class="hljs-string">'discord-handles'</span>);
 
 <span class="hljs-keyword">const</span> client = <span class="hljs-keyword">new</span> discord.Client();
-<span class="hljs-keyword">const</span> handler = <span class="hljs-keyword">new</span> handles.Client();
+<span class="hljs-keyword">const</span> handler = <span class="hljs-keyword">new</span> handles.Client(client);
 
-client.on(<span class="hljs-string">'message'</span>, handler.handle);
 client.login(<span class="hljs-string">'token'</span>);
 </code></pre>
 				<p>This will automatically load all commands in the <code>./commands</code> directory and handle incoming messages.  See <a href="https://handles.topkek.pw/modules/_structures_command_.html"><code>Command</code></a> in the docs for information on how to format the exports of the files you place in <code>./commands</code>.  Particularly of interest are the <code>pre</code>, <code>exec</code>, and <code>post</code> methods.  The loader and handler can be configured according to <a href="https://handles.topkek.pw/modules/_interfaces_config_.html"><code>Config</code></a> options passed to the constructor.</p>
-				<pre><code class="lang-js"><span class="hljs-keyword">const</span> handler = <span class="hljs-keyword">new</span> handles.Client({
+				<pre><code class="lang-js"><span class="hljs-keyword">const</span> handler = <span class="hljs-keyword">new</span> handles.Client(client, {
     <span class="hljs-attr">directory</span>: <span class="hljs-string">'./some/other/awesome/directory'</span>,
     <span class="hljs-attr">prefixes</span>: <span class="hljs-keyword">new</span> <span class="hljs-built_in">Set</span>([<span class="hljs-string">'dank'</span>, <span class="hljs-string">'memes'</span>])
 });
@@ -111,13 +110,13 @@ client.login(<span class="hljs-string">'token'</span>);
             .apply(<span class="hljs-keyword">this</span>.member.permissions.has(Permissions.FLAGS.BAN_MEMBERS), <span class="hljs-string">'You don\'t have permission to ban people.'</span>);
 
         <span class="hljs-keyword">const</span> member = <span class="hljs-keyword">await</span> <span class="hljs-keyword">new</span> Argument(<span class="hljs-keyword">this</span>, <span class="hljs-string">'member'</span>)
-            .setResolver(<span class="hljs-keyword">async</span> c =&gt; {
+            .setResolver(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> {
                 <span class="hljs-keyword">const</span> member = <span class="hljs-keyword">this</span>.guild.members.get(c);
 
                 <span class="hljs-comment">// if they provided a raw user ID</span>
                 <span class="hljs-keyword">if</span> (member) <span class="hljs-keyword">return</span> member;
                 <span class="hljs-comment">// if they mentioned someone</span>
-                <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (c.test(MessageMentions.USERS_PATTERN)) <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.guild.members.get(c.match(MessageMentions.USERS_PATTERN)[<span class="hljs-number">1</span>]);
+                <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (MessageMentions.USERS_PATTERN.test(c)) <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.guild.members.get(c.match(MessageMentions.USERS_PATTERN)[<span class="hljs-number">1</span>]);
                 <span class="hljs-comment">// if they provided a user tag</span>
                 <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.guild.members.exists(<span class="hljs-function"><span class="hljs-params">u</span> =&gt;</span> u.tag === c)) <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.guild.members.find(<span class="hljs-function"><span class="hljs-params">u</span> =&gt;</span> u.tag === c);
                 <span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;

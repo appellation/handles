@@ -31,16 +31,15 @@ const discord = require('discord.js');
 const handles = require('discord-handles');
 
 const client = new discord.Client();
-const handler = new handles.Client();
+const handler = new handles.Client(client);
 
-client.on('message', handler.handle);
 client.login('token');
 ```
 
 This will automatically load all commands in the `./commands` directory and handle incoming messages.  See [`Command`](https://handles.topkek.pw/modules/_structures_command_.html) in the docs for information on how to format the exports of the files you place in `./commands`.  Particularly of interest are the `pre`, `exec`, and `post` methods.  The loader and handler can be configured according to [`Config`](https://handles.topkek.pw/modules/_interfaces_config_.html) options passed to the constructor.
 
 ```js
-const handler = new handles.Client({
+const handler = new handles.Client(client, {
     directory: './some/other/awesome/directory',
     prefixes: new Set(['dank', 'memes'])
 });
