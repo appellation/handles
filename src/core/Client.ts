@@ -1,13 +1,13 @@
 import EventEmitter = require('events');
 import BaseError from '../errors/BaseError';
 import Validator from '../middleware/Validator';
-import CommandMessage from '../structures/CommandMessage';
+
+import Command from '../structures/Command';
 import Response from '../structures/Response';
 
 import CommandHandler from './CommandHandler';
 import CommandRegistry from './CommandRegistry';
 
-import { ICommand } from '../interfaces/Command';
 import { IConfig } from '../interfaces/Config';
 
 import { Client, Message } from 'discord.js';
@@ -44,9 +44,10 @@ export default class HandlesClient extends EventEmitter {
     this.registry = new CommandRegistry(this, config);
     this.handler = new CommandHandler(this, config);
 
-    client.once('ready', () => this.prefixes.add(`<@${client.user.id}>`).add(`<@!${client.user.id}>`));
-
     this.handle = this.handle.bind(this);
+
+    client.once('ready', () => this.prefixes.add(`<@${client.user.id}>`).add(`<@!${client.user.id}>`));
+    client.on('message', this.handle);
   }
 
   /**
@@ -86,19 +87,19 @@ export default class HandlesClient extends EventEmitter {
     return this.handler.exec(cmd);
   }
 
-  public on(event: 'commandStarted' | 'commandUnknown', listener: (cmd: CommandMessage) => void): this;
+  public on(event: 'commandStarted' | 'commandUnknown', listener: (cmd: Command) => void): this;
 
   public on(event: 'commandError', listener:
-    ({ command, error }: { command: CommandMessage, error: Error | BaseError }) => void): this;
+    ({ command, error }: { command: Command, error: Error | BaseError }) => void): this;
 
   public on(event: 'commandFinished', listener:
-    ({ command, result }: { command: CommandMessage, result: any }) => void): this;
+    ({ command, result }: { command: Command, result: any }) => void): this;
 
   public on(event: 'commandFailed', listener:
-    ({ command, error }: { command: CommandMessage, error: BaseError }) => void): this;
+    ({ command, error }: { command: Command, error: BaseError }) => void): this;
 
   public on(event: 'commandsLoaded', listener:
-    ({ commands, failed, time }: { commands: Map<string, ICommand>, failed: string[], time: number }) => void): this;
+    ({ commands, failed, time }: { commands: Map<string, Command>, failed: string[], time: number }) => void): this;
 
   public on(event: string, listener: (...args: any[]) => void): this {
     return super.on(event, listener);

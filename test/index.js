@@ -17,33 +17,33 @@ const handler = new handles.Client(client, {
 });
 
 handler.on('commandError', ({ command, error }) => {
-  const extra = {
-    message: {
-      content: command.message.content,
-      id: command.message.id,
-      type: command.message.type,
-    },
-    channel: {
-      id: command.message.channel.id,
-      type: command.message.channel.type,
-    },
-    guild: {},
-    client: {
-      shard: command.client.shard ? command.client.shard.id : null,
-      ping: command.client.ping,
-      status: command.client.status,
-    },
-  };
+  // const extra = {
+  //   message: {
+  //     content: command.message.content,
+  //     id: command.message.id,
+  //     type: command.message.type,
+  //   },
+  //   channel: {
+  //     id: command.message.channel.id,
+  //     type: command.message.channel.type,
+  //   },
+  //   guild: {},
+  //   client: {
+  //     shard: command.client.shard ? command.client.shard.id : null,
+  //     ping: command.client.ping,
+  //     status: command.client.status,
+  //   },
+  // };
 
-  if (command.message.channel.type === 'text') {
-    extra.guild = {
-      id: command.guild.id,
-      name: command.guild.name,
-      owner: command.guild.ownerID,
-    };
-  }
+  // if (command.message.channel.type === 'text') {
+  //   extra.guild = {
+  //     id: command.guild.id,
+  //     name: command.guild.name,
+  //     owner: command.guild.ownerID,
+  //   };
+  // }
   console.error(error);
-  console.error(extra);
+  // console.error(extra);
 
   // console.log(raven.captureException(error, {
   //   user: {
@@ -52,50 +52,6 @@ handler.on('commandError', ({ command, error }) => {
   //   },
   //   extra
   // }));
-});
-
-// handler.on('commandFailed', console.error);
-// handler.on('commandError', console.error);
-
-client.on('message', m => {
-  // const extra = {
-  //   message: {
-  //     content: m.content,
-  //     id: m.id,
-  //     type: m.type,
-  //   },
-  //   channel: {
-  //     id: m.channel.id,
-  //     type: m.channel.type,
-  //   },
-  //   guild: {},
-  //   client: {
-  //     shard: m.client.shard ? m.client.shard.id : null,
-  //     ping: m.client.ping,
-  //     status: m.client.status,
-  //   },
-  // };
-
-  // if (m.channel.type === 'text') {
-  //   extra.guild = {
-  //     id: m.guild.id,
-  //     name: m.guild.name,
-  //     owner: m.guild.ownerID,
-  //   };
-
-  //   const perms = m.channel.permissionsFor(m.guild.me);
-  //   extra.channel.permissions = perms ? perms.serialize() : null;
-  // }
-
-  // raven.context({
-  //   user: {
-  //     id: m.author.id,
-  //     username: m.author.tag,
-  //   },
-  //   extra,
-  // }, () => {
-  handler.handle(m);
-  // });
 });
 
 client.once('ready', () => console.log('ready'));

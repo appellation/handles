@@ -1,12 +1,11 @@
 import BaseError from '../errors/BaseError';
-import CommandMessage from '../structures/CommandMessage';
+
+import Command from '../structures/Command';
 
 import HandlesClient from './Client';
 import CommandRegistry from './CommandRegistry';
 
-import { CommandMiddleware, ICommand } from '../interfaces/Command';
 import { IConfig } from '../interfaces/Config';
-import { Middleware } from '../interfaces/Middleware';
 
 import { Message } from 'discord.js';
 
@@ -38,9 +37,14 @@ export default class CommandHandler {
   public validator: MessageValidator;
 
   /**
-   * Global middleware.
+   * Methods to run before each command. Executed in sequence before the command's `pre` method.
    */
-  public middleware: CommandMiddleware[] = [];
+  public pre: Array<(cmd: Command) => any> = [];
+
+  /**
+   * Methods to run after each command.  Executed in sequence after the command's `post` method.
+   */
+  public post: Array<(cmd: Command) => any> = [];
 
   constructor(handles: HandlesClient, config: IConfig) {
     this.handles = handles;
@@ -65,19 +69,18 @@ export default class CommandHandler {
   /**
    * Resolve a command from a message.
    */
-  public async resolve(message: Message): Promise<CommandMessage | null> {
+  public async resolve(message: Message): Promise<Command | null> {
     const content = await this.validator(message);
     if (typeof content !== 'string' || !content) return null;
 
     const match = content.match(/^([^\s]+)(.*)/);
     if (match) {
       const [, cmd, commandContent] = match;
-      const mod: ICommand | undefined = this.handles.registry.get(cmd);
+      const mod = this.handles.registry.get(cmd);
 
       if (mod) {
-        return new CommandMessage(this.handles, {
+        return new mod(this.handles, {
           body: commandContent.trim(),
-          command: mod,
           message,
           trigger: cmd,
         });
@@ -97,9 +100,8 @@ export default class CommandHandler {
       }
 
       if (body !== null) {
-        const cmd = new CommandMessage(this.handles, {
+        const cmd = new command(this.handles, {
           body,
-          command,
           message,
           trigger,
         });
@@ -114,38 +116,36 @@ export default class CommandHandler {
   /**
    * Execute a command message.
    */
-  public async exec(msg: CommandMessage): Promise<any> {
-    this._ignore(msg.session);
-    this.handles.emit('commandStarted', msg);
+  public async exec(cmd: Command): Promise<any> {
+    this._ignore(cmd.session);
+    this.handles.emit('commandStarted', cmd);
 
     try {
-      const iterate = async (generator: Iterator<Middleware>, value?: any): Promise<void> => {
-        const next = generator.next(value);
+      for (const fn of this.pre) await fn(cmd);
+      await cmd.pre();
+      const result = await cmd.exec();
+      await cmd.post();
+      for (const fn of this.post) await fn(cmd);
 
-        if (next.done) {
-          return;
-        } else {
-          return iterate(generator, await (typeof next.value === 'function' ? next.value(msg) : next.value.run(msg)));
-        }
-      };
-
-      for (const middleware of this.middleware) await iterate(middleware(msg));
-      if (typeof msg.command.middleware === 'function') await iterate(msg.command.middleware(msg));
-
-      const result = await msg.command.exec(msg);
-      this.handles.emit('commandFinished', { command: msg, result });
-      return this.silent ? result : void 0;
+      this.handles.emit('commandFinished', { command: cmd, result });
+      return this.silent ? result : undefined;
 
     } catch (e) {
+      try {
+        await cmd.error();
+      } catch (e) {
+        // do nothing
+      }
+
       if (e instanceof BaseError) {
-        this.handles.emit('commandFailed', { command: msg, error: e });
+        this.handles.emit('commandFailed', { command: cmd, error: e });
         if (!this.silent) return e;
       } else {
-        this.handles.emit('commandError', { command: msg, error: e });
+        this.handles.emit('commandError', { command: cmd, error: e });
         if (!this.silent) throw e;
       }
     } finally {
-      this._unignore(msg.session);
+      this._unignore(cmd.session);
     }
   }
 
@@ -162,7 +162,7 @@ export default class CommandHandler {
    * @param session The data to unignore.
    */
   private _unignore(session: string) {
-      if (!this.ignore.includes(session)) return;
-      this.ignore.splice(this.ignore.indexOf(session), 1);
+    const index = this.ignore.indexOf(session);
+    if (index > -1) this.ignore.splice(index, 1);
   }
 }

@@ -1,7 +1,6 @@
+import HandlesClient from '../core/Client';
 import ArgumentError from '../errors/ArgumentError';
-import { IMiddleware } from '../interfaces/Middleware';
-import CommandMessage from '../structures/CommandMessage';
-import Prompter from '../structures/Prompter';
+import Command from '../structures/Command';
 import Response from '../structures/Response';
 
 import { Message } from 'discord.js';
@@ -10,13 +9,13 @@ import { Message } from 'discord.js';
  * This is called every time new potential argument data is received, either in the body of
  * the original command or in subsequent prompts.
  */
-export type Resolver = (content: string, message: Message, arg: Argument) => any | null;
+export type Resolver<T> = (content: string, message: Message, arg: Argument<T>) => T | null;
 
-export interface IOptions {
+export interface IOptions<T> {
   prompt?: string;
   rePrompt?: string;
   optional?: boolean;
-  resolver?: Resolver;
+  resolver?: Resolver<T>;
   timeout?: number;
   pattern?: RegExp;
   suffix?: string | null;
@@ -33,7 +32,9 @@ export type Matcher = (content: string) => string;
 /**
  * Represents a command argument.
  */
-export default class Argument implements IOptions, IMiddleware {
+export default class Argument<T = string> implements IOptions<T>, Promise<T> {
+  public readonly command: Command;
+
   /**
    * The key that this arg will be set to.
    *
@@ -66,7 +67,7 @@ export default class Argument implements IOptions, IMiddleware {
   /**
    * The argument resolver for this argument.
    */
-  public resolver: Resolver;
+  public resolver: Resolver<T>;
 
   /**
    * How long to wait for a response to a prompt, in seconds.
@@ -88,23 +89,27 @@ export default class Argument implements IOptions, IMiddleware {
    */
   private _pattern: RegExp;
 
-  constructor(key: string, {
+  constructor(command: Command, key: string, {
     prompt = '',
     rePrompt = '',
     optional = false,
-    resolver = (content: string) => content || null,
     timeout = 30,
     suffix = null,
     pattern = /^\S+/,
-  }: IOptions = {}) {
+  }: IOptions<T> = {}) {
+    this.command = command;
     this.key = key;
+
     this.prompt = prompt;
     this.rePrompt = rePrompt;
     this.optional = optional;
-    this.resolver = resolver;
     this.timeout = timeout;
     this.suffix = suffix;
     this.pattern = pattern;
+  }
+
+  get handles(): HandlesClient {
+    return this.command.handles;
   }
 
   /**
@@ -168,7 +173,7 @@ export default class Argument implements IOptions, IMiddleware {
   /**
    * Set the argument resolver function for this argument.
    */
-  public setResolver(resolver: Resolver = (content) => content || null) {
+  public setResolver(resolver: Resolver<T>) {
     this.resolver = resolver;
     return this;
   }
@@ -189,26 +194,63 @@ export default class Argument implements IOptions, IMiddleware {
     return this;
   }
 
-  public async run(command: CommandMessage) {
-    const matched = this.matcher(command.body);
-    command.body = command.body.replace(matched, '').trim();
+  public then<TResult1 = T, TResult2 = never>(
+    resolver?: ((value: T | null) => TResult1 | PromiseLike<TResult1>),
+    rejector?: ((value: Error) => TResult2 | PromiseLike<TResult2>),
+  ): Promise<TResult1 | TResult2> {
+    return new Promise<T | null>(async (resolve, reject) => {
+      const matched = this.matcher(this.command.body);
+      this.command.body = this.command.body.replace(matched, '').trim();
 
-    let resolved = !matched ? null : await this.resolver(matched, command.message, this);
+      let resolved = !matched ? null : await this.resolver(matched, this.command.message, this);
 
-    // if there is no matched content and the argument is not optional, collect a prompt
-    if (resolved === null && !this.optional) {
-      const prompter = new Prompter(command.handles, new command.handles.Response(command.message, false));
-      try {
-        resolved = await prompter.collectPrompt(this, matched.length === 0);
-      } catch (e) {
-        command.response.send('Command cancelled.');
-        if (typeof e === 'string') throw new ArgumentError(this, e);
-        throw e;
+      // if there is no matched content and the argument is not optional, collect a prompt
+      if (resolved === null && !this.optional) {
+        try {
+          resolved = await this.collectPrompt(matched.length === 0);
+        } catch (e) {
+          this.command.response.send('Command cancelled.');
+          if (typeof e === 'string') e = new ArgumentError<T>(this, e);
+          return reject(e);
+        }
       }
-    }
 
-    if (!command.args) command.args = {};
-    command.args[this.key] = resolved;
+      if (!this.command.args) this.command.args = {};
+      this.command.args[this.key] = resolved;
+
+      return resolve(resolved);
+    }).then(resolver, rejector);
+  }
+
+  public catch<TResult2 = never>(rejector?: ((value: Error) => TResult2 | PromiseLike<TResult2>)) {
+    return this.then(undefined, rejector);
+  }
+
+  public get [Symbol.toStringTag](): 'Promise' {
+    return 'Promise';
+  }
+
+  private async collectPrompt(first = true): Promise<T> {
+    const text = first ? this.prompt : this.rePrompt;
+    const suffix = this.suffix || this.handles.argsSuffix ||
+      `\nCommand will be cancelled in **${this.timeout} seconds**.  Type \`cancel\` to cancel immediately.`;
+
+    // get first response
+    const prompt = new this.handles.Response(this.command.message);
+    await prompt.send(text + suffix);
+    const responses = await prompt.channel.awaitMessages(
+      (m: Message) => m.author.id === this.command.author.id,
+      { time: this.timeout * 1000, max: 1, errors: ['time'] },
+    );
+    const response = responses.first();
+
+    // cancel
+    if (response.content === 'cancel') throw new ArgumentError<T>(this, 'cancelled');
+
+    // resolve: if not, prompt again
+    const resolved = await this.resolver(response.content, response, this);
+    if (resolved === null) return this.collectPrompt(false);
+
     return resolved;
   }
 }

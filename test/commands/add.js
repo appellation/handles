@@ -1,28 +1,28 @@
 const Handles = require('../../dist/index');
 
-class Command {
-  * middleware(cmd) {
-    const val1 = new Handles.Validator(cmd)
+class Command extends Handles.Command {
+  async pre() {
+    const val1 = new Handles.Validator(this)
       .apply(false, 'kek');
-    const val2 = new Handles.Validator(cmd)
+    const val2 = new Handles.Validator(this)
       .apply(true, 'lol');
 
-    // yield val1;
+    await val1;
 
-    yield new Handles.Argument('first')
+    await new Handles.Argument(this, 'first')
       .setPrompt('Please provide the first digit.')
       .setRePrompt('xd1')
       .setResolver(c => isNaN(c) ? null : parseInt(c));
 
-    yield new Handles.Argument('second')
+    await new Handles.Argument(this, 'second')
       .setPrompt('Please provide the second digit.')
       .setRePrompt('xd2')
       .setResolver(c => isNaN(c) ? null : parseInt(c));
   }
 
-  exec(command) {
-    return command.response.send(command.args.first + command.args.second);
+  exec() {
+    return this.response.send(this.args.first + this.args.second);
   }
 }
 
-module.exports = new Command();
+module.exports = Command;

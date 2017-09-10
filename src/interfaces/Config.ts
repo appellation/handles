@@ -1,3 +1,4 @@
+import { ClientOptions } from 'discord.js';
 import { MessageValidator } from '../core/CommandHandler';
 import Response from '../structures/Response';
 

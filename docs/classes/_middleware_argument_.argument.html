@@ -62,7 +62,7 @@
 					<a href="_middleware_argument_.argument.html">Argument</a>
 				</li>
 			</ul>
-			<h1>Class Argument</h1>
+			<h1>Class Argument&lt;T&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -76,6 +76,14 @@
 					</div>
 				</div>
 			</section>
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>T</h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -87,8 +95,8 @@
 			<section class="tsd-panel">
 				<h3>Implements</h3>
 				<ul class="tsd-hierarchy">
-					<li><a href="../interfaces/_middleware_argument_.ioptions.html" class="tsd-signature-type">IOptions</a></li>
-					<li><a href="../interfaces/_interfaces_middleware_.imiddleware.html" class="tsd-signature-type">IMiddleware</a></li>
+					<li><a href="../interfaces/_middleware_argument_.ioptions.html" class="tsd-signature-type">IOptions</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+					<li><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -105,6 +113,7 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external"><a href="_middleware_argument_.argument.html#_pattern" class="tsd-kind-icon">_pattern</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="_middleware_argument_.argument.html#command" class="tsd-kind-icon">command</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="_middleware_argument_.argument.html#key" class="tsd-kind-icon">key</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="_middleware_argument_.argument.html#matcher" class="tsd-kind-icon">matcher</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="_middleware_argument_.argument.html#optional" class="tsd-kind-icon">optional</a></li>
@@ -118,13 +127,16 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-external"><a href="_middleware_argument_.argument.html#___tostringtag" class="tsd-kind-icon">__@to<wbr>String<wbr>Tag</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-external"><a href="_middleware_argument_.argument.html#handles" class="tsd-kind-icon">handles</a></li>
 								<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-external"><a href="_middleware_argument_.argument.html#pattern" class="tsd-kind-icon">pattern</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_middleware_argument_.argument.html#run" class="tsd-kind-icon">run</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-external"><a href="_middleware_argument_.argument.html#catch" class="tsd-kind-icon">catch</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external"><a href="_middleware_argument_.argument.html#collectprompt" class="tsd-kind-icon">collect<wbr>Prompt</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_middleware_argument_.argument.html#setinfinite" class="tsd-kind-icon">set<wbr>Infinite</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_middleware_argument_.argument.html#setoptional" class="tsd-kind-icon">set<wbr>Optional</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_middleware_argument_.argument.html#setpattern" class="tsd-kind-icon">set<wbr>Pattern</a></li>
@@ -133,6 +145,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_middleware_argument_.argument.html#setresolver" class="tsd-kind-icon">set<wbr>Resolver</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_middleware_argument_.argument.html#setsuffix" class="tsd-kind-icon">set<wbr>Suffix</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="_middleware_argument_.argument.html#settimeout" class="tsd-kind-icon">set<wbr>Timeout</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-external"><a href="_middleware_argument_.argument.html#then" class="tsd-kind-icon">then</a></li>
 							</ul>
 						</section>
 					</div>
@@ -144,17 +157,20 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Argument<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, __namedParameters<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_middleware_argument_.argument.html" class="tsd-signature-type">Argument</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Argument<span class="tsd-signature-symbol">(</span>command<span class="tsd-signature-symbol">: </span><a href="_structures_command_.command.html" class="tsd-signature-type">Command</a>, key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, __namedParameters<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_middleware_argument_.argument.html" class="tsd-signature-type">Argument</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L89">middleware/Argument.ts:89</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L90">middleware/Argument.ts:90</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
+								<li>
+									<h5>command: <a href="_structures_command_.command.html" class="tsd-signature-type">Command</a></h5>
+								</li>
 								<li>
 									<h5>key: <span class="tsd-signature-type">string</span></h5>
 								</li>
@@ -179,27 +195,6 @@
 										<li class="tsd-parameter">
 											<h5>timeout<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></h5>
 										</li>
-										<li class="tsd-parameter">
-											<h5>resolver<span class="tsd-signature-symbol">: </span>function</h5>
-											<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-type-literal tsd-is-external tsd-is-not-exported">
-												<li class="tsd-signature tsd-kind-icon">resolver<span class="tsd-signature-symbol">(</span>content<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-											</ul>
-											<ul class="tsd-descriptions">
-												<li class="tsd-description">
-													<aside class="tsd-sources">
-														<ul>
-															<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L95">middleware/Argument.ts:95</a></li>
-														</ul>
-													</aside>
-													<h4 class="tsd-parameters-title">Parameters</h4>
-													<ul class="tsd-parameters">
-														<li>
-															<h5>content: <span class="tsd-signature-type">string</span></h5>
-														</li>
-													</ul>
-													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-												</li>
-										</ul>        </li>
 									</ul>
 								</li>
 							</ul>
@@ -216,7 +211,7 @@
 					<div class="tsd-signature tsd-kind-icon">_pattern<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L89">middleware/Argument.ts:89</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L90">middleware/Argument.ts:90</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -226,12 +221,22 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
+					<a name="command" class="tsd-anchor"></a>
+					<h3>command</h3>
+					<div class="tsd-signature tsd-kind-icon">command<span class="tsd-signature-symbol">:</span> <a href="_structures_command_.command.html" class="tsd-signature-type">Command</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L36">middleware/Argument.ts:36</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
 					<a name="key" class="tsd-anchor"></a>
 					<h3>key</h3>
 					<div class="tsd-signature tsd-kind-icon">key<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L48">middleware/Argument.ts:48</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L49">middleware/Argument.ts:49</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -252,7 +257,7 @@
 					<div class="tsd-signature tsd-kind-icon">matcher<span class="tsd-signature-symbol">:</span> <a href="../modules/_middleware_argument_.html#matcher" class="tsd-signature-type">Matcher</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L84">middleware/Argument.ts:84</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L85">middleware/Argument.ts:85</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -268,7 +273,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/_middleware_argument_.ioptions.html">IOptions</a>.<a href="../interfaces/_middleware_argument_.ioptions.html#optional">optional</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L64">middleware/Argument.ts:64</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L65">middleware/Argument.ts:65</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -284,7 +289,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/_middleware_argument_.ioptions.html">IOptions</a>.<a href="../interfaces/_middleware_argument_.ioptions.html#prompt">prompt</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L53">middleware/Argument.ts:53</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L54">middleware/Argument.ts:54</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -300,7 +305,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/_middleware_argument_.ioptions.html">IOptions</a>.<a href="../interfaces/_middleware_argument_.ioptions.html#reprompt">rePrompt</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L59">middleware/Argument.ts:59</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L60">middleware/Argument.ts:60</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -313,11 +318,11 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
 					<a name="resolver" class="tsd-anchor"></a>
 					<h3>resolver</h3>
-					<div class="tsd-signature tsd-kind-icon">resolver<span class="tsd-signature-symbol">:</span> <a href="../modules/_middleware_argument_.html#resolver" class="tsd-signature-type">Resolver</a></div>
+					<div class="tsd-signature tsd-kind-icon">resolver<span class="tsd-signature-symbol">:</span> <a href="../modules/_middleware_argument_.html#resolver" class="tsd-signature-type">Resolver</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/_middleware_argument_.ioptions.html">IOptions</a>.<a href="../interfaces/_middleware_argument_.ioptions.html#resolver">resolver</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L69">middleware/Argument.ts:69</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L70">middleware/Argument.ts:70</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -333,7 +338,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/_middleware_argument_.ioptions.html">IOptions</a>.<a href="../interfaces/_middleware_argument_.ioptions.html#suffix">suffix</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L79">middleware/Argument.ts:79</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L80">middleware/Argument.ts:80</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -349,7 +354,7 @@
 					<aside class="tsd-sources">
 						<p>Implementation of <a href="../interfaces/_middleware_argument_.ioptions.html">IOptions</a>.<a href="../interfaces/_middleware_argument_.ioptions.html#timeout">timeout</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L74">middleware/Argument.ts:74</a></li>
+							<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L75">middleware/Argument.ts:75</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -361,6 +366,40 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Accessors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
+					<a name="___tostringtag" class="tsd-anchor"></a>
+					<h3>__@to<wbr>String<wbr>Tag</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> __@toStringTag<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"Promise"</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L229">middleware/Argument.ts:229</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">"Promise"</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
+					<a name="handles" class="tsd-anchor"></a>
+					<h3>handles</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> handles<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_core_client_.handlesclient.html" class="tsd-signature-type">HandlesClient</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L111">middleware/Argument.ts:111</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="_core_client_.handlesclient.html" class="tsd-signature-type">HandlesClient</a></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-accessor tsd-parent-kind-class tsd-is-external">
 					<a name="pattern" class="tsd-anchor"></a>
 					<h3>pattern</h3>
@@ -372,7 +411,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L115">middleware/Argument.ts:115</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L120">middleware/Argument.ts:120</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -387,7 +426,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L119">middleware/Argument.ts:119</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L124">middleware/Argument.ts:124</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -410,26 +449,76 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
-					<a name="run" class="tsd-anchor"></a>
-					<h3>run</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">run<span class="tsd-signature-symbol">(</span>command<span class="tsd-signature-symbol">: </span><a href="_structures_commandmessage_.commandmessage.html" class="tsd-signature-type">CommandMessage</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-external">
+					<a name="catch" class="tsd-anchor"></a>
+					<h3>catch</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">catch&lt;TResult2&gt;<span class="tsd-signature-symbol">(</span>rejector<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TResult2</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L192">middleware/Argument.ts:192</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L225">middleware/Argument.ts:225</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>TResult2</h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> rejector: <span class="tsd-signature-type">function</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-siganture">
+											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TResult2</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TResult2</span><span class="tsd-signature-symbol">&gt;</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<h4 class="tsd-parameters-title">Parameters</h4>
+													<ul class="tsd-parameters">
+														<li>
+															<h5>value: <span class="tsd-signature-type">Error</span></h5>
+														</li>
+													</ul>
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TResult2</span>
+														<span class="tsd-signature-symbol"> | </span>
+														<span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TResult2</span><span class="tsd-signature-symbol">&gt;</span>
+													</h4>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TResult2</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
+					<a name="collectprompt" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> collect<wbr>Prompt</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">collect<wbr>Prompt<span class="tsd-signature-symbol">(</span>first<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L233">middleware/Argument.ts:233</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>command: <a href="_structures_commandmessage_.commandmessage.html" class="tsd-signature-type">CommandMessage</a></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> first: <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> =&nbsp;true</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -443,7 +532,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L132">middleware/Argument.ts:132</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L137">middleware/Argument.ts:137</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -466,7 +555,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L163">middleware/Argument.ts:163</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L168">middleware/Argument.ts:168</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -494,7 +583,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L139">middleware/Argument.ts:139</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L144">middleware/Argument.ts:144</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -522,7 +611,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L147">middleware/Argument.ts:147</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L152">middleware/Argument.ts:152</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -550,7 +639,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L155">middleware/Argument.ts:155</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L160">middleware/Argument.ts:160</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -572,13 +661,13 @@
 					<a name="setresolver" class="tsd-anchor"></a>
 					<h3>set<wbr>Resolver</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">set<wbr>Resolver<span class="tsd-signature-symbol">(</span>resolver<span class="tsd-signature-symbol">?: </span><a href="../modules/_middleware_argument_.html#resolver" class="tsd-signature-type">Resolver</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Resolver<span class="tsd-signature-symbol">(</span>resolver<span class="tsd-signature-symbol">: </span><a href="../modules/_middleware_argument_.html#resolver" class="tsd-signature-type">Resolver</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L171">middleware/Argument.ts:171</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L176">middleware/Argument.ts:176</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -589,7 +678,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> resolver: <a href="../modules/_middleware_argument_.html#resolver" class="tsd-signature-type">Resolver</a><span class="tsd-signature-symbol"> =&nbsp;(content) &#x3D;&gt; content || null</span></h5>
+									<h5>resolver: <a href="../modules/_middleware_argument_.html#resolver" class="tsd-signature-type">Resolver</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -606,7 +695,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L187">middleware/Argument.ts:187</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L192">middleware/Argument.ts:192</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -634,7 +723,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/appellation/handles/blob/e19ed33/src/middleware/Argument.ts#L179">middleware/Argument.ts:179</a></li>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L184">middleware/Argument.ts:184</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -649,6 +738,83 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-external">
+					<a name="then" class="tsd-anchor"></a>
+					<h3>then</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">then&lt;TResult1, TResult2&gt;<span class="tsd-signature-symbol">(</span>resolver<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span>, rejector<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TResult1</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TResult2</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/appellation/handles/blob/3f44824/src/middleware/Argument.ts#L197">middleware/Argument.ts:197</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>TResult1</h4>
+								</li>
+								<li>
+									<h4>TResult2</h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> resolver: <span class="tsd-signature-type">function</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-siganture">
+											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TResult1</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TResult1</span><span class="tsd-signature-symbol">&gt;</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<h4 class="tsd-parameters-title">Parameters</h4>
+													<ul class="tsd-parameters">
+														<li>
+															<h5>value: <span class="tsd-signature-type">T</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h5>
+														</li>
+													</ul>
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TResult1</span>
+														<span class="tsd-signature-symbol"> | </span>
+														<span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TResult1</span><span class="tsd-signature-symbol">&gt;</span>
+													</h4>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> rejector: <span class="tsd-signature-type">function</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-siganture">
+											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TResult2</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TResult2</span><span class="tsd-signature-symbol">&gt;</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<h4 class="tsd-parameters-title">Parameters</h4>
+													<ul class="tsd-parameters">
+														<li>
+															<h5>value: <span class="tsd-signature-type">Error</span></h5>
+														</li>
+													</ul>
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TResult2</span>
+														<span class="tsd-signature-symbol"> | </span>
+														<span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TResult2</span><span class="tsd-signature-symbol">&gt;</span>
+													</h4>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">TResult1</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">TResult2</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -688,13 +854,7 @@
 						<a href="../modules/_errors_validationerror_.html">"errors/<wbr>Validation<wbr>Error"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_interfaces_command_.html">"interfaces/<wbr>Command"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_interfaces_config_.html">"interfaces/<wbr>Config"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_interfaces_middleware_.html">"interfaces/<wbr>Middleware"</a>
 					</li>
 					<li class="current tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_middleware_argument_.html">"middleware/<wbr>Argument"</a>
@@ -703,10 +863,7 @@
 						<a href="../modules/_middleware_validator_.html">"middleware/<wbr>Validator"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_structures_commandmessage_.html">"structures/<wbr>Command<wbr>Message"</a>
-					</li>
-					<li class=" tsd-kind-external-module tsd-is-external">
-						<a href="../modules/_structures_prompter_.html">"structures/<wbr>Prompter"</a>
+						<a href="../modules/_structures_command_.html">"structures/<wbr>Command"</a>
 					</li>
 					<li class=" tsd-kind-external-module tsd-is-external">
 						<a href="../modules/_structures_response_.html">"structures/<wbr>Response"</a>
@@ -720,7 +877,7 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-external-module tsd-is-external">
+					<li class="current tsd-kind-class tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-external">
 						<a href="_middleware_argument_.argument.html" class="tsd-kind-icon">Argument</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-external">
@@ -728,6 +885,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private tsd-is-external">
 								<a href="_middleware_argument_.argument.html#_pattern" class="tsd-kind-icon">_pattern</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
+								<a href="_middleware_argument_.argument.html#command" class="tsd-kind-icon">command</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
 								<a href="_middleware_argument_.argument.html#key" class="tsd-kind-icon">key</a>
@@ -753,11 +913,20 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
 								<a href="_middleware_argument_.argument.html#timeout" class="tsd-kind-icon">timeout</a>
 							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
+								<a href="_middleware_argument_.argument.html#___tostringtag" class="tsd-kind-icon">__@to<wbr>String<wbr>Tag</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-external">
+								<a href="_middleware_argument_.argument.html#handles" class="tsd-kind-icon">handles</a>
+							</li>
 							<li class=" tsd-kind-accessor tsd-parent-kind-class tsd-is-external">
 								<a href="_middleware_argument_.argument.html#pattern" class="tsd-kind-icon">pattern</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
-								<a href="_middleware_argument_.argument.html#run" class="tsd-kind-icon">run</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-external">
+								<a href="_middleware_argument_.argument.html#catch" class="tsd-kind-icon">catch</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-external">
+								<a href="_middleware_argument_.argument.html#collectprompt" class="tsd-kind-icon">collect<wbr>Prompt</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="_middleware_argument_.argument.html#setinfinite" class="tsd-kind-icon">set<wbr>Infinite</a>
@@ -783,11 +952,14 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="_middleware_argument_.argument.html#settimeout" class="tsd-kind-icon">set<wbr>Timeout</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-external">
+								<a href="_middleware_argument_.argument.html#then" class="tsd-kind-icon">then</a>
+							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-is-external">
+					<li class=" tsd-kind-interface tsd-parent-kind-external-module tsd-has-type-parameter tsd-is-external">
 						<a href="../interfaces/_middleware_argument_.ioptions.html" class="tsd-kind-icon">IOptions</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module tsd-is-external">

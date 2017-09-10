@@ -1,6 +1,5 @@
 import ValidationError from '../errors/ValidationError';
-import { IMiddleware } from '../interfaces/Middleware';
-import CommandMessage from '../structures/CommandMessage';
+import Command from '../structures/Command';
 
 /**
  * ```js
@@ -9,7 +8,7 @@ import CommandMessage from '../structures/CommandMessage';
  * validator.apply(cmd.message.author.id === 'some id', 'uh oh'); // executed immediately
  * ```
  */
-export type ValidationFunction = (m: CommandMessage, v: Validator) => boolean;
+export type ValidationFunction = (v: Validator) => boolean;
 
 /**
  * Passed as a parameter to command validators.  Arguments will not be available in this class,
@@ -37,7 +36,9 @@ export type ValidationFunction = (m: CommandMessage, v: Validator) => boolean;
  * }
  * ```
  */
-export default class Validator implements IMiddleware {
+export default class Validator {
+  public command: Command;
+
   /**
    * The reason this validator is invalid.
    */
@@ -58,6 +59,10 @@ export default class Validator implements IMiddleware {
    */
   private exec: Map<ValidationFunction, string | null> = new Map();
 
+  constructor(cmd: Command) {
+    this.command = cmd;
+  }
+
   /**
    * Test a new boolean for validity.
    *
@@ -72,21 +77,25 @@ export default class Validator implements IMiddleware {
     return this;
   }
 
-  /**
-   * Run this validator.
-   */
-  public async run(command: CommandMessage) {
-    for (const [test, reason] of this.exec) {
-      try {
-        if (!test(command, this)) {
-          this.reason = reason;
-          this.valid = false;
-          throw new ValidationError(this);
+  public then<TResult1 = void, TResult2 = never>(
+    resolver?: ((value: void) => TResult1 | PromiseLike<TResult1>),
+    rejector?: ((value: Error) => TResult2 | PromiseLike<TResult2>),
+  ): Promise<TResult1 | TResult2> {
+    return new Promise<void>((resolve, reject) => {
+      for (const [test, reason] of this.exec) {
+        try {
+          if (!test(this)) {
+            this.reason = reason;
+            this.valid = false;
+            throw new ValidationError(this);
+          }
+        } catch (e) {
+          if (this.respond) this.command.response.error(e);
+          return reject(e);
         }
-      } catch (e) {
-        if (this.respond) command.response.error(e);
-        throw e;
       }
-    }
+
+      return resolve();
+    }).then(resolver, rejector);
   }
 }
