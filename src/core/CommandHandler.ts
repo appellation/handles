@@ -38,13 +38,20 @@ export default class CommandHandler {
 
   /**
    * Methods to run before each command. Executed in sequence before the command's `pre` method.
+   * **Deprecated:** the command parameter will be removed.
    */
-  public pre: Array<(cmd: Command) => any> = [];
+  public pre: Array<(this: Command, cmd: Command) => any> = [];
 
   /**
    * Methods to run after each command.  Executed in sequence after the command's `post` method.
+   * **Deprecated:** the command parameter will be removed.
    */
-  public post: Array<(cmd: Command) => any> = [];
+  public post: Array<(this: Command, cmd: Command) => any> = [];
+
+  /**
+   * Recently executed commands. Stored regardless of success or failure.
+   */
+  public executed: Command[] = [];
 
   constructor(handles: HandlesClient, config: IConfig) {
     this.handles = handles;
@@ -130,7 +137,6 @@ export default class CommandHandler {
 
       this.handles.emit('commandFinished', { command: cmd, result });
       return this.silent ? result : undefined;
-
     } catch (e) {
       try {
         await cmd.error();
@@ -146,6 +152,9 @@ export default class CommandHandler {
         if (!this.silent) throw e;
       }
     } finally {
+      this.executed.push(cmd);
+      setTimeout(() => this.executed.splice(this.executed.indexOf(cmd), 1), 60 * 60 * 1000);
+
       this._unignore(cmd.session);
     }
   }
