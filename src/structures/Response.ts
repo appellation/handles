@@ -1,11 +1,11 @@
 import Queue from '../util/Queue';
 
-import { DMChannel, GroupDMChannel, Message, MessageOptions, TextChannel } from 'discord.js';
+import { DMChannel, GroupDMChannel, Message, MessageOptions, TextBasedChannel, TextChannel } from 'discord.js';
 
 export type TextBasedChannel = TextChannel | DMChannel | GroupDMChannel;
 
 export type SentResponse = Message | Message[];
-export interface IResponseOptions {
+export interface IResponseOptions extends MessageOptions {
   /**
    * Whether to catch all rejections when sending.  The promise will always resolve when this option
    * is enabled; if there is an error, the resolution will be undefined.
@@ -16,17 +16,11 @@ export interface IResponseOptions {
    * Whether to send a new message regardless of any prior responses.
    */
   force?: boolean;
-
-  /**
-   * The type of response.
-   */
-  type?: 'success' | 'error';
 }
 
 export type Send = (
-    data: string,
+    data: string | IResponseOptions,
     options?: IResponseOptions,
-    messageOptions?: MessageOptions,
   ) => Promise<SentResponse>;
 
 /**
@@ -80,12 +74,8 @@ export default class Response {
    * @param options Message options.
    * @param messageOptions Discord.js message options.
    */
-  public send: Send = (data, options = { catchall: true, force: false }, messageOptions) => {
-    const { type, force, catchall } = options;
-
-    if (type === 'success') data = `\`✅\` | ${data}`;
-    else if (type === 'error') data = `\`❌\` | ${data}`;
-
+  public send: Send = (data, options = {}, ...extra: IResponseOptions[]) => {
+    options = Object.assign(options, ...extra);
     return new Promise((resolve, reject) => {
       this._q.push(async (): Promise<void> => {
         function success(m?: SentResponse): void {
@@ -93,21 +83,20 @@ export default class Response {
         }
 
         function error(e: Error): void {
-          if (catchall) return success();
+          if (options.catchall) return success();
           reject(e);
         }
 
-        if (this.responseMessage && this.edit && !force) {
-          await this.responseMessage.edit(data).then(success, error);
+        if (this.responseMessage && this.edit && !options.force) {
+          await this.responseMessage.edit(data, options).then(success, error);
         } else {
-          await this.channel.send(data, messageOptions).then((m) => {
+          await this.channel.send(data, options).then((m) => {
             if (Array.isArray(m)) this.responseMessage = m[0];
             else this.responseMessage = m;
-
             return success(m);
           }, () => {
             if (this.channel.type === 'text') {
-              return this.message.author.send(data, messageOptions).then(success, error);
+              return this.message.author.send(data, options).then(success, error);
             }
           });
         }
@@ -115,16 +104,16 @@ export default class Response {
     });
   }
 
-  public error: Send = (data, options = { type: 'error' }, messageOptions) => {
-    return this.send(data, options, messageOptions);
+  public error: Send = (data, ...options: IResponseOptions[]) => {
+    return this.send(`\`❌\` | ${data}`, ...options);
   }
 
-  public success: Send = (data, options = { type: 'success' }, messageOptions) => {
-    return this.send(data, options, messageOptions);
+  public success: Send = (data, ...options: IResponseOptions[]) => {
+    return this.send(`\`✅\` | ${data}`, ...options);
   }
 
-  public dm: Send = async (data, options, messageOptions) => {
+  public dm: Send = async (data, ...options: IResponseOptions[]) => {
     this.channel = this.message.author.dmChannel || await this.message.author.createDM();
-    return this.send(data, options, messageOptions);
+    return this.send(data, ...options);
   }
 }
