@@ -74,8 +74,7 @@ export default class Response {
    * @param options Message options.
    * @param messageOptions Discord.js message options.
    */
-  public send: Send = (data, options = {}, ...extra: IResponseOptions[]) => {
-    options = Object.assign(options, ...extra);
+  public send: Send = (data, options = {}) => {
     return new Promise((resolve, reject) => {
       this._q.push(async (): Promise<void> => {
         function success(m?: SentResponse): void {
@@ -104,16 +103,16 @@ export default class Response {
     });
   }
 
-  public error: Send = (data, ...options: IResponseOptions[]) => {
-    return this.send(`\`❌\` | ${data}`, ...options);
+  public error: Send = (data, options) => {
+    return this.send(`\`❌\` | ${data}`, options);
   }
 
-  public success: Send = (data, ...options: IResponseOptions[]) => {
-    return this.send(`\`✅\` | ${data}`, ...options);
+  public success: Send = (data, options) => {
+    return this.send(`\`✅\` | ${data}`, options);
   }
 
-  public dm: Send = async (data, ...options: IResponseOptions[]) => {
+  public dm: Send = async (data, options) => {
     this.channel = this.message.author.dmChannel || await this.message.author.createDM();
-    return this.send(data, ...options);
+    return this.send(data, options);
   }
 }
