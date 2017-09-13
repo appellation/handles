@@ -128,12 +128,11 @@ export default class CommandHandler {
     this.handles.emit('commandStarted', cmd);
 
     try {
-      // TODO: Remove the param on global pre and post for v8
-      for (const fn of this.pre) await fn.call(cmd, cmd);
+      for (const fn of this.pre) await fn.call(cmd);
       await cmd.pre.call(cmd);
       const result = await cmd.exec.call(cmd);
       await cmd.post.call(cmd);
-      for (const fn of this.post) await fn.call(cmd, cmd);
+      for (const fn of this.post) await fn.call(cmd);
 
       this.handles.emit('commandFinished', { command: cmd, result });
       return this.silent ? result : undefined;
