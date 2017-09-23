@@ -1,3 +1,4 @@
+import { Message } from 'discord.js';
 import { promisify } from 'tsubaki';
 
 import { IConfig } from '../interfaces/Config';
@@ -13,7 +14,7 @@ const stat: (path: string) => Promise<fs.Stats> = promisify(fs.stat);
 /**
  * Manage command loading.
  */
-export default class CommandRegistry extends Map<Trigger, typeof Command> {
+export default class CommandRegistry extends Set<typeof Command> {
 
   /**
    * Get all the file paths recursively in a directory.
@@ -80,14 +81,7 @@ export default class CommandRegistry extends Map<Trigger, typeof Command> {
         continue;
       }
 
-      // if triggers are iterable
-      if (Array.isArray(mod.triggers)) {
-        for (const trigger of mod.triggers) this.set(trigger, mod);
-      } else if (typeof mod.triggers === 'undefined') { // if no triggers are provided
-        this.set(path.basename(file, '.js'), mod);
-      } else {
-        this.set(mod.triggers, mod);
-      }
+      this.add(mod);
     }
 
     this.handles.emit('commandsLoaded', { commands: this, failed, time: Date.now() - start });

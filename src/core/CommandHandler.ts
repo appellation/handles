@@ -1,6 +1,6 @@
 import BaseError from '../errors/BaseError';
 
-import Command from '../structures/Command';
+import Command, { Trigger } from '../structures/Command';
 
 import HandlesClient from './Client';
 import CommandRegistry from './CommandRegistry';
@@ -9,7 +9,16 @@ import { IConfig } from '../interfaces/Config';
 
 import { Message } from 'discord.js';
 
-export type MessageValidator = (m: Message) => string | null | Promise<string | null>;
+/**
+ * Represents a custom command resolver. Should return the content of the message, excluding anything like prefixes, or
+ * a command class.
+ */
+export type CommandResolver = (m: Message) => Promise<string | Command | null>;
+
+/**
+ * Represents global command lifecycle hook methods.
+ */
+export type GlobalHook = (this: Command) => void | Command;
 
 /**
  * Class for handling a command.
@@ -32,88 +41,83 @@ export default class CommandHandler {
   public silent: boolean;
 
   /**
-   * The message validator from config.
+   * Custom command resolvers to run. Use when you want more types of command than the `prefix + command` pattern.
    */
-  public validator: MessageValidator;
+  public resolvers: CommandResolver[];
+
+  /**
+   * Global command prefixes. Automatically includes mentions as prefixes.
+   */
+  public prefixes: Set<string>;
 
   /**
    * Methods to run before each command. Executed in sequence before the command's `pre` method.
-   * **Deprecated:** the command parameter will be removed.
    */
-  public pre: Array<(this: Command, cmd: Command) => any> = [];
+  public pre: GlobalHook[] = [];
 
   /**
-   * Methods to run after each command.  Executed in sequence after the command's `post` method.
-   * **Deprecated:** the command parameter will be removed.
+   * Methods to run after each command. Executed in sequence after the command's `post` method.
    */
-  public post: Array<(this: Command, cmd: Command) => any> = [];
+  public post: GlobalHook[] = [];
+
+  /**
+   * Methods to run after a command errors.
+   */
+  public error: GlobalHook[] = [];
 
   /**
    * Recently executed commands. Stored regardless of success or failure.
    */
   public executed: Command[] = [];
 
+  /**
+   * How long commands should be cached (in ms). Defaults to 1 hour.
+   */
+  public commandLifetime: number = 1000 * 60 * 60;
+
   constructor(handles: HandlesClient, config: IConfig) {
     this.handles = handles;
     this.silent = typeof config.silent === 'undefined' ? true : config.silent;
-
-    if (
-      typeof config.validator !== 'function' &&
-      (!this.handles.prefixes || !this.handles.prefixes.size)
-    ) throw new Error('Unable to validate commands: no validator or prefixes were provided.');
-
-    this.validator = config.validator || ((message) => {
-      for (const p of this.handles.prefixes) {
-        if (message.content.startsWith(p)) {
-          return message.content.substring(p.length).trim();
-        }
-      }
-
-      return null;
-    });
   }
 
   /**
-   * Resolve a command from a message.
+   * Resolve commands from a message.
    */
-  public async resolve(message: Message): Promise<Command | null> {
-    const content = await this.validator(message);
-    if (typeof content !== 'string' || !content) return null;
+  public async resolve(message: Message, text?: string): Promise<Command | null> {
+    let body = text;
 
-    const match = content.match(/^([^\s]+)(.*)/);
-    if (match) {
-      const [, cmd, commandContent] = match;
-      const mod = this.handles.registry.get(cmd);
-
-      if (mod) {
-        return new mod(this.handles, {
-          body: commandContent.trim(),
-          message,
-          trigger: cmd,
-        });
+    if (!body) {
+      for (const resolver of this.resolvers) {
+        const resolved = await resolver(message);
+        if (resolved instanceof Command) return resolved;
+        if (typeof resolved === 'string') {
+          body = resolved;
+          break;
+        }
       }
     }
 
-    for (const [trigger, command] of this.handles.registry) {
-      let body = null;
-      if (trigger instanceof RegExp) {
-        const match = content.match(trigger);
-        if (match) body = match[0].trim();
-      } else if (typeof trigger === 'string') {
-        // if the trigger is lowercase, make the command case-insensitive
-        if ((trigger.toLowerCase() === trigger ? content.toLowerCase() : content).startsWith(trigger)) {
-          body = content.substring(trigger.length).trim();
+    if (!body) {
+      for (const prefix of this.prefixes) {
+        if (message.content.startsWith(prefix)) {
+          body = message.content.replace(prefix, '');
+          break;
         }
       }
+    }
 
-      if (body !== null) {
-        const cmd = new command(this.handles, {
-          body,
-          message,
-          trigger,
-        });
+    if (!body) return null;
 
-        if (!this.ignore.includes(cmd.session)) return cmd;
+    for (const command of this.handles.registry) {
+      const triggers = Array.isArray(command.triggers) ? command.triggers : [command.triggers];
+      for (const trigger of triggers) {
+        if (typeof trigger === 'string') {
+          if (body.startsWith(trigger)) return new command(this.handles, message);
+        } else if (trigger instanceof RegExp) {
+          if (trigger.test(body)) return new command(this.handles, message);
+        } else if (typeof trigger === 'function') {
+          if (trigger(message)) return new command(this.handles, message);
+        }
       }
     }
 
@@ -125,37 +129,28 @@ export default class CommandHandler {
    */
   public async exec(cmd: Command): Promise<any> {
     this._ignore(cmd.session);
-    this.handles.emit('commandStarted', cmd);
 
     try {
-      for (const fn of this.pre) await fn.call(cmd);
-      await cmd.pre.call(cmd);
-      const result = await cmd.exec.call(cmd);
-      await cmd.post.call(cmd);
-      for (const fn of this.post) await fn.call(cmd);
-
-      this.handles.emit('commandFinished', { command: cmd, result });
-      return this.silent ? result : undefined;
+      for (const fn of this.pre) await this._handleGlobal(fn, cmd);
+      await cmd;
+      for (const fn of this.post) await this._handleGlobal(fn, cmd);
     } catch (e) {
       try {
-        await cmd.error();
+        for (const fn of this.error) await fn.call(cmd);
       } catch (e) {
         // do nothing
       }
-
-      if (e instanceof BaseError) {
-        this.handles.emit('commandFailed', { command: cmd, error: e });
-        if (!this.silent) return e;
-      } else {
-        this.handles.emit('commandError', { command: cmd, error: e });
-        if (!this.silent) throw e;
-      }
     } finally {
       this.executed.push(cmd);
-      setTimeout(() => this.executed.splice(this.executed.indexOf(cmd), 1), 60 * 60 * 1000);
+      setTimeout(() => this.executed.splice(this.executed.indexOf(cmd), 1), this.commandLifetime);
 
       this._unignore(cmd.session);
     }
+  }
+
+  private async _handleGlobal(fn: GlobalHook, cmd: Command): Promise<void> {
+    const result: Command | void = await fn.call(cmd);
+    if (result) await this.exec(result);
   }
 
   /**

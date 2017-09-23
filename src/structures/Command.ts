@@ -1,20 +1,16 @@
 import HandlesClient from '../core/Client';
-
+import { ICommand } from '../interfaces/Command';
 import { IConfig } from '../interfaces/Config';
+import Runnable from '../util/Runnable';
 import Response, { TextBasedChannel } from './Response';
 
 import { Client, Guild, GuildMember, Message, User } from 'discord.js';
 
 export type Trigger = string | RegExp;
 
-export interface ICommandOptions {
-  trigger: Trigger;
-  message: Message;
-  body: string;
-}
-
 /**
  * A command.
+ *
  * ```js
  * const { Command } = require('discord-handles');
  * module.exports = class extends Command {
@@ -26,8 +22,12 @@ export interface ICommandOptions {
  *     return this.response.success(`${this.trigger} ${Date.now() - this.message.createdTimestamp}ms`);
  *   }
  * };
+ * ```
  */
-export default class Command {
+export default class Command extends Runnable<void> implements ICommand {
+  /**
+   * Triggers for this command.
+   */
   public static triggers?: Trigger | Trigger[];
 
   /**
@@ -36,19 +36,9 @@ export default class Command {
   public readonly handles: HandlesClient;
 
   /**
-   * The command trigger that caused the message to run this command.
-   */
-  public readonly trigger: Trigger;
-
-  /**
    * The message that triggered this command.
    */
   public readonly message: Message;
-
-  /**
-   * The body of the command (without prefix or command), as provided in the original message.
-   */
-  public body: string;
 
   /**
    * Client config.
@@ -65,13 +55,12 @@ export default class Command {
    */
   public response: Response;
 
-  constructor(client: HandlesClient, { trigger, message, body }: ICommandOptions) {
+  constructor(client: HandlesClient, message: Message) {
+    super();
     this.handles = client;
-    this.trigger = trigger;
     this.message = message;
-    this.body = body;
     this.args = null;
-    this.response = new this.handles.Response(this.message);
+    this.response = new Response(this.message);
   }
 
   /**
@@ -114,6 +103,17 @@ export default class Command {
     return `${this.message.author.id}:${this.message.channel.id}`;
   }
 
+  public async run() {
+    try {
+      await this.pre();
+      await this.exec();
+      await this.post();
+    } catch (e) {
+      await this.error(e);
+      throw e;
+    }
+  }
+
   /**
    * Executed prior to {@link Command#exec}. Should be used for middleware/validation.
    * ```js
@@ -122,28 +122,38 @@ export default class Command {
    *     .setResolver(c => c === 'dank memes' ? 'top kek' : null);
    * }
    */
-  public pre() {
+  public async pre() {
+    await this.validators();
+    await this.arguments();
+    // implemented by command
+  }
+
+  public arguments() {
+    // implemented by command
+  }
+
+  public validators() {
     // implemented by command
   }
 
   /**
    * The command execution method
    */
-  public exec() {
+  public async exec() {
     // implemented by command
   }
 
   /**
    * Executed after {@link Command#exec}. Can be used for responses.
    */
-  public post() {
+  public async post() {
     // implemented by command
   }
 
   /**
-   * Executed when any of the command execution methods error. Any errors here will be discarded.
+   * Executed when any of the command execution methods error. Any errors thrown here will be discarded.
    */
-  public error() {
+  public error(e: Error) {
     // implemented by command
   }
 }

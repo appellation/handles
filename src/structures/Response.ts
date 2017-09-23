@@ -74,43 +74,38 @@ export default class Response {
    * @param options Message options.
    * @param messageOptions Discord.js message options.
    */
-  public send: Send = (data, options = {}) => {
+  public send: Send = (data, options = { catchall: true }) => {
     return new Promise((resolve, reject) => {
       this._q.push(async (): Promise<void> => {
-        function success(m?: SentResponse): void {
-          resolve(m);
-        }
+        const success = (m: Message | Message[]) => {
+          if (Array.isArray(m)) this.responseMessage = m[0];
+          else this.responseMessage = m;
+          return resolve(m);
+        };
 
         function error(e: Error): void {
-          if (options.catchall) return success();
-          reject(e);
+          if (options.catchall) return resolve();
+          return reject(e);
         }
 
         if (this.responseMessage && this.edit && !options.force) {
-          await this.responseMessage.edit(data, options).then(success, error);
+          return this.responseMessage.edit(data, options).then(success, error);
         } else {
-          await this.channel.send(data, options).then((m) => {
-            if (Array.isArray(m)) this.responseMessage = m[0];
-            else this.responseMessage = m;
-            return success(m);
-          }, () => {
+          try {
+            return success(await this.channel.send(data, options));
+          } catch (e) {
             if (this.channel.type === 'text') {
               return this.message.author.send(data, options).then(success, error);
             }
-          });
+          }
         }
       });
     });
   }
 
-  public error: Send = (data, options) => {
-    return this.send(`\`❌\` | ${data}`, options);
-  }
-
-  public success: Send = (data, options) => {
-    return this.send(`\`✅\` | ${data}`, options);
-  }
-
+  /**
+   * Sets the channel to the message author's DMs and sends.
+   */
   public dm: Send = async (data, options) => {
     this.channel = this.message.author.dmChannel || await this.message.author.createDM();
     return this.send(data, options);

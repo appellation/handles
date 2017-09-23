@@ -2,6 +2,7 @@ import HandlesClient from '../core/Client';
 import ArgumentError from '../errors/ArgumentError';
 import Command from '../structures/Command';
 import Response from '../structures/Response';
+import Runnable from '../util/Runnable';
 
 import { Message } from 'discord.js';
 
@@ -32,7 +33,7 @@ export type Matcher = (content: string) => string;
 /**
  * Represents a command argument.
  */
-export default class Argument<T = string> implements IOptions<T>, Promise<T> {
+export default class Argument<T = string> extends Runnable<T | null> implements IOptions<T> {
   public readonly command: Command;
 
   /**
@@ -97,6 +98,7 @@ export default class Argument<T = string> implements IOptions<T>, Promise<T> {
     suffix = null,
     pattern = /^\S+/,
   }: IOptions<T> = {}) {
+    super();
     this.command = command;
     this.key = key;
 
@@ -194,40 +196,27 @@ export default class Argument<T = string> implements IOptions<T>, Promise<T> {
     return this;
   }
 
-  public then<TResult1 = T, TResult2 = never>(
-    resolver?: ((value: T | null) => TResult1 | PromiseLike<TResult1>),
-    rejector?: ((value: Error) => TResult2 | PromiseLike<TResult2>),
-  ): Promise<TResult1 | TResult2> {
-    return new Promise<T | null>(async (resolve, reject) => {
-      const matched = this.matcher(this.command.body);
-      this.command.body = this.command.body.replace(matched, '').trim();
+  public async run() {
+    const matched = this.matcher(this.command.body);
+    this.command.body = this.command.body.replace(matched, '').trim();
 
-      let resolved = !matched ? null : await this.resolver(matched, this.command.message, this);
+    let resolved = !matched ? null : await this.resolver(matched, this.command.message, this);
 
-      // if there is no matched content and the argument is not optional, collect a prompt
-      if (resolved === null && !this.optional) {
-        try {
-          resolved = await this.collectPrompt(matched.length === 0);
-        } catch (e) {
-          this.command.response.send('Command cancelled.');
-          if (typeof e === 'string') e = new ArgumentError<T>(this, e);
-          return reject(e);
-        }
+    // if there is no matched content and the argument is not optional, collect a prompt
+    if (resolved === null && !this.optional) {
+      try {
+        resolved = await this.collectPrompt(matched.length === 0);
+      } catch (e) {
+        this.command.response.send('Command cancelled.');
+        if (typeof e === 'string') e = new ArgumentError<T>(this, e);
+        throw e;
       }
+    }
 
-      if (!this.command.args) this.command.args = {};
-      this.command.args[this.key] = resolved;
+    if (!this.command.args) this.command.args = {};
+    this.command.args[this.key] = resolved;
 
-      return resolve(resolved);
-    }).then(resolver, rejector);
-  }
-
-  public catch<TResult2 = never>(rejector?: ((value: Error) => TResult2 | PromiseLike<TResult2>)) {
-    return this.then(undefined, rejector);
-  }
-
-  public get [Symbol.toStringTag](): 'Promise' {
-    return 'Promise';
+    return resolved;
   }
 
   private async collectPrompt(first = true): Promise<T> {
@@ -236,7 +225,7 @@ export default class Argument<T = string> implements IOptions<T>, Promise<T> {
       `\nCommand will be cancelled in **${this.timeout} seconds**.  Type \`cancel\` to cancel immediately.`;
 
     // get first response
-    const prompt = new this.handles.Response(this.command.message);
+    const prompt = new Response(this.command.message);
     await prompt.send(text + suffix);
     const responses = await prompt.channel.awaitMessages(
       (m: Message) => m.author.id === this.command.author.id,

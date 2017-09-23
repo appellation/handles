@@ -3,7 +3,6 @@ import BaseError from '../errors/BaseError';
 import Validator from '../middleware/Validator';
 
 import Command from '../structures/Command';
-import Response from '../structures/Response';
 
 import CommandHandler from './CommandHandler';
 import CommandRegistry from './CommandRegistry';
@@ -30,23 +29,19 @@ export default class HandlesClient extends EventEmitter {
   public readonly registry: CommandRegistry;
   public readonly handler: CommandHandler;
 
-  public Response: typeof Response;
   public argsSuffix?: string;
-  public readonly prefixes: Set<string>;
 
   constructor(client: Client, config: IConfig = {}) {
     super();
 
-    this.Response = Response;
     this.argsSuffix = config.argsSuffix;
-    this.prefixes = config.prefixes || new Set();
 
     this.registry = new CommandRegistry(this, config);
     this.handler = new CommandHandler(this, config);
 
     this.handle = this.handle.bind(this);
 
-    client.once('ready', () => this.prefixes.add(`<@${client.user.id}>`).add(`<@!${client.user.id}>`));
+    client.once('ready', () => this.handler.prefixes.add(`<@${client.user.id}>`).add(`<@!${client.user.id}>`));
     client.on('message', this.handle);
   }
 
@@ -86,17 +81,6 @@ export default class HandlesClient extends EventEmitter {
 
     return this.handler.exec(cmd);
   }
-
-  public on(event: 'commandStarted' | 'commandUnknown', listener: (cmd: Command) => void): this;
-
-  public on(event: 'commandError', listener:
-    ({ command, error }: { command: Command, error: Error | BaseError }) => void): this;
-
-  public on(event: 'commandFinished', listener:
-    ({ command, result }: { command: Command, result: any }) => void): this;
-
-  public on(event: 'commandFailed', listener:
-    ({ command, error }: { command: Command, error: BaseError }) => void): this;
 
   public on(event: 'commandsLoaded', listener:
     ({ commands, failed, time }: { commands: Map<string, Command>, failed: string[], time: number }) => void): this;

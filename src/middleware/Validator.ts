@@ -1,5 +1,6 @@
 import ValidationError from '../errors/ValidationError';
 import Command from '../structures/Command';
+import Runnable from '../util/Runnable';
 
 /**
  * ```js
@@ -36,7 +37,7 @@ export type ValidationFunction = (v: Validator) => boolean;
  * }
  * ```
  */
-export default class Validator {
+export default class Validator extends Runnable<void> {
   public command: Command;
 
   /**
@@ -60,6 +61,7 @@ export default class Validator {
   private exec: Map<ValidationFunction, string | null> = new Map();
 
   constructor(cmd: Command) {
+    super();
     this.command = cmd;
   }
 
@@ -77,25 +79,18 @@ export default class Validator {
     return this;
   }
 
-  public then<TResult1 = void, TResult2 = never>(
-    resolver?: ((value: void) => TResult1 | PromiseLike<TResult1>),
-    rejector?: ((value: Error) => TResult2 | PromiseLike<TResult2>),
-  ): Promise<TResult1 | TResult2> {
-    return new Promise<void>((resolve, reject) => {
-      for (const [test, reason] of this.exec) {
-        try {
-          if (!test(this)) {
-            this.reason = reason;
-            this.valid = false;
-            throw new ValidationError(this);
-          }
-        } catch (e) {
-          if (this.respond) this.command.response.error(e);
-          return reject(e);
+  public async run() {
+    for (const [test, reason] of this.exec) {
+      try {
+        if (!test(this)) {
+          this.reason = reason;
+          this.valid = false;
+          throw new ValidationError(this);
         }
+      } catch (e) {
+        if (this.respond) this.command.response.send(e);
+        throw e;
       }
-
-      return resolve();
-    }).then(resolver, rejector);
+    }
   }
 }
