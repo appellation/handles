@@ -47,7 +47,7 @@ export default class HandlesClient extends EventEmitter {
     this.handle = this.handle.bind(this);
 
     client.once('ready', () => this.prefixes.add(`<@${client.user.id}>`).add(`<@!${client.user.id}>`));
-    if ('autoListen' in config && config.autoListen) client.on('message', this.handle);
+    if (!('autoListen' in config) || !config.autoListen) client.on('message', this.handle);
   }
 
   /**
