@@ -30,4 +30,10 @@ export interface IConfig {
    * case).
    */
   silent?: boolean;
+
+  /**
+   * Whether to automatically listen for commands. If you specify this as false, you'll have to
+   * `handles.handle(message)` in your message listener.
+   */
+  autoListen?: boolean;
 }
