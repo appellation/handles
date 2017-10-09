@@ -202,7 +202,8 @@ export default class Argument<T = string> implements IOptions<T>, Promise<T> {
       const matched = this.matcher(this.command.body);
       this.command.body = this.command.body.replace(matched, '').trim();
 
-      let resolved = !matched ? null : await this.resolver(matched, this.command.message, this);
+      const resolver = this.resolver || ((c: string) => c);
+      let resolved = !matched ? null : await resolver(matched, this.command.message, this);
 
       // if there is no matched content and the argument is not optional, collect a prompt
       if (resolved === null && !this.optional) {
