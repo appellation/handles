@@ -26,12 +26,15 @@
   },
   "homepage": "https://github.com/appellation/handles#readme",
   "dependencies": {
-    "discord.js": "^11.1.0",
     "tsubaki": "^1.2.0"
+  },
+  "peerDependencies": {
+    "discord.js": "^11.1.0"
   },
   "devDependencies": {
     "@types/node": "^8.0.19",
     "del": "^3.0.0",
+    "discord.js": "^11.2.1",
     "dotenv": "^4.0.0",
     "gulp": "^3.9.1",
     "gulp-sourcemaps": "^2.6.1",
