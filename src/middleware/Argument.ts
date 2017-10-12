@@ -211,7 +211,7 @@ export default class Argument<T = string> implements IOptions<T>, Promise<T> {
           resolved = await this.collectPrompt(matched.length === 0);
         } catch (e) {
           this.command.response.send('Command cancelled.');
-          if (typeof e === 'string') e = new ArgumentError<T>(this, e);
+          if (e instanceof Map && !e.size) e = new ArgumentError<T>(this, 'time');
           return reject(e);
         }
       }
