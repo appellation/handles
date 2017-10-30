@@ -68,7 +68,7 @@ export default class CommandRegistry extends Map<Trigger, typeof Command> {
 
     const failed = [];
     for (const file of files) {
-      let mod: typeof Command;
+      let mod;
       const location = path.resolve(process.cwd(), file);
 
       try {
@@ -79,6 +79,8 @@ export default class CommandRegistry extends Map<Trigger, typeof Command> {
         console.error(e); // tslint:disable-line no-console
         continue;
       }
+
+      if (typeof mod.default !== 'undefined') mod = mod.default;
 
       // if triggers are iterable
       if (Array.isArray(mod.triggers)) {
