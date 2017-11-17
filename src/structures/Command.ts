@@ -24,7 +24,7 @@ export type Trigger = string | RegExp;
  * };
  * ```
  */
-export default class Command extends Runnable<void> implements ICommand {
+export default class Command implements ICommand {
   /**
    * Triggers for this command.
    */
@@ -56,7 +56,6 @@ export default class Command extends Runnable<void> implements ICommand {
   public response: Response;
 
   constructor(client: HandlesClient, message: Message) {
-    super();
     this.handles = client;
     this.message = message;
     this.args = null;
@@ -125,7 +124,6 @@ export default class Command extends Runnable<void> implements ICommand {
   public async pre() {
     await this.validators();
     await this.arguments();
-    // implemented by command
   }
 
   public arguments() {
