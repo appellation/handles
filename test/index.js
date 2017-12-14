@@ -1,4 +1,4 @@
-// process.on('unhandledRejection', console.error);
+process.on('unhandledRejection', console.error);
 
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
@@ -13,7 +13,7 @@ const handles = require('../dist/index');
 const client = new discord.Client();
 const handler = new handles.Client(client, {
   directory: path.join('test', 'commands'),
-  prefixes: new Set(['x!'])
+  prefixes: ['x!'],
 });
 
 handler.on('commandError', ({ command, error }) => {

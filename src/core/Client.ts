@@ -4,12 +4,38 @@ import Validator from '../middleware/Validator';
 
 import Command from '../structures/Command';
 
-import CommandHandler from './CommandHandler';
+import CommandHandler, { CommandResolver } from './CommandHandler';
 import CommandRegistry from './CommandRegistry';
 
-import { IConfig } from '../interfaces/Config';
-
 import { Client, Message } from 'discord.js';
+
+export interface IConfig {
+  /**
+   * Command prefixes (will not be used if a [[validator]] is provided).
+   */
+  prefixes?: Iterable<string>;
+
+  /**
+   * A global setting for configuring the argument suffix.
+   */
+  argsSuffix?: string;
+
+  /**
+   * Directory to load commands from. Default to `./commands` relative to the cwd.
+   */
+  directory?: string;
+
+  /**
+   * This will get run on every message. Use to manually determine whether a message is a command.
+   */
+  validator?: CommandResolver;
+
+  /**
+   * By default, Handles will automatically add any event listeners it needs in order to process commands. Set this to
+   * false if you want to add listeners yourself.
+   */
+  listen?: boolean;
+}
 
 /**
  * The starting point for using handles.
@@ -37,11 +63,11 @@ export default class HandlesClient extends EventEmitter {
     this.argsSuffix = config.argsSuffix;
 
     this.registry = new CommandRegistry(this, config);
-    this.handler = new CommandHandler(this, config);
+    this.handler = new CommandHandler(this);
+    if (config.prefixes) for (const pref of config.prefixes) this.handler.prefixes.add(pref);
 
     this.handle = this.handle.bind(this);
-
-    client.once('ready', () => this.handler.prefixes.add(`<@${client.user.id}>`).add(`<@!${client.user.id}>`));
+    client.once('ready', () => this.handler.prefixes.add(new RegExp(`<@!?${client.user.id}>`)));
     if (!('listen' in config) || config.listen) {
       client.on('message', this.handle);
       client.on('messageUpdate', (o, n) => this.handle(n));

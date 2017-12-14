@@ -1,12 +1,12 @@
 import { Message } from 'discord.js';
 import { promisify } from 'tsubaki';
 
-import { IConfig } from '../interfaces/Config';
-import { InstantiableCommand, Trigger } from '../structures/Command';
-import HandlesClient from './Client';
+import Command, { ICommand, InstantiableCommand, Trigger } from '../structures/Command';
+import HandlesClient, { IConfig } from './Client';
 
 import fs = require('fs');
 import path = require('path');
+import { Client } from '../';
 
 const readdir: (dir: string) => Promise<string[]> = promisify(fs.readdir);
 const stat: (path: string) => Promise<fs.Stats> = promisify(fs.stat);
@@ -69,7 +69,7 @@ export default class CommandRegistry extends Set<InstantiableCommand> {
 
     const failed = [];
     for (const file of files) {
-      let mod: InstantiableCommand;
+      let mod: InstantiableCommand | ICommand;
       const location = path.resolve(process.cwd(), file);
 
       try {
@@ -77,10 +77,29 @@ export default class CommandRegistry extends Set<InstantiableCommand> {
         mod = require(location);
       } catch (e) {
         failed.push(file);
-        console.error(e); // tslint:disable-line no-console
+        this.handles.emit('error', e);
         continue;
       }
 
+      // setup command to handle basic exports
+      if (typeof mod !== 'function') {
+        /* tslint:disable */
+        class BasicCommand extends Command {
+          public static triggers: string = path.basename(location, '.js');
+
+          public async exec() {
+            throw new Error(`command ${(this.constructor as typeof BasicCommand).triggers} has no exec method`);
+          }
+
+          [prop: string]: any;
+        }
+        /* tslint:enable */
+
+        for (const prop in mod) BasicCommand.prototype[prop] = (mod as any)[prop];
+        mod = BasicCommand as InstantiableCommand;
+      }
+
+      if (!mod.triggers) mod.triggers = path.basename(location, '.js');
       this.add(mod);
     }
 

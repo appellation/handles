@@ -5,9 +5,9 @@ import Command, { Trigger } from '../structures/Command';
 import HandlesClient from './Client';
 import CommandRegistry from './CommandRegistry';
 
-import { IConfig } from '../interfaces/Config';
-
 import { Message, Snowflake } from 'discord.js';
+import { EventEmitter } from 'events';
+import ValidationError from '../errors/ValidationError';
 
 /**
  * Represents a custom command resolver. Should return the content of the message, excluding anything like prefixes, or
@@ -23,7 +23,7 @@ export type GlobalHook = (this: Command) => void | Command;
 /**
  * Class for handling a command.
  */
-export default class CommandHandler {
+export default class CommandHandler extends EventEmitter {
 
   /**
    * The client.
@@ -36,19 +36,14 @@ export default class CommandHandler {
   public readonly ignore: string[] = [];
 
   /**
-   * Whether the [[handle]] method should always resolve with void (use when relying on events to catch errors).
-   */
-  public silent: boolean;
-
-  /**
    * Custom command resolvers to run. Use when you want more types of command than the `prefix + command` pattern.
    */
-  public resolvers: CommandResolver[];
+  public resolvers: CommandResolver[] = [];
 
   /**
    * Global command prefixes. Automatically includes mentions as prefixes.
    */
-  public prefixes: Set<string>;
+  public prefixes: Set<string | RegExp> = new Set();
 
   /**
    * Methods to run before each command. Executed in sequence before the command's `pre` method.
@@ -75,9 +70,9 @@ export default class CommandHandler {
    */
   public commandLifetime: number = 1000 * 60 * 60;
 
-  constructor(handles: HandlesClient, config: IConfig) {
+  constructor(handles: HandlesClient) {
+    super();
     this.handles = handles;
-    this.silent = typeof config.silent === 'undefined' ? true : config.silent;
   }
 
   /**
@@ -102,7 +97,7 @@ export default class CommandHandler {
 
     if (!body) {
       for (const prefix of this.prefixes) {
-        if (message.content.startsWith(prefix)) {
+        if (prefix instanceof RegExp ? prefix.test(message.content) : message.content.startsWith(prefix)) {
           body = message.content.replace(prefix, '');
           break;
         }
@@ -110,8 +105,9 @@ export default class CommandHandler {
     }
 
     if (!body) return null;
+    body = body.trim();
 
-    for (const Command of this.handles.registry) {
+    for (const Command of this.handles.registry) { // tslint:disable-line variable-name
       const triggers = Array.isArray(Command.triggers) ? Command.triggers : [Command.triggers];
       for (const trigger of triggers) {
         if (typeof trigger === 'string') {
@@ -131,18 +127,25 @@ export default class CommandHandler {
   /**
    * Execute a command message.
    */
-  public async exec(cmd: Command): Promise<any> {
+  public async exec(cmd: Command): Promise<void> {
     this._ignore(cmd.id);
+    this.emit('start', cmd);
 
     try {
       for (const fn of this.pre) await this._handleGlobal(fn, cmd);
       await cmd.run();
       for (const fn of this.post) await this._handleGlobal(fn, cmd);
+      this.emit('complete', cmd);
     } catch (e) {
-      try {
-        for (const fn of this.error) await fn.call(cmd);
-      } catch (e) {
-        // do nothing
+      // if the error is not intended
+      if (!(e instanceof BaseError)) {
+        try {
+          for (const fn of this.error) await fn.call(cmd);
+        } catch (e) {
+          // do nothing
+        }
+
+        if (!this.error.length) this.emit('error', e, cmd);
       }
     } finally {
       // store command

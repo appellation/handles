@@ -4,7 +4,7 @@ import Runnable from '../util/Runnable';
 
 /**
  * ```js
- * validator.apply(cmd => cmd.message.author.id === 'some id', 'uh oh'); // executed at runtime
+ * validator.apply(v => v.command.author.id === 'some id', 'uh oh'); // executed at runtime
  * // or
  * validator.apply(cmd.message.author.id === 'some id', 'uh oh'); // executed immediately
  * ```
@@ -58,7 +58,7 @@ export default class Validator extends Runnable<void> {
   /**
    * Functions to execute when determining validity. Maps validation functions to reasons.
    */
-  private exec: Map<ValidationFunction, string | null> = new Map();
+  private exec: Array<[ValidationFunction, string | null]> = [];
 
   constructor(cmd: Command) {
     super();
@@ -70,12 +70,13 @@ export default class Validator extends Runnable<void> {
    *
    * ```js
    * const validator = new Validator();
-   * validator.apply(aCondition, 'borke') || validator.apply(otherCondition, 'different borke');
-   * yield validator;
+   * await validator
+   *   .apply(aCondition, 'borke')
+   *   .apply(otherCondition, 'different borke');
    * ```
    */
   public apply(test: ValidationFunction | boolean, reason: string | null = null) {
-    this.exec.set(typeof test === 'function' ? test : () => test, reason);
+    this.exec.push([typeof test === 'function' ? test : () => test, reason]);
     return this;
   }
 

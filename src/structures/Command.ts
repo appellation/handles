@@ -1,6 +1,4 @@
 import HandlesClient from '../core/Client';
-import { ICommand } from '../interfaces/Command';
-import { IConfig } from '../interfaces/Config';
 import Response, { TextBasedChannel } from './Response';
 
 import { Client, Guild, GuildMember, Message, User } from 'discord.js';
@@ -10,6 +8,13 @@ export type Trigger = string | RegExp | ((msg: Message) => string);
 export interface InstantiableCommand {
   triggers?: Trigger | Trigger[];
   new (client: HandlesClient, message: Message, body?: string): Command;
+}
+
+export interface ICommand {
+  pre?: () => Promise<any>;
+  exec: () => Promise<any>;
+  post?: () => Promise<any>;
+  error?: (e: Error) => Promise<any>;
 }
 
 /**
@@ -50,29 +55,22 @@ export default abstract class Command implements ICommand {
   public body: string;
 
   /**
-   * Client config.
-   */
-  public config: IConfig;
-
-  /**
    * The command arguments as set by arguments in executor.
    */
-  public args?: any;
+  public args?: any = null;
 
   /**
    * The response object for this command.
    */
   public response: Response;
 
-  private _status: 'instantiated' | 'running' | 'completed' | 'failed';
+  private _status: 'instantiated' | 'running' | 'completed' | 'failed' = 'instantiated';
 
   constructor(client: HandlesClient, message: Message, body?: string) {
     this.handles = client;
     this.message = message;
     this.body = body || message.content;
-    this.args = null;
     this.response = new Response(this.message);
-    this._status = 'instantiated';
   }
 
   /**
@@ -133,7 +131,12 @@ export default abstract class Command implements ICommand {
       await this.post();
       this._status = 'completed';
     } catch (e) {
-      await this.error(e);
+      try {
+        await this.error(e);
+      } catch (e) {
+        // do nothing
+      }
+
       this._status = 'failed';
       throw e;
     }
@@ -182,7 +185,7 @@ export default abstract class Command implements ICommand {
   /**
    * Executed when any of the command execution methods error. Any errors thrown here will be discarded.
    */
-  public error(e: Error) {
+  public async error(e: Error) {
     // implemented by command
   }
 }

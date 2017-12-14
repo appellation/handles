@@ -5,7 +5,7 @@ export default abstract class Runnable<T> implements Promise<T> {
     resolver?: ((value: any) => TResult1 | PromiseLike<TResult1>),
     rejector?: ((value: Error) => TResult2 | PromiseLike<TResult2>),
   ): Promise<TResult1 | TResult2> {
-    return new Promise((resolve, reject) => this.run()).then(resolver, rejector);
+    return this.run().then(resolver, rejector);
   }
 
   public catch<TResult2 = never>(rejector?: ((value: Error) => TResult2 | PromiseLike<TResult2>)) {

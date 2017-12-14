@@ -8,8 +8,6 @@ import Response from './structures/Response';
 import Argument from './middleware/Argument';
 import Validator from './middleware/Validator';
 
-export * from './interfaces/Config';
-
 export {
   Argument,
   Client,

@@ -11,15 +11,15 @@
         "semicolon": [true, "always"],
         "curly": [true, "ignore-same-line"],
         "whitespace": [true, "check-branch", "check-decl", "check-module", "check-separator", "check-type", "check-typecast", "check-preblock"],
-        // "no-unused-variable": [true], broken for some reason
         "no-console": [true],
         "triple-equals": true,
         "no-invalid-this": true,
         "no-trailing-whitespace": true,
-        "no-unused-variable": true,
+        "no-unused-variable": [true, "check-parameters"],
         "prefer-const": [true],
         "prefer-template": true,
         "variable-name": [
+            true,
             "check-format",
             "allow-leading-underscore",
             "ban-keywords"
