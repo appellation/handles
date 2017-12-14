@@ -70,7 +70,7 @@ export default abstract class Command implements ICommand {
   constructor(client: HandlesClient, message: Message, body?: string) {
     this.handles = client;
     this.message = message;
-    this.body = body || message.content;
+    this.body = typeof body === 'undefined' ? message.content : body;
     this.response = new Response(this.message);
   }
 

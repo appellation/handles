@@ -203,9 +203,9 @@ export default class HandlesClient extends EventEmitter {
       const triggers = Array.isArray(Command.triggers) ? Command.triggers : [Command.triggers];
       for (const trigger of triggers) {
         if (typeof trigger === 'string') {
-          if (body.startsWith(trigger)) return new Command(this, message, message.content.replace(trigger, ''));
+          if (body.startsWith(trigger)) return new Command(this, message, body.replace(trigger, '').trim());
         } else if (trigger instanceof RegExp) {
-          if (trigger.test(body)) return new Command(this, message, message.content.replace(trigger, ''));
+          if (trigger.test(body)) return new Command(this, message, body.replace(trigger, '').trim());
         } else if (typeof trigger === 'function') {
           const content = trigger(message);
           if (content) return new Command(this, message, content);
