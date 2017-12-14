@@ -221,7 +221,6 @@ export default class HandlesClient extends EventEmitter {
    */
   public async exec(cmd: Command): Promise<void> {
     this._ignore(cmd.id);
-    console.log(cmd.exec);
     this.emit('start', cmd);
 
     try {
