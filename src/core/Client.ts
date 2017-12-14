@@ -171,7 +171,10 @@ export default class HandlesClient extends EventEmitter {
    */
   public async resolve(message: Message, text?: string): Promise<Command | null> {
     const executed = this.executed.get(message.id);
-    if (executed && executed.status !== 'completed') return executed;
+    if (executed) {
+      if (executed.status === 'completed') return null;
+      else return executed;
+    }
 
     let body = text;
 

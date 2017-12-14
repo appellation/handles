@@ -7,7 +7,7 @@ class Command extends Handles.Command {
     const val2 = new Handles.Validator(this)
       .apply(true, 'lol');
 
-    await val1;
+    // await val1;
 
     await new Handles.Argument(this, 'first')
       .setPrompt('Please provide the first digit.')
