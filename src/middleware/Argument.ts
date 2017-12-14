@@ -6,10 +6,6 @@ import Runnable from '../util/Runnable';
 
 import { Message } from 'discord.js';
 
-/**
- * This is called every time new potential argument data is received, either in the body of
- * the original command or in subsequent prompts.
- */
 export type Resolver<T> = (content: string, message: Message, arg: Argument<T>) => T | null;
 
 export interface IOptions<T> {
@@ -66,11 +62,6 @@ export default class Argument<T = string> extends Runnable<T | null> implements 
   public optional: boolean = false;
 
   /**
-   * The argument resolver for this argument.
-   */
-  public resolver: Resolver<T>;
-
-  /**
    * How long to wait for a response to a prompt, in seconds.
    */
   public timeout: number;
@@ -97,6 +88,7 @@ export default class Argument<T = string> extends Runnable<T | null> implements 
     timeout = 30,
     suffix = null,
     pattern = /^\S+/,
+    resolver,
   }: IOptions<T> = {}) {
     super();
     this.command = command;
@@ -108,6 +100,7 @@ export default class Argument<T = string> extends Runnable<T | null> implements 
     this.timeout = timeout;
     this.suffix = suffix;
     this.pattern = pattern;
+    if (resolver) this.resolver = resolver;
   }
 
   get handles(): HandlesClient {
@@ -194,6 +187,14 @@ export default class Argument<T = string> extends Runnable<T | null> implements 
   public setSuffix(text: string = '') {
     this.suffix = text;
     return this;
+  }
+
+  /**
+   * This is called every time new potential argument data is received, either in the body of
+   * the original command or in subsequent prompts.
+   */
+  public resolver(content: string, message: Message, arg: Argument<T>): T | null {
+    return content as any;
   }
 
   public async run() {

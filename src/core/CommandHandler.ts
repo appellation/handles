@@ -7,7 +7,7 @@ import CommandRegistry from './CommandRegistry';
 
 import { IConfig } from '../interfaces/Config';
 
-import { Message } from 'discord.js';
+import { Message, Snowflake } from 'discord.js';
 
 /**
  * Represents a custom command resolver. Should return the content of the message, excluding anything like prefixes, or
@@ -66,9 +66,9 @@ export default class CommandHandler {
   public error: GlobalHook[] = [];
 
   /**
-   * Recently executed commands. Stored regardless of success or failure.
+   * Recently executed commands. Mapped by message ID.
    */
-  public executed: Command[] = [];
+  public executed: Map<Snowflake, Command> = new Map();
 
   /**
    * How long commands should be cached (in ms). Defaults to 1 hour.
@@ -84,6 +84,9 @@ export default class CommandHandler {
    * Resolve commands from a message.
    */
   public async resolve(message: Message, text?: string): Promise<Command | null> {
+    const executed = this.executed.get(message.id);
+    if (executed && executed.status !== 'completed') return executed;
+
     let body = text;
 
     if (!body) {
@@ -108,15 +111,16 @@ export default class CommandHandler {
 
     if (!body) return null;
 
-    for (const command of this.handles.registry) {
-      const triggers = Array.isArray(command.triggers) ? command.triggers : [command.triggers];
+    for (const Command of this.handles.registry) {
+      const triggers = Array.isArray(Command.triggers) ? Command.triggers : [Command.triggers];
       for (const trigger of triggers) {
         if (typeof trigger === 'string') {
-          if (body.startsWith(trigger)) return new command(this.handles, message);
+          if (body.startsWith(trigger)) return new Command(this.handles, message, message.content.replace(trigger, ''));
         } else if (trigger instanceof RegExp) {
-          if (trigger.test(body)) return new command(this.handles, message);
+          if (trigger.test(body)) return new Command(this.handles, message, message.content.replace(trigger, ''));
         } else if (typeof trigger === 'function') {
-          if (trigger(message)) return new command(this.handles, message);
+          const content = trigger(message);
+          if (content) return new Command(this.handles, message, content);
         }
       }
     }
@@ -128,11 +132,11 @@ export default class CommandHandler {
    * Execute a command message.
    */
   public async exec(cmd: Command): Promise<any> {
-    this._ignore(cmd.session);
+    this._ignore(cmd.id);
 
     try {
       for (const fn of this.pre) await this._handleGlobal(fn, cmd);
-      await cmd;
+      await cmd.run();
       for (const fn of this.post) await this._handleGlobal(fn, cmd);
     } catch (e) {
       try {
@@ -141,10 +145,11 @@ export default class CommandHandler {
         // do nothing
       }
     } finally {
-      this.executed.push(cmd);
-      setTimeout(() => this.executed.splice(this.executed.indexOf(cmd), 1), this.commandLifetime);
+      // store command
+      this.executed.set(cmd.message.id, cmd);
+      setTimeout(() => this.executed.delete(cmd.message.id), this.commandLifetime);
 
-      this._unignore(cmd.session);
+      this._unignore(cmd.id);
     }
   }
 

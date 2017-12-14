@@ -1,5 +1,5 @@
 import { ClientOptions } from 'discord.js';
-import { MessageValidator } from '../core/CommandHandler';
+import { CommandResolver } from '../core/CommandHandler';
 import Response from '../structures/Response';
 
 export interface IConfig {
@@ -21,7 +21,7 @@ export interface IConfig {
   /**
    * This will get run on every message. Use to manually determine whether a message is a command.
    */
-  validator?: MessageValidator;
+  validator?: CommandResolver;
 
   /**
    * Set to false to resolve/reject the command handling process properly. When true,
@@ -30,4 +30,10 @@ export interface IConfig {
    * case).
    */
   silent?: boolean;
+
+  /**
+   * By default, Handles will automatically add any event listeners it needs in order to process commands. Set this to
+   * false if you want to add listeners yourself.
+   */
+  listen?: boolean;
 }

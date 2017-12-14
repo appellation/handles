@@ -1,12 +1,16 @@
 import HandlesClient from '../core/Client';
 import { ICommand } from '../interfaces/Command';
 import { IConfig } from '../interfaces/Config';
-import Runnable from '../util/Runnable';
 import Response, { TextBasedChannel } from './Response';
 
 import { Client, Guild, GuildMember, Message, User } from 'discord.js';
 
-export type Trigger = string | RegExp;
+export type Trigger = string | RegExp | ((msg: Message) => string);
+
+export interface InstantiableCommand {
+  triggers?: Trigger | Trigger[];
+  new (client: HandlesClient, message: Message, body?: string): Command;
+}
 
 /**
  * A command.
@@ -24,7 +28,7 @@ export type Trigger = string | RegExp;
  * };
  * ```
  */
-export default class Command implements ICommand {
+export default abstract class Command implements ICommand {
   /**
    * Triggers for this command.
    */
@@ -41,6 +45,11 @@ export default class Command implements ICommand {
   public readonly message: Message;
 
   /**
+   * The body of this command.
+   */
+  public body: string;
+
+  /**
    * Client config.
    */
   public config: IConfig;
@@ -55,11 +64,15 @@ export default class Command implements ICommand {
    */
   public response: Response;
 
-  constructor(client: HandlesClient, message: Message) {
+  private _status: 'instantiated' | 'running' | 'completed' | 'failed';
+
+  constructor(client: HandlesClient, message: Message, body?: string) {
     this.handles = client;
     this.message = message;
+    this.body = body || message.content;
     this.args = null;
     this.response = new Response(this.message);
+    this._status = 'instantiated';
   }
 
   /**
@@ -67,6 +80,21 @@ export default class Command implements ICommand {
    */
   get client(): Client {
     return this.message.client;
+  }
+
+  /**
+   * Ensure unique commands for an author in a channel.
+   * Format: "authorID:channelID"
+   */
+  get id() {
+    return `${this.message.author.id}:${this.message.channel.id}`;
+  }
+
+  /**
+   * The status of this command.
+   */
+  get status() {
+    return this._status;
   }
 
   /**
@@ -90,25 +118,23 @@ export default class Command implements ICommand {
     return this.message.author;
   }
 
+  /**
+   * The guild member of this command.
+   */
   get member(): GuildMember {
     return this.message.member;
   }
 
-  /**
-   * Ensure unique commands for an author in a channel.
-   * Format: "authorID:channelID"
-   */
-  get session() {
-    return `${this.message.author.id}:${this.message.channel.id}`;
-  }
-
   public async run() {
+    this._status = 'running';
     try {
       await this.pre();
       await this.exec();
       await this.post();
+      this._status = 'completed';
     } catch (e) {
       await this.error(e);
+      this._status = 'failed';
       throw e;
     }
   }
@@ -126,10 +152,17 @@ export default class Command implements ICommand {
     await this.arguments();
   }
 
+  /**
+   * A method for arguments. Called before {@link Command#validators} if the {@link Command#pre} method is not
+   * overidden.
+   */
   public arguments() {
     // implemented by command
   }
 
+  /**
+   * A method for validators. Called after {@link COmmand#arguments} if the {@link Command#pre} method is not overidden.
+   */
   public validators() {
     // implemented by command
   }
@@ -137,9 +170,7 @@ export default class Command implements ICommand {
   /**
    * The command execution method
    */
-  public async exec() {
-    // implemented by command
-  }
+  public abstract exec(): Promise<any>;
 
   /**
    * Executed after {@link Command#exec}. Can be used for responses.

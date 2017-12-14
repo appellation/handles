@@ -2,7 +2,7 @@ import { Message } from 'discord.js';
 import { promisify } from 'tsubaki';
 
 import { IConfig } from '../interfaces/Config';
-import Command, { Trigger } from '../structures/Command';
+import { InstantiableCommand, Trigger } from '../structures/Command';
 import HandlesClient from './Client';
 
 import fs = require('fs');
@@ -14,7 +14,7 @@ const stat: (path: string) => Promise<fs.Stats> = promisify(fs.stat);
 /**
  * Manage command loading.
  */
-export default class CommandRegistry extends Set<typeof Command> {
+export default class CommandRegistry extends Set<InstantiableCommand> {
 
   /**
    * Get all the file paths recursively in a directory.
@@ -69,7 +69,7 @@ export default class CommandRegistry extends Set<typeof Command> {
 
     const failed = [];
     for (const file of files) {
-      let mod: typeof Command;
+      let mod: InstantiableCommand;
       const location = path.resolve(process.cwd(), file);
 
       try {

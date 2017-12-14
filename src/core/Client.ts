@@ -42,7 +42,10 @@ export default class HandlesClient extends EventEmitter {
     this.handle = this.handle.bind(this);
 
     client.once('ready', () => this.handler.prefixes.add(`<@${client.user.id}>`).add(`<@!${client.user.id}>`));
-    client.on('message', this.handle);
+    if (!('listen' in config) || config.listen) {
+      client.on('message', this.handle);
+      client.on('messageUpdate', (o, n) => this.handle(n));
+    }
   }
 
   /**
