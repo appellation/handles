@@ -13,7 +13,7 @@ module.exports = class extends Command {
     try {
       this.response.send(util.inspect(await eval(this.args.code)), undefined, { code: 'js' });
     } catch (e) {
-      this.response.error(e);
+      this.response.send(e);
     }
   }
 };

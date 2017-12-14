@@ -16,7 +16,7 @@ const handler = new handles.Client(client, {
   prefixes: ['x!'],
 });
 
-handler.on('commandError', ({ command, error }) => {
+handler.on('error', (error, command) => {
   // const extra = {
   //   message: {
   //     content: command.message.content,

@@ -77,7 +77,7 @@ export default class CommandRegistry extends Set<InstantiableCommand> {
         mod = require(location);
       } catch (e) {
         failed.push(file);
-        this.handles.emit('error', e);
+        console.log(e); // tslint:disable-line no-console
         continue;
       }
 
@@ -85,7 +85,7 @@ export default class CommandRegistry extends Set<InstantiableCommand> {
       if (typeof mod !== 'function') {
         /* tslint:disable */
         class BasicCommand extends Command {
-          public static triggers: string = path.basename(location, '.js');
+          public static triggers: Trigger | Trigger[] = (mod as ICommand).triggers || path.basename(location, '.js');
 
           public async exec() {
             throw new Error(`command ${(this.constructor as typeof BasicCommand).triggers} has no exec method`);
@@ -103,7 +103,7 @@ export default class CommandRegistry extends Set<InstantiableCommand> {
       this.add(mod);
     }
 
-    this.handles.emit('commandsLoaded', { commands: this, failed, time: Date.now() - start });
+    this.handles.emit('loaded', { commands: this, failed, time: Date.now() - start });
     return this;
   }
 }

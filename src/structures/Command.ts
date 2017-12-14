@@ -11,6 +11,7 @@ export interface InstantiableCommand {
 }
 
 export interface ICommand {
+  triggers?: Trigger | Trigger[];
   pre?: () => Promise<any>;
   exec: () => Promise<any>;
   post?: () => Promise<any>;

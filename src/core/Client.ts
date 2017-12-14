@@ -3,11 +3,9 @@ import BaseError from '../errors/BaseError';
 import Validator from '../middleware/Validator';
 
 import Command from '../structures/Command';
-
-import CommandHandler, { CommandResolver } from './CommandHandler';
 import CommandRegistry from './CommandRegistry';
 
-import { Client, Message } from 'discord.js';
+import { Client, Message, Snowflake } from 'discord.js';
 
 export interface IConfig {
   /**
@@ -38,6 +36,22 @@ export interface IConfig {
 }
 
 /**
+ * Represents a custom command resolver. Return types:
+ * - string: content of the message, excluding anything like prefixes. Use for custom guild prefixes, etc.
+ * - Command: a specific command to run. Can be used for ratelimiters, etc. (e.g. run the ban command if these
+ * conditions are met).
+ * - boolean: indicate whether this command should be run. If true, use resolve normally using registered prefixes etc.
+ * Use to debounce commands.
+ * - null: do not run this command.
+ */
+export type CommandResolver = (m: Message) => Promise<string | Command | boolean | null>;
+
+/**
+ * Represents global command lifecycle hook methods.
+ */
+export type GlobalHook = (this: Command) => void | Command;
+
+/**
  * The starting point for using handles.
  *
  * ```js
@@ -53,8 +67,50 @@ export interface IConfig {
  */
 export default class HandlesClient extends EventEmitter {
   public readonly registry: CommandRegistry;
-  public readonly handler: CommandHandler;
 
+  /**
+   * Sessions to ignore.
+   */
+  public readonly ignore: string[] = [];
+
+  /**
+   * Custom command resolvers to run. Use when you want more types of command than the `prefix + command` pattern.
+   */
+  public resolvers: CommandResolver[] = [];
+
+  /**
+   * Global command prefixes. Automatically includes mentions as prefixes.
+   */
+  public prefixes: Set<string | RegExp> = new Set();
+
+  /**
+   * Methods to run before each command. Executed in sequence before the command's `pre` method.
+   */
+  public pre: GlobalHook[] = [];
+
+  /**
+   * Methods to run after each command. Executed in sequence after the command's `post` method.
+   */
+  public post: GlobalHook[] = [];
+
+  /**
+   * Methods to run after a command errors.
+   */
+  public error: GlobalHook[] = [];
+
+  /**
+   * Recently executed commands. Mapped by message ID.
+   */
+  public executed: Map<Snowflake, Command> = new Map();
+
+  /**
+   * How long commands should be cached (in ms). Defaults to 1 hour.
+   */
+  public commandLifetime: number = 1000 * 60 * 60;
+
+  /**
+   * Global arguments suffix.
+   */
   public argsSuffix?: string;
 
   constructor(client: Client, config: IConfig = {}) {
@@ -63,11 +119,10 @@ export default class HandlesClient extends EventEmitter {
     this.argsSuffix = config.argsSuffix;
 
     this.registry = new CommandRegistry(this, config);
-    this.handler = new CommandHandler(this);
-    if (config.prefixes) for (const pref of config.prefixes) this.handler.prefixes.add(pref);
+    if (config.prefixes) for (const pref of config.prefixes) this.prefixes.add(pref);
 
     this.handle = this.handle.bind(this);
-    client.once('ready', () => this.handler.prefixes.add(new RegExp(`<@!?${client.user.id}>`)));
+    client.once('ready', () => this.prefixes.add(new RegExp(`<@!?${client.user.id}>`)));
     if (!('listen' in config) || config.listen) {
       client.on('message', this.handle);
       client.on('messageUpdate', (o, n) => this.handle(n));
@@ -102,19 +157,127 @@ export default class HandlesClient extends EventEmitter {
       (!msg.client.user.bot && msg.author.id !== msg.client.user.id)
     ) return null;
 
-    const cmd = await this.handler.resolve(msg);
+    const cmd = await this.resolve(msg);
     if (!cmd) {
-      this.emit('commandUnknown', msg);
+      this.emit('unknown', msg);
       return null;
     }
 
-    return this.handler.exec(cmd);
+    return this.exec(cmd);
   }
 
-  public on(event: 'commandsLoaded', listener:
+  /**
+   * Resolve commands from a message.
+   */
+  public async resolve(message: Message, text?: string): Promise<Command | null> {
+    const executed = this.executed.get(message.id);
+    if (executed && executed.status !== 'completed') return executed;
+
+    let body = text;
+
+    if (!body) {
+      for (const resolver of this.resolvers) {
+        const resolved = await resolver(message);
+        if (resolved instanceof Command) return resolved;
+        if (typeof resolved === 'boolean' && resolved) break;
+        if (typeof resolved === 'string') {
+          body = resolved;
+          break;
+        }
+      }
+    }
+
+    if (!body) {
+      for (const prefix of this.prefixes) {
+        if (prefix instanceof RegExp ? prefix.test(message.content) : message.content.startsWith(prefix)) {
+          body = message.content.replace(prefix, '');
+          break;
+        }
+      }
+    }
+
+    if (!body) return null;
+    body = body.trim();
+
+    for (const Command of this.registry) { // tslint:disable-line variable-name
+      const triggers = Array.isArray(Command.triggers) ? Command.triggers : [Command.triggers];
+      for (const trigger of triggers) {
+        if (typeof trigger === 'string') {
+          if (body.startsWith(trigger)) return new Command(this, message, message.content.replace(trigger, ''));
+        } else if (trigger instanceof RegExp) {
+          if (trigger.test(body)) return new Command(this, message, message.content.replace(trigger, ''));
+        } else if (typeof trigger === 'function') {
+          const content = trigger(message);
+          if (content) return new Command(this, message, content);
+        }
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Execute a command message.
+   */
+  public async exec(cmd: Command): Promise<void> {
+    this._ignore(cmd.id);
+    console.log(cmd.exec);
+    this.emit('start', cmd);
+
+    try {
+      for (const fn of this.pre) await this._handleGlobal(fn, cmd);
+      await cmd.run();
+      for (const fn of this.post) await this._handleGlobal(fn, cmd);
+      this.emit('complete', cmd);
+    } catch (e) {
+      // if the error is not intended
+      if (!(e instanceof BaseError)) {
+        try {
+          for (const fn of this.error) await fn.call(cmd);
+        } catch (e) {
+          // do nothing
+        }
+
+        if (!this.error.length) this.emit('error', e, cmd);
+      }
+    } finally {
+      // store command
+      this.executed.set(cmd.message.id, cmd);
+      setTimeout(() => this.executed.delete(cmd.message.id), this.commandLifetime);
+
+      this._unignore(cmd.id);
+    }
+  }
+
+  public on(event: 'loaded', listener:
     ({ commands, failed, time }: { commands: Map<string, Command>, failed: string[], time: number }) => void): this;
+  public on(event: 'unknown', listener: (msg: Message) => void): this;
+  public on(event: 'error', listener: (error: any, command: Command) => void): this;
+  public on(event: 'start' | 'complete', listener: (command: Command) => void): this;
 
   public on(event: string, listener: (...args: any[]) => void): this {
     return super.on(event, listener);
+  }
+
+  private async _handleGlobal(fn: GlobalHook, cmd: Command): Promise<void> {
+    const result: Command | void = await fn.call(cmd);
+    if (result) await this.exec(result);
+  }
+
+  /**
+   * Ignore something (designed for [[CommandMessage#session]]).
+   * @param session The data to ignore.
+   */
+  private _ignore(session: string) {
+    this.ignore.push(session);
+  }
+
+  /**
+   * Stop ignoring something (designed for [[CommandMessage#session]]).
+   * @param session The data to unignore.
+   */
+  private _unignore(session: string) {
+    const index = this.ignore.indexOf(session);
+    if (index > -1) this.ignore.splice(index, 1);
   }
 }
