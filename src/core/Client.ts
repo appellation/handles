@@ -263,6 +263,16 @@ export default class HandlesClient extends EventEmitter {
     return super.on(event, listener);
   }
 
+  public once(event: 'loaded', listener:
+  ({ commands, failed, time }: { commands: CommandRegistry, failed: string[], time: number }) => void): this;
+  public once(event: 'unknown', listener: (msg: Message) => void): this;
+  public once(event: 'error', listener: (error: any, command: Command) => void): this;
+  public once(event: 'start' | 'complete', listener: (command: Command) => void): this;
+
+  public once(event: string, listener: (...args: any[]) => void): this {
+    return super.once(event, listener);
+  }
+
   private async _handleGlobal(fn: GlobalHook, cmd: Command): Promise<void> {
     const result: Command | void = await fn.call(cmd);
     if (result) await this.exec(result);
