@@ -252,7 +252,7 @@ export default class HandlesClient extends EventEmitter {
   }
 
   public on(event: 'loaded', listener:
-    ({ commands, failed, time }: { commands: Map<string, Command>, failed: string[], time: number }) => void): this;
+    ({ commands, failed, time }: { commands: CommandRegistry, failed: string[], time: number }) => void): this;
   public on(event: 'unknown', listener: (msg: Message) => void): this;
   public on(event: 'error', listener: (error: any, command: Command) => void): this;
   public on(event: 'start' | 'complete', listener: (command: Command) => void): this;
