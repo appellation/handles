@@ -1,10 +1,9 @@
 import HandlesClient from '../core/Client';
-import ArgumentError from '../errors/ArgumentError';
 import Command from '../structures/Command';
 import Response from '../structures/Response';
 import Runnable from '../util/Runnable';
 
-import { Message } from 'discord.js';
+import { Collection, Message, MessageCollector, PartialGuild } from 'discord.js';
 
 export type Resolver<T> = (content: string, message: Message, arg: Argument<T>) => T | null;
 
@@ -48,13 +47,7 @@ export default class Argument<T = string> extends Runnable<T | null> implements 
   /**
    * The initial prompt text of this argument.
    */
-  public prompt: string;
-
-  /**
-   * Text sent for re-prompting to provide correct input when provided input is not resolved
-   * (ie. the resolver returns null).
-   */
-  public rePrompt: string;
+  public prompt?: string;
 
   /**
    * Whether this argument is optional.
@@ -77,13 +70,17 @@ export default class Argument<T = string> extends Runnable<T | null> implements 
   public matcher: Matcher;
 
   /**
+   * Current message collector for prompting.
+   */
+  private _collector?: MessageCollector;
+
+  /**
    * The raw content matching regex.
    */
   private _pattern: RegExp;
 
   constructor(command: Command, key: string, {
-    prompt = '',
-    rePrompt = '',
+    prompt,
     optional = false,
     timeout = 30,
     suffix = null,
@@ -95,12 +92,15 @@ export default class Argument<T = string> extends Runnable<T | null> implements 
     this.key = key;
 
     this.prompt = prompt;
-    this.rePrompt = rePrompt;
     this.optional = optional;
     this.timeout = timeout;
     this.suffix = suffix;
     this.pattern = pattern;
     if (resolver) this.resolver = resolver;
+
+    this.command.once('cancel', () => {
+      if (this._collector) this._collector.stop();
+    });
   }
 
   get handles(): HandlesClient {
@@ -150,14 +150,6 @@ export default class Argument<T = string> extends Runnable<T | null> implements 
   }
 
   /**
-   * Set the re-prompt for the argument.
-   */
-  public setRePrompt(rePrompt: string = '') {
-    this.rePrompt = rePrompt;
-    return this;
-  }
-
-  /**
    * Set whether the argument is optional.
    */
   public setOptional(optional: boolean = true) {
@@ -193,54 +185,58 @@ export default class Argument<T = string> extends Runnable<T | null> implements 
    * This is called every time new potential argument data is received, either in the body of
    * the original command or in subsequent prompts.
    */
-  public resolver(content: string, message: Message, arg: Argument<T>): T | null {
+  public resolver: Resolver<T> = (content) => {
     return content as any;
   }
 
   public async run() {
-    const matched = this.matcher(this.command.body);
-    this.command.body = this.command.body.replace(matched, '').trim();
+    let content = this.matcher(this.command.body);
+    this.command.body = this.command.body.replace(content, '').trim();
 
-    let resolved = !matched ? null : await this.resolver(matched, this.command.message, this);
-
-    // if there is no matched content and the argument is not optional, collect a prompt
-    if (resolved === null && !this.optional) {
+    let resolved: T | null = null;
+    do {
       try {
-        resolved = await this.collectPrompt(matched.length === 0);
+        resolved = await this._resolve(content);
       } catch (e) {
-        this.command.response.send('Command cancelled.');
-        if (typeof e === 'string') e = new ArgumentError<T>(this, e);
-        throw e;
+        try {
+          const msg = await this._collectPrompt(e.message || e);
+          content = msg.content;
+        } catch (e) {
+          this.command.cancel(e);
+        }
       }
-    }
+    } while (!resolved);
 
-    if (!this.command.args) this.command.args = {};
-    this.command.args[this.key] = resolved;
-
-    return resolved;
+    return this.command.args[this.key] = resolved;
   }
 
-  private async collectPrompt(first = true): Promise<T> {
-    const text = first ? this.prompt : this.rePrompt;
+  private async _collectPrompt(text: string): Promise<Message> {
     const suffix = this.suffix || this.handles.argsSuffix ||
-      `\nCommand will be cancelled in **${this.timeout} seconds**.  Type \`cancel\` to cancel immediately.`;
+      `\nCommand will be cancelled in **${this.timeout} seconds**. Type \`cancel\` to cancel immediately.`;
 
     // get first response
-    const prompt = new Response(this.command.message);
+    const prompt = new Response(this.command.message, false);
     await prompt.send(text + suffix);
-    const responses = await prompt.channel.awaitMessages(
+
+    this._collector = prompt.channel.createCollector(
       (m: Message) => m.author.id === this.command.author.id,
-      { time: this.timeout * 1000, max: 1, errors: ['time'] },
+      { time: this.timeout * 1000, max: 1, errors: ['time'] } as any,
     );
-    const response = responses.first();
 
-    // cancel
-    if (response.content === 'cancel') throw new ArgumentError<T>(this, 'cancelled');
+    const responses = await new Promise<Collection<string, Message>>((resolve, reject) => {
+      if (this._collector) {
+        (this._collector as any).once('end', (collected: Collection<string, Message>, reason: string) => {
+          if (collected.size) resolve(collected);
+          else reject(reason);
+        });
+      }
+    });
 
-    // resolve: if not, prompt again
-    const resolved = await this.resolver(response.content, response, this);
-    if (resolved === null) return this.collectPrompt(false);
+    return responses.first();
+  }
 
-    return resolved;
+  private async _resolve(content: string): Promise<T | null> {
+    if (!content) throw new Error(this.prompt);
+    return this.resolver(content, this.command.message, this);
   }
 }

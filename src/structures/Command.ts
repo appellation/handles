@@ -2,6 +2,7 @@ import HandlesClient from '../core/Client';
 import Response, { TextBasedChannel } from './Response';
 
 import { Client, Guild, GuildMember, Message, User } from 'discord.js';
+import { EventEmitter } from 'events';
 
 export type Trigger = string | RegExp | ((msg: Message) => string);
 
@@ -16,6 +17,14 @@ export interface ICommand {
   exec: () => Promise<any>;
   post?: () => Promise<any>;
   error?: (e: Error) => Promise<any>;
+}
+
+export enum Status {
+  INSTANTIATED,
+  RUNNING,
+  COMPLETED,
+  CANCELLED,
+  FAILED,
 }
 
 /**
@@ -34,7 +43,7 @@ export interface ICommand {
  * };
  * ```
  */
-export default abstract class Command implements ICommand {
+export default abstract class Command extends EventEmitter implements ICommand {
   /**
    * Triggers for this command.
    */
@@ -58,16 +67,17 @@ export default abstract class Command implements ICommand {
   /**
    * The command arguments as set by arguments in executor.
    */
-  public args?: any = null;
+  public args: any = {};
 
   /**
    * The response object for this command.
    */
   public response: Response;
 
-  private _status: 'instantiated' | 'running' | 'completed' | 'failed' = 'instantiated';
+  private _status: Status = Status.INSTANTIATED;
 
   constructor(client: HandlesClient, message: Message, body?: string) {
+    super();
     this.handles = client;
     this.message = message;
     this.body = typeof body === 'undefined' ? message.content : body;
@@ -124,13 +134,26 @@ export default abstract class Command implements ICommand {
     return this.message.member;
   }
 
+  public get ended() {
+    switch (this.status) {
+      case Status.COMPLETED:
+      case Status.CANCELLED:
+      case Status.FAILED:
+        return true;
+      default:
+        return false;
+    }
+  }
+
   public async run() {
-    this._status = 'running';
+    this._status = Status.RUNNING;
+
     try {
       await this.pre();
       await this.exec();
       await this.post();
-      this._status = 'completed';
+
+      this._status = Status.COMPLETED;
     } catch (e) {
       try {
         await this.error(e);
@@ -138,9 +161,18 @@ export default abstract class Command implements ICommand {
         // do nothing
       }
 
-      this._status = 'failed';
+      if (this.status !== Status.CANCELLED) this._status = Status.FAILED;
       throw e;
+    } finally {
+      this.removeAllListeners();
     }
+  }
+
+  public cancel(err?: any): never {
+    // if (this._status !== Status.RUNNING) return;
+    this._status = Status.CANCELLED;
+    this.emit('cancel');
+    throw err || new Error('cancelled');
   }
 
   /**

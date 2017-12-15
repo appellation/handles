@@ -1,26 +1,28 @@
-const Argument = require('../../dist/middleware/Argument').default;
+const { Argument, Command } = require('../../dist');
 
 // const HTTPPing = require('node-http-ping')
 
-class PingCommand {
-  exec(command) {
-    if (!command.args.site) {
-      return command.response.success(`${Math.round(command.message.client.ping)}ms 💓`);
+class PingCommand extends Command {
+  exec() {
+    if (!this.args.site) {
+      return this.response.send(`${Math.round(this.message.client.ping)}ms 💓`);
+    } else {
+      return this.response.send(`lul pinging \`${this.args.site}\` in 2017`);
     }
 
-    // HTTPPing(command.args[0]).then((time) => {
-    //   return command.response.success(`Website **${command.args[0]}** responded in ${time}ms.`);
+    // HTTPPing(this.args[0]).then((time) => {
+    //   return this.response.success(`Website **${this.args[0]}** responded in ${time}ms.`);
     // }).catch(console.error);
   }
 
-  * middleware() {
-    yield new Argument('site')
+  async pre() {
+    await new Argument(this, 'site')
       .setPrompt('plz provide websit')
-      .setRePrompt('this is no link my fRIEND')
       .setOptional()
       .setResolver((content) => {
+        console.log(content);
         if (!content.match(new RegExp(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi))) {
-          return null;
+          throw new Error('this is no link my fRIEND');
         }
 
         return content;
@@ -28,4 +30,4 @@ class PingCommand {
   }
 }
 
-module.exports = new PingCommand;
+module.exports = PingCommand;

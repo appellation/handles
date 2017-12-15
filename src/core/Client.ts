@@ -1,8 +1,7 @@
 import EventEmitter = require('events');
-import BaseError from '../errors/BaseError';
 import Validator from '../middleware/Validator';
 
-import Command from '../structures/Command';
+import Command, { Status } from '../structures/Command';
 import CommandRegistry from './CommandRegistry';
 
 import { Client, Message, Snowflake } from 'discord.js';
@@ -47,7 +46,8 @@ export interface IConfig {
 export type CommandResolver = (m: Message) => Promise<string | Command | boolean | null>;
 
 /**
- * Represents global command lifecycle hook methods.
+ * Represents global command lifecycle hook methods. Note that these require `this` context, which means arrow functions
+ * will not work.
  */
 export type GlobalHook = (this: Command) => void | Command;
 
@@ -104,9 +104,9 @@ export default class HandlesClient extends EventEmitter {
   public executed: Map<Snowflake, Command> = new Map();
 
   /**
-   * How long commands should be cached (in ms). Defaults to 1 hour.
+   * How long commands should be cached (in ms). Defaults to the client message cache lifetime.
    */
-  public commandLifetime: number = 1000 * 60 * 60;
+  public commandLifetime: number;
 
   /**
    * Global arguments suffix.
@@ -117,11 +117,13 @@ export default class HandlesClient extends EventEmitter {
     super();
 
     this.argsSuffix = config.argsSuffix;
+    this.commandLifetime = client.options.messageCacheLifetime as number;
 
     this.registry = new CommandRegistry(this, config);
     if (config.prefixes) for (const pref of config.prefixes) this.prefixes.add(pref);
 
     this.handle = this.handle.bind(this);
+
     client.once('ready', () => this.prefixes.add(new RegExp(`<@!?${client.user.id}>`)));
     if (!('listen' in config) || config.listen) {
       client.on('message', this.handle);
@@ -172,8 +174,8 @@ export default class HandlesClient extends EventEmitter {
   public async resolve(message: Message, text?: string): Promise<Command | null> {
     const executed = this.executed.get(message.id);
     if (executed) {
-      if (executed.status === 'completed') return null;
-      else return executed;
+      if (executed.status === Status.COMPLETED) return null;
+      return executed;
     }
 
     let body = text;
@@ -233,7 +235,7 @@ export default class HandlesClient extends EventEmitter {
       this.emit('complete', cmd);
     } catch (e) {
       // if the error is not intended
-      if (!(e instanceof BaseError)) {
+      if (cmd.status !== Status.CANCELLED) {
         try {
           for (const fn of this.error) await fn.call(cmd);
         } catch (e) {

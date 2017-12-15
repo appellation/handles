@@ -1,4 +1,3 @@
-import ValidationError from '../errors/ValidationError';
 import Command from '../structures/Command';
 import Runnable from '../util/Runnable';
 
@@ -43,7 +42,7 @@ export default class Validator extends Runnable<void> {
   /**
    * The reason this validator is invalid.
    */
-  public reason: string | null = null;
+  public reason?: string;
 
   /**
    * Whether to automatically respond with reason when invalid.
@@ -84,9 +83,9 @@ export default class Validator extends Runnable<void> {
     for (const [test, reason] of this.exec) {
       try {
         if (!test(this)) {
-          this.reason = reason;
+          this.reason = reason || undefined;
           this.valid = false;
-          throw new ValidationError(this);
+          throw new Error(this.reason);
         }
       } catch (e) {
         if (this.respond) this.command.response.send(e);
