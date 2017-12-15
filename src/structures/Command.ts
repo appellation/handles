@@ -172,7 +172,8 @@ export default abstract class Command extends EventEmitter implements ICommand {
     // if (this._status !== Status.RUNNING) return;
     this._status = Status.CANCELLED;
     this.emit('cancel');
-    throw err || new Error('cancelled');
+    if (err instanceof Error) throw err;
+    throw new Error(err || 'cancelled');
   }
 
   /**

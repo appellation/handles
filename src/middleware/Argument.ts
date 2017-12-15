@@ -70,6 +70,11 @@ export default class Argument<T = string> extends Runnable<T | null> implements 
   public matcher: Matcher;
 
   /**
+   * Pattern to match for prompt cancellations.
+   */
+  public cancel: string | RegExp = 'cancel';
+
+  /**
    * Current message collector for prompting.
    */
   private _collector?: MessageCollector;
@@ -99,7 +104,7 @@ export default class Argument<T = string> extends Runnable<T | null> implements 
     if (resolver) this.resolver = resolver;
 
     this.command.once('cancel', () => {
-      if (this._collector) this._collector.stop();
+      if (this._collector) this._collector.stop('command cancelled');
     });
   }
 
@@ -196,10 +201,18 @@ export default class Argument<T = string> extends Runnable<T | null> implements 
     let resolved: T | null = null;
     do {
       try {
-        resolved = await this._resolve(content);
+        resolved = await this.resolver(content, this.command.message, this);
       } catch (e) {
+        if (this.optional) {
+          resolved = null;
+          break;
+        }
+
+        if (!this.prompt) this.command.cancel(e || `Argument \`${this.key}\` is invalid.`);
+
         try {
           const msg = await this._collectPrompt(e.message || e);
+          if (msg.content.match(this.cancel)) this.command.cancel();
           content = msg.content;
         } catch (e) {
           this.command.cancel(e);
@@ -233,10 +246,5 @@ export default class Argument<T = string> extends Runnable<T | null> implements 
     });
 
     return responses.first();
-  }
-
-  private async _resolve(content: string): Promise<T | null> {
-    if (!content) throw new Error(this.prompt);
-    return this.resolver(content, this.command.message, this);
   }
 }

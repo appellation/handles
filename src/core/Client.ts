@@ -49,7 +49,7 @@ export type CommandResolver = (m: Message) => Promise<string | Command | boolean
  * Represents global command lifecycle hook methods. Note that these require `this` context, which means arrow functions
  * will not work.
  */
-export type GlobalHook = (this: Command) => void | Command;
+export type GlobalHook = (this: Command) => void | Command | Promise<void | Command>;
 
 /**
  * The starting point for using handles.
@@ -96,7 +96,7 @@ export default class HandlesClient extends EventEmitter {
   /**
    * Methods to run after a command errors.
    */
-  public error: GlobalHook[] = [];
+  public error: Array<(this: Command, error: any) => void | Promise<void>> = [];
 
   /**
    * Recently executed commands. Mapped by message ID.
@@ -234,16 +234,14 @@ export default class HandlesClient extends EventEmitter {
       for (const fn of this.post) await this._handleGlobal(fn, cmd);
       this.emit('complete', cmd);
     } catch (e) {
-      // if the error is not intended
-      if (cmd.status !== Status.CANCELLED) {
-        try {
-          for (const fn of this.error) await fn.call(cmd);
-        } catch (e) {
-          // do nothing
-        }
-
-        if (!this.error.length) this.emit('error', e, cmd);
+      try {
+        for (const fn of this.error) await fn.call(cmd, e);
+      } catch (e) {
+        // do nothing
       }
+
+      // if the error hasn't already been handled
+      if (!this.error.length) this.emit('error', e, cmd);
     } finally {
       // store command
       this.executed.set(cmd.message.id, cmd);
