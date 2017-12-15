@@ -195,14 +195,13 @@ export default class HandlesClient extends EventEmitter {
     if (!body) {
       for (const prefix of this.prefixes) {
         if (prefix instanceof RegExp ? prefix.test(message.content) : message.content.startsWith(prefix)) {
-          body = message.content.replace(prefix, '');
+          body = message.content.replace(prefix, '').trim();
           break;
         }
       }
     }
 
     if (!body) return null;
-    body = body.trim();
 
     for (const Command of this.registry) { // tslint:disable-line variable-name
       const triggers = Array.isArray(Command.triggers) ? Command.triggers : [Command.triggers];
