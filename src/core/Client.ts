@@ -194,7 +194,10 @@ export default class HandlesClient extends EventEmitter {
 
     if (!body) {
       for (const prefix of this.prefixes) {
-        if (prefix instanceof RegExp ? prefix.test(message.content) : message.content.startsWith(prefix)) {
+        if (
+          (prefix instanceof RegExp ? prefix.test(message.content) : message.content.startsWith(prefix)) ||
+          message.channel.type === 'dm'
+        ) {
           body = message.content.replace(prefix, '').trim();
           break;
         }
