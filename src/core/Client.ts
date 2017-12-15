@@ -23,11 +23,6 @@ export interface IConfig {
   directory?: string;
 
   /**
-   * This will get run on every message. Use to manually determine whether a message is a command.
-   */
-  validator?: CommandResolver;
-
-  /**
    * By default, Handles will automatically add any event listeners it needs in order to process commands. Set this to
    * false if you want to add listeners yourself.
    */
@@ -39,11 +34,9 @@ export interface IConfig {
  * - string: content of the message, excluding anything like prefixes. Use for custom guild prefixes, etc.
  * - Command: a specific command to run. Can be used for ratelimiters, etc. (e.g. run the ban command if these
  * conditions are met).
- * - boolean: indicate whether this command should be run. If true, use resolve normally using registered prefixes etc.
- * Use to debounce commands.
- * - null: do not run this command.
+ * - null: ignore this resolver.
  */
-export type CommandResolver = (m: Message) => Promise<string | Command | boolean | null>;
+export type CommandResolver = (m: Message) => Promise<string | Command | null>;
 
 /**
  * Represents global command lifecycle hook methods. Note that these require `this` context, which means arrow functions
@@ -184,11 +177,11 @@ export default class HandlesClient extends EventEmitter {
       for (const resolver of this.resolvers) {
         const resolved = await resolver(message);
         if (resolved instanceof Command) return resolved;
-        if (typeof resolved === 'boolean' && resolved) break;
         if (typeof resolved === 'string') {
           body = resolved;
           break;
         }
+        if (!resolved) return null;
       }
     }
 
