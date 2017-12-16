@@ -89,7 +89,7 @@ export default class Validator extends Runnable<void> {
         }
       } catch (e) {
         if (this.respond) this.command.response.send(e);
-        throw e;
+        this.command.cancel(e);
       }
     }
   }

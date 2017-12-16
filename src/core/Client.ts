@@ -240,7 +240,7 @@ export default class HandlesClient extends EventEmitter {
     } finally {
       // store command
       this.executed.set(cmd.message.id, cmd);
-      setTimeout(() => this.executed.delete(cmd.message.id), this.commandLifetime);
+      setTimeout(() => this.executed.delete(cmd.message.id), this.commandLifetime * 1000);
 
       this._unignore(cmd.id);
     }
