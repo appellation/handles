@@ -1,4 +1,5 @@
 import HandlesClient from '../core/Client';
+import HandlesError, { Code } from '../util/Error';
 import Response, { TextBasedChannel } from './Response';
 
 import { Client, Guild, GuildMember, Message, User } from 'discord.js';
@@ -134,15 +135,11 @@ export default abstract class Command extends EventEmitter implements ICommand {
     return this.message.member;
   }
 
+  /**
+   * Whether this command has finished running.
+   */
   public get ended() {
-    switch (this.status) {
-      case Status.COMPLETED:
-      case Status.CANCELLED:
-      case Status.FAILED:
-        return true;
-      default:
-        return false;
-    }
+    return this._status >= Status.COMPLETED;
   }
 
   public async run() {
@@ -155,24 +152,32 @@ export default abstract class Command extends EventEmitter implements ICommand {
 
       this._status = Status.COMPLETED;
     } catch (e) {
+      if (this.status !== Status.CANCELLED) this._status = Status.FAILED;
+
       try {
         await this.error(e);
       } catch (e) {
         // do nothing
       }
 
-      if (this.status !== Status.CANCELLED) this._status = Status.FAILED;
       throw e;
     } finally {
       this.removeAllListeners();
     }
   }
 
-  public cancel(err?: any): never {
-    // if (this._status !== Status.RUNNING) return;
+  /**
+   * Immediately cancel this command.
+   * @param err The error that cancelled the command
+   * @param args Any other args to emit with the error
+   */
+  public cancel(err?: any, ...args: any[]): never {
     this._status = Status.CANCELLED;
-    this.emit('cancel');
-    if (err instanceof Error) throw err;
+
+    if (typeof err === 'number' && err in Code) err = new HandlesError(err);
+    this.emit('cancel', err, ...args);
+
+    if (err instanceof Error || err instanceof global.Error) throw err;
     throw new Error(err || 'cancelled');
   }
 
@@ -190,7 +195,7 @@ export default abstract class Command extends EventEmitter implements ICommand {
   }
 
   /**
-   * A method for arguments. Called before {@link Command#validators} if the {@link Command#pre} method is not
+   * A method for arguments. Called after {@link Command#validators} if the {@link Command#pre} method is not
    * overidden.
    */
   public arguments() {
@@ -198,7 +203,8 @@ export default abstract class Command extends EventEmitter implements ICommand {
   }
 
   /**
-   * A method for validators. Called after {@link COmmand#arguments} if the {@link Command#pre} method is not overidden.
+   * A method for validators. Called before {@link Command#arguments} if the {@link Command#pre} method is not
+   * overidden.
    */
   public validators() {
     // implemented by command
@@ -218,8 +224,10 @@ export default abstract class Command extends EventEmitter implements ICommand {
 
   /**
    * Executed when any of the command execution methods error. Any errors thrown here will be discarded.
+   * Override this to provide custom responses on cancellation/failure.
    */
-  public async error(e: Error) {
-    // implemented by command
+  public async error(e: any) {
+    if (this.status === Status.CANCELLED) this.response.send('Command cancelled.');
+    if (this.status === Status.FAILED) this.response.send(`Command failed: \`${e}\``);
   }
 }

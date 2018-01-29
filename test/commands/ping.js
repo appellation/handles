@@ -20,9 +20,9 @@ class PingCommand extends Command {
       // .setPrompt('plz provide websit')
       // .setOptional()
       .setResolver((content) => {
-        console.log(content);
         if (!content.match(new RegExp(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi))) {
           throw new Error('this is no link my fRIEND');
+          // throw new Error();
         }
 
         return content;

@@ -1,16 +1,18 @@
 import HandlesClient from '../core/Client';
 import Command from '../structures/Command';
 import Response from '../structures/Response';
+import HandlesError, { Code } from '../util/Error';
 import Runnable from '../util/Runnable';
 
 import { Collection, Message, MessageCollector, PartialGuild } from 'discord.js';
 
-export type Resolver<T> = (content: string, message: Message, arg: Argument<T>) => T | null;
+export type Resolver<T> = (content: string, message: Message, arg: Argument<T>) => T;
 
 export interface IOptions<T> {
   prompt?: string;
   rePrompt?: string;
   optional?: boolean;
+  respond?: boolean;
   resolver?: Resolver<T>;
   timeout?: number;
   pattern?: RegExp;
@@ -28,7 +30,7 @@ export type Matcher = (content: string) => string;
 /**
  * Represents a command argument.
  */
-export default class Argument<T = string> extends Runnable<T | null> implements IOptions<T> {
+export default class Argument<T = string> extends Runnable<T | undefined> implements IOptions<T> {
   public readonly command: Command;
 
   /**
@@ -45,14 +47,14 @@ export default class Argument<T = string> extends Runnable<T | null> implements 
   public key: string;
 
   /**
-   * The initial prompt text of this argument.
+   * Whether to prompt.
    */
-  public prompt?: string;
+  public prompt: string;
 
   /**
    * Whether this argument is optional.
    */
-  public optional: boolean = false;
+  public optional: boolean;
 
   /**
    * How long to wait for a response to a prompt, in seconds.
@@ -103,7 +105,7 @@ export default class Argument<T = string> extends Runnable<T | null> implements 
     this.pattern = pattern;
     if (resolver) this.resolver = resolver;
 
-    this.command.once('cancel', () => {
+    this.command.once('cancel', (e) => {
       if (this._collector) this._collector.stop('command cancelled');
     });
   }
@@ -149,7 +151,7 @@ export default class Argument<T = string> extends Runnable<T | null> implements 
   /**
    * Set the prompt for the argument.
    */
-  public setPrompt(prompt: string = '') {
+  public setPrompt(prompt: string) {
     this.prompt = prompt;
     return this;
   }
@@ -195,30 +197,36 @@ export default class Argument<T = string> extends Runnable<T | null> implements 
   }
 
   public async run() {
-    let content = this.matcher(this.command.body);
-    this.command.body = this.command.body.replace(content, '').trim();
+    let content: string = this.matcher(this.command.body);
+    let resolved: T | undefined;
 
-    let resolved: T | null = null;
-    do {
-      try {
-        resolved = await this.resolver(content, this.command.message, this);
-      } catch (e) {
-        if (this.optional) {
-          resolved = null;
-          break;
-        }
+    while (!resolved) {
+      let prompt: string;
 
-        if (!this.prompt) this.command.cancel(e || `Argument \`${this.key}\` is invalid.`);
-
+      if (content) {
         try {
-          const msg = await this._collectPrompt(e.message || e);
-          if (msg.content.match(this.cancel)) this.command.cancel();
+          resolved = await this.resolver(content, this.command.message, this);
+          this.command.body = this.command.body.replace(content, '').trim();
+          break;
+        } catch (e) {
+          prompt = e.message || e || this.prompt;
+        }
+      } else {
+        if (this.optional) return;
+        if (this.prompt) prompt = this.prompt;
+        else throw new HandlesError(Code.ARGUMENT_MISSING);
+      }
+
+      if (prompt) {
+        try {
+          const msg = await this._collectPrompt(prompt || `Please provide a valid \`${this.key}\`.`);
+          if (msg.content.match(this.cancel)) this.command.cancel(Code.COMMAND_CANCELLED);
           content = msg.content;
         } catch (e) {
-          this.command.cancel(e);
+          this.command.cancel(Code.COMMAND_CANCELLED);
         }
       }
-    } while (!resolved);
+    }
 
     return this.command.args[this.key] = resolved;
   }

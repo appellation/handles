@@ -42,7 +42,7 @@ handler.on('error', (error, command) => {
   //     owner: command.guild.ownerID,
   //   };
   // }
-  console.error(error);
+  console.error(error, command.constructor.name);
   // console.error(extra);
 
   // console.log(raven.captureException(error, {

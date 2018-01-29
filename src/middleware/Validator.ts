@@ -1,4 +1,5 @@
 import Command from '../structures/Command';
+import { Code } from '../util/Error';
 import Runnable from '../util/Runnable';
 
 /**
@@ -57,7 +58,7 @@ export default class Validator extends Runnable<void> {
   /**
    * Functions to execute when determining validity. Maps validation functions to reasons.
    */
-  private exec: Array<[ValidationFunction, string | null]> = [];
+  private exec: Array<[ValidationFunction, string | undefined]> = [];
 
   constructor(cmd: Command) {
     super();
@@ -74,7 +75,7 @@ export default class Validator extends Runnable<void> {
    *   .apply(otherCondition, 'different borke');
    * ```
    */
-  public apply(test: ValidationFunction | boolean, reason: string | null = null) {
+  public apply(test: ValidationFunction | boolean, reason?: string) {
     this.exec.push([typeof test === 'function' ? test : () => test, reason]);
     return this;
   }
@@ -85,11 +86,11 @@ export default class Validator extends Runnable<void> {
         if (!test(this)) {
           this.reason = reason || undefined;
           this.valid = false;
-          throw new Error(this.reason);
+          this.command.cancel(this.reason);
         }
       } catch (e) {
-        if (this.respond) this.command.response.send(e);
-        this.command.cancel(e);
+        if (this.respond) this.command.response.send(e.message || e);
+        this.command.cancel(Code.COMMAND_INVALID, this);
       }
     }
   }

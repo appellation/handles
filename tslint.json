@@ -22,6 +22,7 @@
             true,
             "check-format",
             "allow-leading-underscore",
+            "allow-pascal-case",
             "ban-keywords"
         ],
         "no-shadowed-variable": false

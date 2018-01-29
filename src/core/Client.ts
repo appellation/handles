@@ -5,6 +5,7 @@ import Command, { Status } from '../structures/Command';
 import CommandRegistry from './CommandRegistry';
 
 import { Client, Message, Snowflake } from 'discord.js';
+import Runnable from '../util/Runnable';
 
 export interface IConfig {
   /**
@@ -79,12 +80,12 @@ export default class HandlesClient extends EventEmitter {
   /**
    * Methods to run before each command. Executed in sequence before the command's `pre` method.
    */
-  public pre: GlobalHook[] = [];
+  public pre: Array<new (command: Command) => Runnable<void | Command | boolean>> = [];
 
   /**
    * Methods to run after each command. Executed in sequence after the command's `post` method.
    */
-  public post: GlobalHook[] = [];
+  public post: Array<new (command: Command) => Runnable<void | Command | boolean>> = [];
 
   /**
    * Methods to run after a command errors.
@@ -167,13 +168,13 @@ export default class HandlesClient extends EventEmitter {
   public async resolve(message: Message, text?: string): Promise<Command | null> {
     const executed = this.executed.get(message.id);
     if (executed) {
-      if (executed.status === Status.COMPLETED) return null;
+      if (![Status.COMPLETED, Status.RUNNING].includes(executed.status)) return null;
       return executed;
     }
 
     let body = text;
 
-    if (!body) {
+    if (!body && this.resolvers.length) {
       for (const resolver of this.resolvers) {
         const resolved = await resolver(message);
         if (resolved instanceof Command) return resolved;
@@ -185,7 +186,7 @@ export default class HandlesClient extends EventEmitter {
       }
     }
 
-    if (!body) {
+    if (!body && this.prefixes.size) {
       for (const prefix of this.prefixes) {
         if (
           (prefix instanceof RegExp ? prefix.test(message.content) : message.content.startsWith(prefix)) ||
@@ -199,7 +200,7 @@ export default class HandlesClient extends EventEmitter {
 
     if (!body) return null;
 
-    for (const Command of this.registry) { // tslint:disable-line variable-name
+    for (const Command of this.registry) {
       const triggers = Array.isArray(Command.triggers) ? Command.triggers : [Command.triggers];
       for (const trigger of triggers) {
         if (typeof trigger === 'string') {
@@ -224,9 +225,20 @@ export default class HandlesClient extends EventEmitter {
     this.emit('start', cmd);
 
     try {
-      for (const fn of this.pre) await this._handleGlobal(fn, cmd);
+      for (const Hook of this.pre) {
+        const hook = await new Hook(cmd);
+        if (hook === false) return;
+        if (hook instanceof Command) await this.exec(hook);
+      }
+
       await cmd.run();
-      for (const fn of this.post) await this._handleGlobal(fn, cmd);
+
+      for (const Hook of this.pre) {
+        const hook = await new Hook(cmd);
+        if (hook === false) return;
+        if (hook instanceof Command) await this.exec(hook);
+      }
+
       this.emit('complete', cmd);
     } catch (e) {
       try {
@@ -264,11 +276,6 @@ export default class HandlesClient extends EventEmitter {
 
   public once(event: string, listener: (...args: any[]) => void): this {
     return super.once(event, listener);
-  }
-
-  private async _handleGlobal(fn: GlobalHook, cmd: Command): Promise<void> {
-    const result: Command | void = await fn.call(cmd);
-    if (result) await this.exec(result);
   }
 
   /**
