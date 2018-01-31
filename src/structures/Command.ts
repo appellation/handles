@@ -175,9 +175,11 @@ export default abstract class Command extends EventEmitter implements ICommand {
     this._status = Status.CANCELLED;
 
     if (typeof err === 'number' && err in Code) err = new HandlesError(err);
+    else if (!err) err = new HandlesError(Code.COMMAND_CANCELLED);
+
     this.emit('cancel', err, ...args);
 
-    if (err instanceof Error || err instanceof global.Error) throw err;
+    if (err instanceof HandlesError || err instanceof Error) throw err;
     throw new Error(err || 'cancelled');
   }
 
@@ -227,7 +229,6 @@ export default abstract class Command extends EventEmitter implements ICommand {
    * Override this to provide custom responses on cancellation/failure.
    */
   public async error(e: any) {
-    if (this.status === Status.CANCELLED) this.response.send('Command cancelled.');
-    if (this.status === Status.FAILED) this.response.send(`Command failed: \`${e}\``);
+    // implemented by command
   }
 }

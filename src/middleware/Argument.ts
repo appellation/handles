@@ -196,6 +196,16 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
     return content as any;
   }
 
+  /**
+   * Called when there is an unrecoverable issue resolving the argument: typically when the argument is not optional,
+   * the resolution fails, and there is no prompt. Use this to send a detailed response about missing but required
+   * arguments. Errors thrown here are swallowed.
+   * @param err The error causing this argument to fail.
+   */
+  public error(err?: any) {
+    return this.command.response.send(`Please provide a ${this.key}.`);
+  }
+
   public async run() {
     let content: string = this.matcher(this.command.body);
     let resolved: T | undefined;
@@ -203,28 +213,39 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
     while (!resolved) {
       let prompt: string;
 
+      // if there is content, attempt to resolve it
       if (content) {
         try {
           resolved = await this.resolver(content, this.command.message, this);
           this.command.body = this.command.body.replace(content, '').trim();
           break;
         } catch (e) {
-          prompt = e.message || e || this.prompt;
+          prompt = e ? e.message || e : this.prompt;
         }
       } else {
+        // if there is no matched content: cancel resolution, prompt, or fail based on config
         if (this.optional) return;
-        if (this.prompt) prompt = this.prompt;
-        else throw new HandlesError(Code.ARGUMENT_MISSING);
+        if (this.prompt) {
+          prompt = this.prompt;
+        } else {
+          const error = new HandlesError(Code.ARGUMENT_MISSING, this.key);
+          try {
+            await this.error(error);
+          } catch (e) {
+            // do nothing
+          }
+
+          return this.command.cancel(error);
+        }
       }
 
-      if (prompt) {
-        try {
-          const msg = await this._collectPrompt(prompt || `Please provide a valid \`${this.key}\`.`);
-          if (msg.content.match(this.cancel)) this.command.cancel(Code.COMMAND_CANCELLED);
-          content = msg.content;
-        } catch (e) {
-          this.command.cancel(Code.COMMAND_CANCELLED);
-        }
+      // prompt for resolution
+      try {
+        const msg = await this._collectPrompt(prompt || `Please provide a valid \`${this.key}\`.`);
+        if (msg.content.match(this.cancel)) this.command.cancel();
+        content = msg.content;
+      } catch (e) {
+        this.command.cancel();
       }
     }
 
