@@ -17,6 +17,7 @@ export interface IOptions<T> {
   timeout?: number;
   pattern?: RegExp;
   suffix?: string | null;
+  error?: (err: any) => any;
 }
 
 /**
@@ -93,6 +94,7 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
     suffix = null,
     pattern = /^\S+/,
     resolver,
+    error,
   }: IOptions<T> = {}) {
     super();
     this.command = command;
@@ -104,6 +106,7 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
     this.suffix = suffix;
     this.pattern = pattern;
     if (resolver) this.resolver = resolver;
+    if (error) this.error = error;
 
     this.command.once('cancel', (e) => {
       if (this._collector) this._collector.stop('command cancelled');
@@ -188,6 +191,11 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
     return this;
   }
 
+  public handleError(cb: (err: any) => any) {
+    this.error = cb;
+    return this;
+  }
+
   /**
    * This is called every time new potential argument data is received, either in the body of
    * the original command or in subsequent prompts.
@@ -202,7 +210,7 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
    * arguments. Errors thrown here are swallowed.
    * @param err The error causing this argument to fail.
    */
-  public error(err?: any) {
+  public error(err: any) {
     return this.command.response.send(`Please provide a ${this.key}.`);
   }
 
