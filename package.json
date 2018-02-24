@@ -27,8 +27,7 @@
   },
   "homepage": "https://github.com/appellation/handles#readme",
   "dependencies": {
-    "is-plain-object": "^2.0.4",
-    "tsubaki": "^1.2.0"
+    "tsubaki": "^1.3.0"
   },
   "peerDependencies": {
     "discord.js": "^11.1.0"
