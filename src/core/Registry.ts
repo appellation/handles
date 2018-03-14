@@ -1,12 +1,9 @@
-import { Message } from 'discord.js';
-import { promisify } from 'tsubaki';
-
-import Command, { ICommand, InstantiableCommand, Trigger } from '../structures/Command';
-import HandlesClient, { IConfig } from './Client';
-
 import fs = require('fs');
 import path = require('path');
-import { Client } from '../';
+import { promisify } from 'tsubaki';
+
+import Command, { ICommand, InstantiableCommand } from '../structures/Command';
+import HandlesClient, { IConfig } from './Client';
 
 const readdir: (dir: string) => Promise<string[]> = promisify(fs.readdir);
 const stat: (path: string) => Promise<fs.Stats> = promisify(fs.stat);
@@ -14,7 +11,7 @@ const stat: (path: string) => Promise<fs.Stats> = promisify(fs.stat);
 /**
  * Manage command loading.
  */
-export default class CommandRegistry extends Set<InstantiableCommand> {
+export default class Registry extends Set<InstantiableCommand> {
 
   /**
    * Get all the file paths recursively in a directory.
@@ -42,30 +39,29 @@ export default class CommandRegistry extends Set<InstantiableCommand> {
   /**
    * Handles client.
    */
-  public readonly handles: HandlesClient;
-
-  /**
-   * The directory from which to load commands.
-   */
-  public directory: string;
+  public readonly handles!: HandlesClient;
 
   constructor(handles: HandlesClient, config: IConfig) {
     super();
-
-    this.handles = handles;
-    this.directory = config.directory || './commands';
-
-    this.load();
+    Object.defineProperty(this, 'handles', { value: handles });
+    this.load(config.directory || './commands');
   }
 
   /**
-   * Load all commands into memory.  Use when reloading commands.
+   * Load all commands into memory.
+   * @param directory The directory to load.
    */
-  public async load(): Promise<this> {
+  public async load(directory: string): Promise<this> {
     const start = Date.now();
 
     this.clear();
-    const files = await CommandRegistry._loadDir(this.directory);
+    let files: string[];
+    try {
+      files = await Registry._loadDir(directory);
+    } catch (e) {
+      this.handles.emit('error', e);
+      return this;
+    }
 
     const failed = [];
     for (const file of files) {
@@ -77,7 +73,7 @@ export default class CommandRegistry extends Set<InstantiableCommand> {
         mod = require(location);
       } catch (e) {
         failed.push(file);
-        console.log(e); // tslint:disable-line no-console
+        this.handles.emit('error', e);
         continue;
       }
 
@@ -85,18 +81,15 @@ export default class CommandRegistry extends Set<InstantiableCommand> {
       if (typeof mod !== 'function') {
         /* tslint:disable */
         class BasicCommand extends Command {
-          public static triggers: Trigger | Trigger[] = (mod as ICommand).triggers || path.basename(location, '.js');
-
           public async exec() {
             throw new Error(`command ${(this.constructor as typeof BasicCommand).triggers} has no exec method`);
           }
-
-          [prop: string]: any;
         }
         /* tslint:enable */
 
-        for (const prop in mod) BasicCommand.prototype[prop] = (mod as any)[prop];
-        mod = BasicCommand as InstantiableCommand;
+        const descriptors = Object.getOwnPropertyDescriptors(mod);
+        Object.defineProperties(BasicCommand.prototype, descriptors);
+        mod = BasicCommand;
       }
 
       if (!mod.triggers) mod.triggers = path.basename(location, '.js');

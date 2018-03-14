@@ -1,4 +1,4 @@
-process.on('unhandledRejection', console.error);
+// process.on('unhandledRejection', console.error);
 
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
@@ -16,43 +16,9 @@ const handler = new handles.Client(client, {
   prefixes: ['x!'],
 });
 
-handler.on('error', (error, command) => {
-  // const extra = {
-  //   message: {
-  //     content: command.message.content,
-  //     id: command.message.id,
-  //     type: command.message.type,
-  //   },
-  //   channel: {
-  //     id: command.message.channel.id,
-  //     type: command.message.channel.type,
-  //   },
-  //   guild: {},
-  //   client: {
-  //     shard: command.client.shard ? command.client.shard.id : null,
-  //     ping: command.client.ping,
-  //     status: command.client.status,
-  //   },
-  // };
+// handler.on('error', console.log);
 
-  // if (command.message.channel.type === 'text') {
-  //   extra.guild = {
-  //     id: command.guild.id,
-  //     name: command.guild.name,
-  //     owner: command.guild.ownerID,
-  //   };
-  // }
-  console.error(error, command.constructor.name);
-  // console.error(extra);
-
-  // console.log(raven.captureException(error, {
-  //   user: {
-  //     id: command.message.author.id,
-  //     username: command.message.author.tag,
-  //   },
-  //   extra
-  // }));
-});
+handler.on('loaded', console.log);
 
 client.once('ready', () => console.log('ready'));
 

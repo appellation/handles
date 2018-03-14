@@ -4,11 +4,12 @@ import Response from '../structures/Response';
 import HandlesError, { Code } from '../util/Error';
 import Runnable from '../util/Runnable';
 
-import { Collection, Message, MessageCollector, PartialGuild } from 'discord.js';
+import { Collection, Message, MessageCollector } from 'discord.js';
 
 export type Resolver<T> = (content: string, message: Message, arg: Argument<T>) => T;
 
 export interface IOptions<T> {
+  cancel?: string | RegExp;
   prompt?: string;
   rePrompt?: string;
   optional?: boolean;
@@ -38,11 +39,11 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
    * The key that this arg will be set to.
    *
    * ```js
-   * // in args definition
-   * new Argument('thing');
+   * // in command `pre` method
+   * new Argument(this, 'thing');
    *
    * // in command execution
-   * const thingData = command.args.thing;
+   * const thingData = this.args.thing;
    * ```
    */
   public key: string;
@@ -50,17 +51,17 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
   /**
    * Whether to prompt.
    */
-  public prompt: string;
+  public prompt?: string;
 
   /**
    * Whether this argument is optional.
    */
-  public optional: boolean;
+  public optional: boolean = false;
 
   /**
    * How long to wait for a response to a prompt, in seconds.
    */
-  public timeout: number;
+  public timeout: number = 30;
 
   /**
    * Text to append to each prompt.  Defaults to global setting or built-in text.
@@ -68,9 +69,11 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
   public suffix: string | null;
 
   /**
-   * The matcher for this argument.
+   * A regex describing the pattern of arguments.  Defaults to single words.  If more advanced matching
+   * is required, set a custom [[matcher]] instead.  Can pull arguments from anywhere in the unresolved
+   * content, so make sure to specify `^` if you want to pull from the front.
    */
-  public matcher: Matcher;
+  public pattern: RegExp = /^\S+/;
 
   /**
    * Pattern to match for prompt cancellations.
@@ -82,35 +85,19 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
    */
   private _collector?: MessageCollector;
 
-  /**
-   * The raw content matching regex.
-   */
-  private _pattern: RegExp;
-
-  constructor(command: Command, key: string, {
-    prompt,
-    optional = false,
-    timeout = 30,
-    suffix = null,
-    pattern = /^\S+/,
-    resolver,
-    error,
-  }: IOptions<T> = {}) {
+  constructor(command: Command, key: string, opts: IOptions<T> = {}) {
     super();
     this.command = command;
     this.key = key;
 
-    this.prompt = prompt;
-    this.optional = optional;
-    this.timeout = timeout;
-    this.suffix = suffix;
-    this.pattern = pattern;
-    if (resolver) this.resolver = resolver;
-    if (error) this.error = error;
-
-    this.command.once('cancel', (e) => {
-      if (this._collector) this._collector.stop('command cancelled');
-    });
+    if (opts.prompt) this.prompt = opts.prompt;
+    if (typeof opts.optional === 'boolean') this.optional = opts.optional;
+    if (typeof opts.timeout === 'number') this.timeout = opts.timeout;
+    if (opts.cancel) this.cancel = opts.cancel;
+    this.suffix = opts.suffix ||
+       `\nCommand will be cancelled in **${this.timeout} seconds**. Type \`${this.cancel}\` to cancel immediately.`;
+    if (opts.pattern) this.pattern = opts.pattern;
+    if (opts.resolver) this.resolver = opts.resolver;
   }
 
   get handles(): HandlesClient {
@@ -118,21 +105,12 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
   }
 
   /**
-   * A regex describing the pattern of arguments.  Defaults to single words.  If more advanced matching
-   * is required, set a custom [[matcher]] instead.  Can pull arguments from anywhere in the unresolved
-   * content, so make sure to specify `^` if you want to pull from the front.
+   * Resolve a string as an argument segment. Unless overridden, matches remaining command body content
+   * against [[Argument#pattern]].
    */
-  get pattern() {
-    return this._pattern;
-  }
-
-  set pattern(regex) {
-    this._pattern = regex;
-
-    this.matcher = (content) => {
-      const m = content.match(regex);
-      return m === null ? '' : m[0];
-    };
+  public matcher: Matcher = (content: string) => {
+    const m = content.match(this.pattern);
+    return m === null ? '' : m[0];
   }
 
   /**
@@ -191,11 +169,6 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
     return this;
   }
 
-  public handleError(cb: (err: any) => any) {
-    this.error = cb;
-    return this;
-  }
-
   /**
    * This is called every time new potential argument data is received, either in the body of
    * the original command or in subsequent prompts.
@@ -204,18 +177,9 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
     return content as any;
   }
 
-  /**
-   * Called when there is an unrecoverable issue resolving the argument: typically when the argument is not optional,
-   * the resolution fails, and there is no prompt. Use this to send a detailed response about missing but required
-   * arguments. Errors thrown here are swallowed.
-   * @param err The error causing this argument to fail.
-   */
-  public error(err: any) {
-    return this.command.response.send(`Please provide a ${this.key}.`);
-  }
-
   public async run() {
     let content: string = this.matcher(this.command.body);
+    this.command.body = this.command.body.replace(content, '').trim();
     let resolved: T | undefined;
 
     while (!resolved) {
@@ -225,7 +189,6 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
       if (content) {
         try {
           resolved = await this.resolver(content, this.command.message, this);
-          this.command.body = this.command.body.replace(content, '').trim();
           break;
         } catch (e) {
           prompt = e ? e.message || e : this.prompt;
@@ -236,24 +199,17 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
         if (this.prompt) {
           prompt = this.prompt;
         } else {
-          const error = new HandlesError(Code.ARGUMENT_MISSING, this.key);
-          try {
-            await this.error(error);
-          } catch (e) {
-            // do nothing
-          }
-
-          return this.command.cancel(error);
+          return this.command.cancel(new HandlesError(Code.ARGUMENT_MISSING, this.key));
         }
       }
 
       // prompt for resolution
       try {
-        const msg = await this._collectPrompt(prompt || `Please provide a valid \`${this.key}\`.`);
-        if (msg.content.match(this.cancel)) this.command.cancel();
+        const msg = await this._collectPrompt(prompt);
+        if (msg.content.match(this.cancel)) this.command.cancel(new HandlesError(Code.COMMAND_CANCELLED, 'user'));
         content = msg.content;
       } catch (e) {
-        this.command.cancel();
+        this.command.cancel(e);
       }
     }
 
@@ -261,12 +217,9 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
   }
 
   private async _collectPrompt(text: string): Promise<Message> {
-    const suffix = this.suffix || this.handles.argsSuffix ||
-      `\nCommand will be cancelled in **${this.timeout} seconds**. Type \`cancel\` to cancel immediately.`;
-
     // get first response
     const prompt = new Response(this.command.message, false);
-    await prompt.send(text + suffix);
+    await prompt.send(text + this.suffix);
 
     this._collector = prompt.channel.createCollector(
       (m: Message) => m.author.id === this.command.author.id,

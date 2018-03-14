@@ -1,5 +1,8 @@
 import HandlesClient from '../core/Client';
+import Hook from '../middleware/Hook';
 import HandlesError, { Code } from '../util/Error';
+import Mixin from '../util/Mixin';
+import Runnable, { IRunnable } from '../util/Runnable';
 import Response, { TextBasedChannel } from './Response';
 
 import { Client, Guild, GuildMember, Message, User } from 'discord.js';
@@ -44,11 +47,16 @@ export enum Status {
  * };
  * ```
  */
-export default abstract class Command extends EventEmitter implements ICommand {
+@Mixin([Runnable])
+export default abstract class Command extends EventEmitter implements ICommand, IRunnable<void> {
   /**
    * Triggers for this command.
    */
   public static triggers?: Trigger | Trigger[];
+
+  public static makeID(message: Message) {
+    return `${message.author.id}:${message.channel.id}`;
+  }
 
   /**
    * The handles client.
@@ -68,7 +76,7 @@ export default abstract class Command extends EventEmitter implements ICommand {
   /**
    * The command arguments as set by arguments in executor.
    */
-  public args: any = {};
+  public args: { [key: string]: any } = {};
 
   /**
    * The response object for this command.
@@ -77,18 +85,18 @@ export default abstract class Command extends EventEmitter implements ICommand {
 
   private _status: Status = Status.INSTANTIATED;
 
-  constructor(client: HandlesClient, message: Message, body?: string) {
+  constructor(client: HandlesClient, message: Message, body: string = message.content) {
     super();
     this.handles = client;
     this.message = message;
-    this.body = typeof body === 'undefined' ? message.content : body;
+    this.body = body;
     this.response = new Response(this.message);
   }
 
   /**
    * The Discord.js client.
    */
-  get client(): Client {
+  public get client(): Client {
     return this.message.client;
   }
 
@@ -96,42 +104,42 @@ export default abstract class Command extends EventEmitter implements ICommand {
    * Ensure unique commands for an author in a channel.
    * Format: "authorID:channelID"
    */
-  get id() {
-    return `${this.message.author.id}:${this.message.channel.id}`;
+  public get id() {
+    return Command.makeID(this.message);
   }
 
   /**
    * The status of this command.
    */
-  get status() {
+  public get status() {
     return this._status;
   }
 
   /**
    * The guild this command is in.
    */
-  get guild(): Guild {
+  public get guild(): Guild {
     return this.message.guild;
   }
 
   /**
    * The channel this command is in.
    */
-  get channel(): TextBasedChannel {
+  public get channel(): TextBasedChannel {
     return this.message.channel;
   }
 
   /**
    * The author of this command.
    */
-  get author(): User {
+  public get author(): User {
     return this.message.author;
   }
 
   /**
    * The guild member of this command.
    */
-  get member(): GuildMember {
+  public get member(): GuildMember {
     return this.message.member;
   }
 
@@ -142,27 +150,52 @@ export default abstract class Command extends EventEmitter implements ICommand {
     return this._status >= Status.COMPLETED;
   }
 
+  /**
+   * Whether this command was terminated before completion.
+   */
+  public get terminated() {
+    return this._status >= Status.CANCELLED;
+  }
+
+  /**
+   * Assert that a condition is true before continuing execution.
+   * @param test A check whether this command should cancel
+   * @param message The message to cancel this command with, if it should be
+   */
+  public assert(test: boolean, message: string) {
+    if (!test) this.cancel(message);
+    return this;
+  }
+
   public async run() {
     this._status = Status.RUNNING;
+    this._emit('start');
 
     try {
+      for (const fn of this.handles.pre) await new Hook(fn);
       await this.pre();
       await this.exec();
       await this.post();
+      for (const fn of this.handles.post) await new Hook(fn);
 
       this._status = Status.COMPLETED;
+      this._emit('complete');
     } catch (e) {
-      if (this.status !== Status.CANCELLED) this._status = Status.FAILED;
+      if (!this.terminated) this._status = Status.FAILED;
 
-      try {
-        await this.error(e);
-      } catch (e) {
-        // do nothing
+      if (this.status === Status.CANCELLED) {
+        if (this._willHandle('cancel')) {
+          this._emit('cancel', e);
+        } else {
+          if (e.code === Code.COMMAND_CANCELLED) this.response.send('Command cancelled.');
+          else if (e.code === Code.ARGUMENT_MISSING) this.response.send(`Argument \`${e.details}\` was not provided.`);
+        }
+      } else {
+        if (!this._willHandle('error')) this.response.send(`Command failed: \`${e}\``);
+        this._emit('error', e);
       }
-
-      throw e;
     } finally {
-      this.removeAllListeners();
+      this._emit('finish');
     }
   }
 
@@ -171,16 +204,14 @@ export default abstract class Command extends EventEmitter implements ICommand {
    * @param err The error that cancelled the command
    * @param args Any other args to emit with the error
    */
-  public cancel(err?: any, ...args: any[]): never {
+  public cancel(err?: Error | number | string | HandlesError, ...args: any[]): never {
     this._status = Status.CANCELLED;
 
-    if (typeof err === 'number' && err in Code) err = new HandlesError(err);
-    else if (!err) err = new HandlesError(Code.COMMAND_CANCELLED);
+    if (typeof err === 'number') err = new HandlesError(err);
+    else if (typeof err === 'string' || typeof err === 'undefined') err = new HandlesError(Code.COMMAND_CANCELLED, err);
+    else if (err instanceof Error) err = new HandlesError(Code.COMMAND_CANCELLED, err.message);
 
-    this.emit('cancel', err, ...args);
-
-    if (err instanceof HandlesError || err instanceof Error) throw err;
-    throw new Error(err || 'cancelled');
+    throw err;
   }
 
   /**
@@ -224,11 +255,16 @@ export default abstract class Command extends EventEmitter implements ICommand {
     // implemented by command
   }
 
+  protected _emit(event: string, ...data: any[]) {
+    this.handles.emit(event, ...data, this);
+    if (event !== 'error' || this.listenerCount('error')) this.emit(event, ...data);
+  }
+
   /**
-   * Executed when any of the command execution methods error. Any errors thrown here will be discarded.
-   * Override this to provide custom responses on cancellation/failure.
+   * Check whether there are any event listeners for the given event
+   * @param event The event that might be emitted
    */
-  public async error(e: any) {
-    // implemented by command
+  protected _willHandle(event: string) {
+    return Boolean(this.listenerCount(event) || this.handles.listenerCount(event));
   }
 }

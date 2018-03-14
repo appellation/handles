@@ -11,13 +11,17 @@ class Command extends Handles.Command {
 
     await new Handles.Argument(this, 'first')
       .setPrompt('Please provide the first digit.')
-      .setRePrompt('xd1')
-      .setResolver(c => isNaN(c) ? null : parseInt(c));
+      .setResolver(c => {
+        if (isNaN(c)) throw new Error('das no number');
+        return parseInt(c);
+      });
 
     await new Handles.Argument(this, 'second')
       .setPrompt('Please provide the second digit.')
-      .setRePrompt('xd2')
-      .setResolver(c => isNaN(c) ? null : parseInt(c));
+      .setResolver(c => {
+        if (isNaN(c)) throw new Error('das no number');
+        return parseInt(c);
+      });
   }
 
   exec() {

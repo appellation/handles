@@ -3,6 +3,14 @@ const { Argument, Command } = require('../../dist');
 // const HTTPPing = require('node-http-ping')
 
 class PingCommand extends Command {
+  constructor(...args) {
+    super(...args);
+    // this.on('cancel', (e) => {
+    //   this.response.send('meme kek');
+    //   console.log(e);
+    // });
+  }
+
   exec() {
     if (!this.args.site) {
       return this.response.send(`${Math.round(this.message.client.ping)}ms 💓`);

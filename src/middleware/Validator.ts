@@ -83,7 +83,7 @@ export default class Validator extends Runnable<void> {
   public async run() {
     for (const [test, reason] of this.exec) {
       try {
-        if (!test(this)) {
+        if (!await test(this)) {
           this.reason = reason || undefined;
           this.valid = false;
           this.command.cancel(this.reason);

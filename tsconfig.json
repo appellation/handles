@@ -9,7 +9,8 @@
     ],
     "declaration": true,
     "sourceMap": true,
-    "removeComments": false
+    "removeComments": false,
+    "experimentalDecorators": true
   },
   "include": [
     "./src/"

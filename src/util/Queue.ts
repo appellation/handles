@@ -1,7 +1,7 @@
 export type QueueFunction<T> = () => Promise<T>;
 
 export default class Queue<T = void> extends Array<QueueFunction<T>> {
-  private _started: boolean;
+  private _started: boolean = false;
 
   constructor() {
     super();

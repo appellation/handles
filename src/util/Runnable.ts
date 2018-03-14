@@ -1,4 +1,9 @@
-export default abstract class Runnable<T> implements Promise<T> {
+export interface IRunnable<T> {
+  run(): Promise<T>;
+}
+
+export default abstract class Runnable<T> implements Promise<T>, IRunnable<T> {
+  public [Symbol.toStringTag]: 'Promise' = 'Promise';
   public abstract run(): Promise<T>;
 
   public then<TResult1 = T, TResult2 = never>(
@@ -8,11 +13,9 @@ export default abstract class Runnable<T> implements Promise<T> {
     return this.run().then(resolver, rejector);
   }
 
-  public catch<TResult2 = never>(rejector?: ((value: Error) => TResult2 | PromiseLike<TResult2>)) {
+  public catch<TResult2 = never>(
+    rejector?: ((value: Error) => TResult2 | PromiseLike<TResult2>),
+  ): Promise<TResult2 | T> {
     return this.then(undefined, rejector);
-  }
-
-  public get [Symbol.toStringTag](): 'Promise' {
-    return 'Promise';
   }
 }
