@@ -110,4 +110,9 @@ export default class Response {
     this.channel = this.message.author.dmChannel || await this.message.author.createDM();
     return this.send(data, options);
   }
+
+  public reply: Send = async (data, options) => {
+    if (typeof data === 'string') return this.send(`${this.message.author}, ${data}`, options);
+    return this.send(this.message.author.toString(), data);
+  }
 }
