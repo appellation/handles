@@ -16,13 +16,13 @@ Documentation is available at [handles.topkek.pw](http://handles.topkek.pw).
 npm install --save discord-handles
 ```
 
-Or, if you want to risk cutting yourself, install the bleeding edge version:
+Or, if you want the bleeding edge version (may not always be available):
 
 ```xl
-npm install --save appellation/handles#master
+npm install --save discord-handles@next
 ```
 
-Usually I try to avoid pushing broken code, but sometimes I move a little too fast.
+I do not recommend installing from GitHub, since Typescript projects often won't get built properly post-installation.
 
 ### The basics
 
