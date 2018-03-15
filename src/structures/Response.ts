@@ -95,7 +95,7 @@ export default class Response {
             return success(await this.channel.send(data, options));
           } catch (e) {
             if (this.channel.type === 'text') {
-              return this.message.author.send(data, options).then(success, error);
+              return this.dm(data, options).then(success, error);
             }
           }
         }
