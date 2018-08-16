@@ -20,10 +20,8 @@ export default class Queue<T = void> extends Array<QueueFunction<T>> {
     if (this._started) return;
     this._started = true;
 
-    while (this.length) {
-      const func = this.shift();
-      if (func) await func();
-    }
+    let func: QueueFunction<T> | undefined;
+    while (func = this.shift()) await func(); // tslint:disable-line no-conditional-assignment
 
     this._started = false;
   }

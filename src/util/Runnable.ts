@@ -1,16 +1,11 @@
-export interface IRunnable<T> {
-  run(): Promise<T>;
-}
-
-export default abstract class Runnable<T> implements Promise<T>, IRunnable<T> {
+export default abstract class Runnable<T> implements Promise<T> {
   public [Symbol.toStringTag]: 'Promise' = 'Promise';
-  public abstract run(): Promise<T>;
 
   public then<TResult1 = T, TResult2 = never>(
     resolver?: ((value: any) => TResult1 | PromiseLike<TResult1>),
     rejector?: ((value: Error) => TResult2 | PromiseLike<TResult2>),
   ): Promise<TResult1 | TResult2> {
-    return this.run().then(resolver, rejector);
+    return this._run().then(resolver, rejector);
   }
 
   public catch<TResult2 = never>(
@@ -18,4 +13,6 @@ export default abstract class Runnable<T> implements Promise<T>, IRunnable<T> {
   ): Promise<TResult2 | T> {
     return this.then(undefined, rejector);
   }
+
+  protected abstract _run(): Promise<T>;
 }

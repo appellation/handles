@@ -3,7 +3,6 @@ import path = require('path');
 import { promisify } from 'tsubaki';
 
 import Command, { ICommand, InstantiableCommand } from '../structures/Command';
-import HandlesClient, { IConfig } from './Client';
 
 const readdir: (dir: string) => Promise<string[]> = promisify(fs.readdir);
 const stat: (path: string) => Promise<fs.Stats> = promisify(fs.stat);
@@ -12,7 +11,6 @@ const stat: (path: string) => Promise<fs.Stats> = promisify(fs.stat);
  * Manage command loading.
  */
 export default class Registry extends Set<InstantiableCommand> {
-
   /**
    * Get all the file paths recursively in a directory.
    * @param dir The directory to start at.
@@ -37,35 +35,21 @@ export default class Registry extends Set<InstantiableCommand> {
   }
 
   /**
-   * Handles client.
-   */
-  public readonly handles!: HandlesClient;
-
-  constructor(handles: HandlesClient, config: IConfig) {
-    super();
-    Object.defineProperty(this, 'handles', { value: handles });
-    this.load(config.directory || './commands');
-  }
-
-  /**
    * Load all commands into memory.
-   * @param directory The directory to load.
+   * @param directoryOrFile The directory or file location to load.
    */
-  public async load(directory: string): Promise<this> {
-    const start = Date.now();
-
+  public async load(directoryOrFile: string): Promise<string[]> {
     this.clear();
+    const stats = await stat(directoryOrFile);
+
     let files: string[];
-    try {
-      files = await Registry._loadDir(directory);
-    } catch (e) {
-      this.handles.emit('error', e);
-      return this;
-    }
+    if (stats.isDirectory()) files = await Registry._loadDir(directoryOrFile);
+    else if (stats.isFile()) files = [directoryOrFile];
+    else throw new Error('unexpected command location type');
 
     const failed = [];
     for (const file of files) {
-      let mod: InstantiableCommand | ICommand;
+      let mod: InstantiableCommand | ICommand | { default: InstantiableCommand | ICommand };
       const location = path.resolve(process.cwd(), file);
 
       try {
@@ -73,9 +57,10 @@ export default class Registry extends Set<InstantiableCommand> {
         mod = require(location);
       } catch (e) {
         failed.push(file);
-        this.handles.emit('error', e);
         continue;
       }
+
+      if ('default' in mod) mod = mod.default;
 
       // setup command to handle basic exports
       if (typeof mod !== 'function') {
@@ -96,7 +81,6 @@ export default class Registry extends Set<InstantiableCommand> {
       this.add(mod);
     }
 
-    this.handles.emit('loaded', { commands: this, failed, time: Date.now() - start });
-    return this;
+    return failed;
   }
 }
