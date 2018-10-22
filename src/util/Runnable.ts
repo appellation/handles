@@ -1,6 +1,4 @@
-export default abstract class Runnable<T> implements Promise<T> {
-  public [Symbol.toStringTag]: 'Promise' = 'Promise';
-
+export default abstract class Runnable<T> implements PromiseLike<T> {
   public then<TResult1 = T, TResult2 = never>(
     resolver?: ((value: any) => TResult1 | PromiseLike<TResult1>),
     rejector?: ((value: Error) => TResult2 | PromiseLike<TResult2>),

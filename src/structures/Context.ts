@@ -24,5 +24,4 @@ export default abstract class Context {
     type: string;
   };
   public abstract body: string;
-  public abstract createDM(): Promise<any>;
 }

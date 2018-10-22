@@ -3,6 +3,6 @@ import { InstantiablePlugin } from './Plugin';
 
 export default abstract class Handler extends Array<InstantiablePlugin> {
   public async run(context: Context) {
-    for (const P of this) await new P(context);
+    for (const Plugin of this) await new Plugin(context);
   }
 }
