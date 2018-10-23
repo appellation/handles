@@ -108,7 +108,7 @@ export default abstract class Command extends Plugin implements ICommand {
     this._status = Status.RUNNING;
 
     if (typeof trigger === 'function') trigger = trigger(this.context);
-    this.context.body = this.context.body.replace(trigger, '');
+    this.context.body = this.context.body.replace(trigger, '').trim();
 
     try {
       await this.pre();
