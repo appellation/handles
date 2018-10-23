@@ -95,10 +95,10 @@ export default abstract class Command extends Plugin implements ICommand {
     let trigger: Trigger | undefined;
     let found: boolean = false;
     for (trigger of ctor.triggers) {
-      if (trigger instanceof RegExp && trigger.test(this.context.body)) {
-        found = true;
-        break;
-      } else if (typeof trigger === 'string' && this.context.body.startsWith(trigger)) {
+      if (
+        (trigger instanceof RegExp && trigger.test(this.context.body)) ||
+        (typeof trigger === 'string' && this.context.body.startsWith(trigger))
+      ) {
         found = true;
         break;
       }
