@@ -104,13 +104,11 @@ export default abstract class Command extends Plugin implements ICommand {
       }
     }
 
-    if (!trigger) return this;
+    if (!found || !trigger) return this;
     this._status = Status.RUNNING;
 
-    if (found) {
-      if (typeof trigger === 'function') trigger = trigger(this.context);
-      this.context.body = this.context.body.replace(trigger, '');
-    }
+    if (typeof trigger === 'function') trigger = trigger(this.context);
+    this.context.body = this.context.body.replace(trigger, '');
 
     try {
       await this.pre();
