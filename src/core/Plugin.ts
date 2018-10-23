@@ -15,7 +15,6 @@ export interface InstantiablePlugin {
 }
 
 export default abstract class Plugin extends Runnable<Plugin> {
-  public abstract id: string;
   protected _status: Status = Status.INSTANTIATED;
 
   constructor(public readonly context: Context) {

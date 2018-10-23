@@ -1,3 +1,4 @@
+import path = require('path');
 import Plugin from '../core/Plugin';
 import Context from './Context';
 
@@ -44,26 +45,7 @@ export default abstract class Command extends Plugin implements ICommand {
   /**
    * Triggers for this command.
    */
-  public static triggers?: Trigger | Trigger[];
-
-  public static makeID(context: Context) {
-    return `${context.authorID}:${context.channel.id}`;
-  }
-
-  /**
-   * Ensure unique commands for an author in a channel.
-   * Format: "authorID:channelID"
-   */
-  public get id() {
-    return Command.makeID(this.context);
-  }
-
-  /**
-   * The status of this command.
-   */
-  public get status() {
-    return this._status;
-  }
+  public static triggers: Trigger | Trigger[] = path.basename(__filename, '.js');
 
   /**
    * Executed prior to {@link Command#exec}. Should be used for middleware/validation.
@@ -106,8 +88,29 @@ export default abstract class Command extends Plugin implements ICommand {
     // implemented by command
   }
 
-  protected async _run() {
+  protected async _run(): Promise<this> {
+    const ctor: typeof Command = this.constructor as typeof Command;
+    if (!Array.isArray(ctor.triggers)) ctor.triggers = [ctor.triggers];
+
+    let trigger: Trigger | undefined;
+    let found: boolean = false;
+    for (trigger of ctor.triggers) {
+      if (trigger instanceof RegExp && trigger.test(this.context.body)) {
+        found = true;
+        break;
+      } else if (typeof trigger === 'string' && this.context.body.startsWith(trigger)) {
+        found = true;
+        break;
+      }
+    }
+
+    if (!trigger) return this;
     this._status = Status.RUNNING;
+
+    if (found) {
+      if (typeof trigger === 'function') trigger = trigger(this.context);
+      this.context.body = this.context.body.replace(trigger, '');
+    }
 
     try {
       await this.pre();

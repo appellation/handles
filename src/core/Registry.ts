@@ -2,7 +2,9 @@ import fs = require('fs');
 import path = require('path');
 import { promisify } from 'tsubaki';
 
-import Command, { ICommand, InstantiableCommand } from '../structures/Command';
+import Command from '../structures/Command';
+import Context from '../structures/Context';
+import { InstantiablePlugin } from './Plugin';
 
 const readdir: (dir: string) => Promise<string[]> = promisify(fs.readdir);
 const stat: (path: string) => Promise<fs.Stats> = promisify(fs.stat);
@@ -10,7 +12,7 @@ const stat: (path: string) => Promise<fs.Stats> = promisify(fs.stat);
 /**
  * Manage command loading.
  */
-export default class Registry extends Set<InstantiableCommand> {
+export default class Registry extends Set<InstantiablePlugin> {
   /**
    * Get all the file paths recursively in a directory.
    * @param dir The directory to start at.
@@ -34,12 +36,20 @@ export default class Registry extends Set<InstantiableCommand> {
     return list;
   }
 
+  public async handle(context: Context) {
+    for (const Plugin of this) await new Plugin(context);
+  }
+
+  public async reload(directoryOrFile: string): Promise<string[]> {
+    this.clear();
+    return this.load(directoryOrFile);
+  }
+
   /**
    * Load all commands into memory.
    * @param directoryOrFile The directory or file location to load.
    */
   public async load(directoryOrFile: string): Promise<string[]> {
-    this.clear();
     const stats = await stat(directoryOrFile);
 
     let files: string[];
@@ -49,7 +59,7 @@ export default class Registry extends Set<InstantiableCommand> {
 
     const failed = [];
     for (const file of files) {
-      let mod: InstantiableCommand | ICommand | { default: InstantiableCommand | ICommand };
+      let mod: InstantiablePlugin | { default: InstantiablePlugin };
       const location = path.resolve(process.cwd(), file);
 
       try {
@@ -77,7 +87,6 @@ export default class Registry extends Set<InstantiableCommand> {
         mod = BasicCommand;
       }
 
-      if (!mod.triggers) mod.triggers = path.basename(location, '.js');
       this.add(mod);
     }
 
