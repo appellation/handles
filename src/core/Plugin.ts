@@ -14,7 +14,7 @@ export interface InstantiablePlugin {
   new(context: Context): Plugin;
 }
 
-export default abstract class Plugin extends Runnable<Plugin> {
+export default abstract class Plugin<T = any> extends Runnable<T> {
   protected _status: Status = Status.INSTANTIATED;
 
   constructor(public readonly context: Context) {
@@ -55,6 +55,7 @@ export default abstract class Plugin extends Runnable<Plugin> {
    */
   public cancel(err?: Error | Code | string | HandlesError): never {
     this._status = Status.CANCELLED;
+    if (err instanceof HandlesError) throw err;
 
     if (typeof err === 'number') err = new HandlesError(err);
     else if (typeof err === 'string' || typeof err === 'undefined') err = new HandlesError(Code.COMMAND_CANCELLED, err);

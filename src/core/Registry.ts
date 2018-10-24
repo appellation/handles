@@ -45,6 +45,11 @@ export default class Registry extends Set<InstantiablePlugin> {
     return this.load(directoryOrFile);
   }
 
+  public use(...plugins: InstantiablePlugin[]): this {
+    for (const plugin of plugins) this.add(plugin);
+    return this;
+  }
+
   /**
    * Load all commands into memory.
    * @param directoryOrFile The directory or file location to load.

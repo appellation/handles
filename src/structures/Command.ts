@@ -41,11 +41,11 @@ export enum Status {
  * };
  * ```
  */
-export default abstract class Command extends Plugin implements ICommand {
+export default abstract class Command extends Plugin<boolean> implements ICommand {
   /**
    * Triggers for this command.
    */
-  public static triggers: Trigger | Trigger[] = path.basename(__filename, '.js');
+  public static triggers: Trigger | Trigger[];
 
   /**
    * Executed prior to {@link Command#exec}. Should be used for middleware/validation.
@@ -88,7 +88,7 @@ export default abstract class Command extends Plugin implements ICommand {
     // implemented by command
   }
 
-  protected async _run(): Promise<this> {
+  protected async _run(): Promise<boolean> {
     const ctor: typeof Command = this.constructor as typeof Command;
     if (!Array.isArray(ctor.triggers)) ctor.triggers = [ctor.triggers];
 
@@ -104,7 +104,7 @@ export default abstract class Command extends Plugin implements ICommand {
       }
     }
 
-    if (!found || !trigger) return this;
+    if (!found || !trigger) return false;
     this._status = Status.RUNNING;
 
     if (typeof trigger === 'function') trigger = trigger(this.context);
@@ -118,8 +118,9 @@ export default abstract class Command extends Plugin implements ICommand {
       this._status = Status.COMPLETED;
     } catch (e) {
       if (!this.terminated) this._status = Status.FAILED;
+      throw e;
     }
 
-    return this;
+    return true;
   }
 }

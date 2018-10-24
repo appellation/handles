@@ -1,32 +1,29 @@
 const Handles = require('../../dist/index');
 
-class Command extends Handles.Command {
+class AddCommand extends Handles.Command {
   async pre() {
-    const val1 = new Handles.Validator(this)
-      .apply(false, 'kek');
-    const val2 = new Handles.Validator(this)
-      .apply(true, 'lol');
+    // this.assert(false, 'kek');
 
-    // await val1;
-
-    await new Handles.Argument(this, 'first')
-      .setPrompt('Please provide the first digit.')
-      .setResolver(c => {
+    this.first = await new Handles.Argument(this, {
+      resolver: (c) => {
         if (isNaN(c)) throw new Error('das no number');
         return parseInt(c);
-      });
+      },
+    });
 
-    await new Handles.Argument(this, 'second')
-      .setPrompt('Please provide the second digit.')
-      .setResolver(c => {
+    this.second = await new Handles.Argument(this, {
+      resolver: (c) => {
         if (isNaN(c)) throw new Error('das no number');
         return parseInt(c);
-      });
+      },
+    });
   }
 
   exec() {
-    return this.response.send(this.args.first + this.args.second);
+    return console.log(this.first + this.second);
   }
 }
 
-module.exports = Command;
+AddCommand.triggers = 'add';
+
+module.exports = AddCommand;

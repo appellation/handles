@@ -5,18 +5,13 @@ export enum Code {
   COMMAND_INVALID,
 }
 
-export default class HandlesError {
+export default class HandlesError extends Error {
   public readonly code: Code;
-  public readonly message: string;
   public details?: string;
 
   constructor(code: Code, details?: string) {
+    super(details || Code[code]);
     this.code = code;
-    this.message = Code[code];
     this.details = details;
-  }
-
-  public toString() {
-    return this.details ? `${this.message}: ${this.details}` : this.message;
   }
 }

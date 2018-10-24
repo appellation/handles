@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Launch Program",
       "program": "${workspaceRoot}/test/index.js",
-      "preLaunchTask": "compile",
+      "preLaunchTask": "build",
       "sourceMaps": true
     }
   ]

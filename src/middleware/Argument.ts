@@ -160,30 +160,26 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
     throw new Error('no prompt collection method provided');
   }
 
-  protected async _run() {
+  protected async _run(): Promise<T | undefined> {
     let content: string = this.matcher(this.body);
     this.body = this.body.replace(content, '').trim();
     let resolved: T | undefined;
 
     while (!resolved) {
-      let prompt: string;
+      let prompt: string | undefined;
 
       // if there is content, attempt to resolve it
       if (content) {
         try {
           resolved = await this.resolver(content, this.plugin.context, this);
-          break;
         } catch (e) {
-          prompt = e ? e.message || e : this.prompt;
+          prompt = e ? e.message || e : this.prompt; // TODO: preserve stack
         }
-      } else {
-        // if there is no matched content: cancel resolution, prompt, or fail based on config
+      }
+
+      if (prompt !== undefined) { // content resolution failed: exit, prompt, or cancel based on config
         if (this.optional) return;
-        if (this.prompt) {
-          prompt = this.prompt;
-        } else {
-          return this.plugin.cancel(new HandlesError(Code.ARGUMENT_MISSING));
-        }
+        if (!this.prompt) return this.plugin.cancel(new HandlesError(Code.ARGUMENT_MISSING, prompt));
 
         // prompt for resolution
         try {
@@ -194,5 +190,7 @@ export default class Argument<T = string> extends Runnable<T | undefined> implem
         }
       }
     }
+
+    return resolved;
   }
 }

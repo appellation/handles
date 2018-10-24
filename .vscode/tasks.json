@@ -4,9 +4,10 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "taskName": "compile",
-      "type": "shell",
-      "command": "gulp"
+      "type": "gulp",
+      "task": "build",
+      "label": "build",
+      "problemMatcher": []
     }
   ]
 }
